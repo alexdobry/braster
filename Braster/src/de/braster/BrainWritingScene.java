@@ -22,11 +22,11 @@ import org.mt4j.util.font.FontManager;
 import org.mt4j.util.math.Vector3D;
 
 
-public class HelloWorldScene extends AbstractScene{
+public class BrainWritingScene extends AbstractScene{
 
 	MTCanvas canv;
 	
-	public HelloWorldScene(MTApplication mtApplication, String name) {
+	public BrainWritingScene(MTApplication mtApplication, String name) {
 		super(mtApplication, name);
 		
 		canv = getCanvas();
