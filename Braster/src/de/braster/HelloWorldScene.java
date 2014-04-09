@@ -50,18 +50,7 @@ public class HelloWorldScene extends AbstractScene{
 		makeKB(mtApplication);
 		makeKB(mtApplication);
 		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
+
 //		MTTextKeyboard test = new MTTextKeyboard(mtApplication);
 //		getCanvas().addChild(test);
 	}
