@@ -12,6 +12,9 @@ import org.mt4j.components.visibleComponents.widgets.keyboard.MTKeyboard;
 import org.mt4j.components.visibleComponents.widgets.keyboard.MTTextKeyboard;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
@@ -46,16 +49,25 @@ public class BrainWritingScene extends AbstractScene{
 		
 		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height/2f));
 		
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
-		makeKB(mtApplication);
+		MTKeyboard kb1 = makeKB(mtApplication);
+		MTKeyboard kb2 = makeKB(mtApplication);
+		
+		Vector3D keyboardPositionRU = new Vector3D(mtApplication.width/2f+(kb1.getWidthXY(TransformSpace.LOCAL)/2),
+				mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f),
+				0);
+
+		Vector3D keyboardPositionLU = new Vector3D(mtApplication.width/2f-(kb2.getWidthXY(TransformSpace.LOCAL)/2),
+				mtApplication.height-(kb2.getHeightXY(TransformSpace.LOCAL)/2f),
+				0);
+		
+		kb1.setPositionGlobal(keyboardPositionRU);
+		kb2.setPositionGlobal(keyboardPositionLU);
 
 //		MTTextKeyboard test = new MTTextKeyboard(mtApplication);
 //		getCanvas().addChild(test);
 	}
 
-	public void makeKB(MTApplication mtApplication) {
+	public MTKeyboard makeKB(MTApplication mtApplication) {
 		
 		MTKeyboard keyboard = new MTKeyboard(mtApplication);
 		
@@ -103,12 +115,19 @@ public class BrainWritingScene extends AbstractScene{
 		getCanvas().addChild(keyboard);
 		
 		keyboard.scale(0.8f, 0.8f, 1, new Vector3D(0, 0, 0));
+		keyboard.removeAllGestureEventListeners(DragProcessor.class);
+		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
+		keyboard.removeAllGestureEventListeners(RotateProcessor.class);
 		
-		keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f),0));
+
+		return keyboard;
+		
+		
 
 		
 		
-		
 	}
+	
+	
 	
 }
