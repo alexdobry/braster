@@ -51,6 +51,8 @@ public class BrainWritingScene extends AbstractScene{
 		
 		MTKeyboard kb1 = makeKB(mtApplication);
 		MTKeyboard kb2 = makeKB(mtApplication);
+		MTKeyboard kb3 = makeKB(mtApplication);
+		MTKeyboard kb4 = makeKB(mtApplication);
 		
 		Vector3D keyboardPositionRU = new Vector3D(mtApplication.width/2f+(kb1.getWidthXY(TransformSpace.LOCAL)/2),
 				mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f),
@@ -60,9 +62,21 @@ public class BrainWritingScene extends AbstractScene{
 				mtApplication.height-(kb2.getHeightXY(TransformSpace.LOCAL)/2f),
 				0);
 		
+		Vector3D keyboardPositionLO = new Vector3D(mtApplication.width/2f-(kb3.getWidthXY(TransformSpace.LOCAL)-(kb3.getHeightXY(TransformSpace.LOCAL)/2f)),
+				(mtApplication.height/2f)-(kb3.getHeightXY(TransformSpace.LOCAL)/2f),
+				0);
+		
+		Vector3D keyboardPositionRO = new Vector3D(mtApplication.width/2f+kb3.getWidthXY(TransformSpace.LOCAL)-kb3.getHeightXY(TransformSpace.LOCAL)/2f,
+				mtApplication.height/2f-(kb3.getHeightXY(TransformSpace.LOCAL)/2f),
+				0);
+		
+		
 		kb1.setPositionGlobal(keyboardPositionRU);
 		kb2.setPositionGlobal(keyboardPositionLU);
-
+		kb3.setPositionGlobal(keyboardPositionLO);
+		kb4.setPositionGlobal(keyboardPositionRO);
+		kb3.rotateZGlobal(keyboardPositionLO, 90);
+		kb4.rotateZGlobal(keyboardPositionRO, 270);
 //		MTTextKeyboard test = new MTTextKeyboard(mtApplication);
 //		getCanvas().addChild(test);
 	}
