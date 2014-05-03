@@ -1,5 +1,8 @@
 package de.braster;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
@@ -24,6 +27,7 @@ public class SetupScene  extends AbstractScene{
 	private MTCanvas canv;
 	private MTApplication mtApp;
 	private Iscene brainWritingScene;
+	private ArrayList<MTRoundRectangle> playerButtons;
 	
 	
 	public SetupScene(final MTApplication mtApplication, String name) {
@@ -31,6 +35,7 @@ public class SetupScene  extends AbstractScene{
 		
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
+		this.playerButtons = new ArrayList<MTRoundRectangle>();
 		
 		//TextField für Titel
 		MTTextField textFieldTitle = new MTTextField(mtApplication, mtApplication.width/2f-100, 30, 200, 60, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
@@ -49,10 +54,14 @@ public class SetupScene  extends AbstractScene{
 		canv.addChild(textFieldProblem);
 		
 		//fungiert als mehrzeilige textarea für die Problembeschreibung
-		MTTextArea textArea = new MTTextArea(mtApplication,                                
+		final MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
+		
+		//wenn angeklickt wird, muss sich Tastatur öffnen
+		//eingegebener Text dann im Feld erscheinen
+	
 		
 		textArea.setPositionGlobal(new Vector3D(350, 180));
 		textArea.setHeightLocal(200);
@@ -68,40 +77,11 @@ public class SetupScene  extends AbstractScene{
 		textFieldPlayer.setText("Player:");
 		canv.addChild(textFieldPlayer);
 		
-		//Liste ähnlich einer Dropdownlist mit der Spielerzahl
-		MTList aList = new MTList(mtApplication, 350, 455, 100, 25); //(100, 50, 200, 400, mtApplication);
-		
-		MTListCell listCell = new MTListCell(mtApplication, 100, 25 );
-		MTTextArea texta = new MTTextArea(mtApplication, 0,0, 100,25);
-		texta.setText("1");
-		listCell.addChild(texta);
-		
-		MTListCell listCell2 = new MTListCell(mtApplication, 100, 25 );
-		MTTextArea texta2 = new MTTextArea(mtApplication, 0,0, 100,25);
-		texta2.setText("2");
-		listCell2.addChild(texta2);
-		
-		MTListCell listCell3 = new MTListCell(mtApplication, 100, 25 );
-		MTTextArea texta3 = new MTTextArea(mtApplication, 0,0, 100,25);
-		texta3.setText("3");
-		listCell3.addChild(texta3);
-		
-		MTListCell listCell4 = new MTListCell(mtApplication, 100, 25 );
-		MTTextArea texta4 = new MTTextArea(mtApplication, 0,0, 100,25);
-		texta4.setText("4");
-		listCell4.addChild(texta4);
-		
-		aList.addListElement(listCell);
-		aList.addListElement(listCell2);
-		aList.addListElement(listCell3);
-		aList.addListElement(listCell4);
-		
-		getCanvas().addChild(aList);
-			
+					
 		IFont font = FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		50, MTColor.WHITE, false);
+        		50, MTColor.BLACK, false);
 		
-		MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2f-90, mtApplication.height-100, 180, 35, "Start Brain Writing", font);
+		MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Start Brain Writing", font, MTColor.AQUA);
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -125,13 +105,60 @@ public class SetupScene  extends AbstractScene{
 			}
 		});
 		canv.addChild(r);
+		
+		
+		//erzeugt 4 Buttons für die Spieleranzahl
+		createPlayerButtons();
 	}
 
 	
-	private MTRoundRectangle getRoundRectWithText(float x, float y, float width, float height, String text, IFont font){
+	private void createPlayerButtons()
+	{		
+		for(int i=1;i<5;i++)
+		{
+			IFont font = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		34, MTColor.BLACK, false);
+			int x=0,y=0;
+			switch (i){
+				case 1:	x = 270;
+						y = 445;
+						break;
+				case 2:	x = 470;
+						y = 445;
+						break;
+				case 3:	x = 670;
+						y = 445;
+						break;
+				case 4:	x = 870;
+						y = 445;						
+			}
+			final MTRoundRectangle r = getRoundRectWithText(x, y, 180, 35, i+"", font, MTColor.AQUA);
+			r.registerInputProcessor(new TapProcessor(getMTApplication()));
+			r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
+			r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					TapEvent te = (TapEvent)ge;
+					if (te.isTapped()){
+						
+						//wenn angeklickt wird, werden alle Buttons in die Standardfarbe zurückgeführt
+						//und der angeklickte wird grün markiert						
+						for (MTRoundRectangle item: playerButtons) {
+							   item.setFillColor(MTColor.AQUA);
+						}
+						r.setFillColor(MTColor.GREEN);
+					}
+					return false;
+				}
+			});
+			this.canv.addChild(r);
+			this.playerButtons.add(r);
+		}
+	}
+	
+	private MTRoundRectangle getRoundRectWithText(float x, float y, float width, float height, String text, IFont font, MTColor background){
 		MTRoundRectangle r = new MTRoundRectangle(getMTApplication(), x, y, 0, width, height, 12, 12);
 		r.unregisterAllInputProcessors();
-		r.setFillColor(MTColor.BLACK);
+		r.setFillColor(background);
 		r.setStrokeColor(MTColor.BLACK);
 		MTTextArea rText = new MTTextArea(getMTApplication(), font);
 		rText.unregisterAllInputProcessors();
