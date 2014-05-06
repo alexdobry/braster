@@ -3,8 +3,10 @@ import java.awt.event.KeyEvent;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
+import org.mt4j.components.MTComponent;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.AbstractShape;
+import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
 import org.mt4j.components.visibleComponents.widgets.buttons.MTSvgButton;
@@ -44,11 +46,14 @@ public class BrainWritingScene extends AbstractScene{
 		textArea.setNoFill(true);
 		textArea.setNoStroke(true);
 		
-		textArea.setText("Problem 1");
+		textArea.setText("Problem....");
 		this.getCanvas().addChild(textArea);
 		
 		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height/2f));
 		
+		
+		
+		//Keyboards erstellen und positionieren
 		MTKeyboard kb1 = makeKB(mtApplication);
 		MTKeyboard kb2 = makeKB(mtApplication);
 		MTKeyboard kb3 = makeKB(mtApplication);
@@ -77,8 +82,20 @@ public class BrainWritingScene extends AbstractScene{
 		kb4.setPositionGlobal(keyboardPositionRO);
 		kb3.rotateZGlobal(keyboardPositionLO, 90);
 		kb4.rotateZGlobal(keyboardPositionRO, 270);
-//		MTTextKeyboard test = new MTTextKeyboard(mtApplication);
-//		getCanvas().addChild(test);
+
+		//Keyboards Ende //
+		
+		//Objektbereiche definieren
+		
+		MTComponent field = new MTComponent(mtApplication);
+		MTTextArea test = new MTTextArea(mtApplication);
+		test.setFillColor(new MTColor(255,255,255, 255));
+		test.setSizeXYGlobal(mtApplication.width*0.7f, mtApplication.height*0.7f);
+		test.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height, 0));
+		
+		//canv.addChild(test);
+		
+		
 	}
 
 	public MTKeyboard makeKB(MTApplication mtApplication) {
