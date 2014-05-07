@@ -57,18 +57,22 @@ public class Idea extends MTTextArea {
 				case DragEvent.GESTURE_ENDED:
 					
 					System.out.print("I was here\n");
-					PickResult pr = pick(de.getDragCursor().getCurrentEvtPosX(),de.getDragCursor().getCurrentEvtPosY());
+					PickResult pr = self.getParent().pick(de.getDragCursor().getCurrentEvtPosX(),de.getDragCursor().getCurrentEvtPosY());
 					
 					List<PickEntry> pe = pr.getPickList();
-					for (PickEntry pickEntry : pe) {
-						System.out.print(pickEntry.hitObj.toString() + "\n");
+//					for (PickEntry pickEntry : pe) {
+//						System.out.print(pickEntry.hitObj.toString() + " " + pe.size() +"\n");
+//					}
+					
+					if (pe.size() >= 2) {
+						Object obj = pe.get(1).hitObj;
+//						System.out.print(obj);
+						if (obj instanceof Idea) {
+							
+							((Idea)obj).snapToIdea(self);
+						}
 					}
 					
-					
-//					MTComponent comp = pr.getNearestPickResult();
-//					if (comp instanceof Idea) {
-//						self.snapToIdea((Idea)comp);
-//					}
 					
 					break;
 				default:
@@ -118,6 +122,7 @@ public class Idea extends MTTextArea {
 							
 							//TODO: logik für parent implementieren
 							idea.setGestureAllowance(DragProcessor.class, true);
+							((Idea)parent).repositionChildren();
 						}
 					}
 					break;
@@ -127,6 +132,21 @@ public class Idea extends MTTextArea {
 				return false;
 			}
 		});
+	}
+	/**
+	 * Rückt bei entfernten Kindern alle zusammen damit keine lücken auftreten
+	 */
+	protected void repositionChildren() {
+		List<MTComponent> cl = getChildList();
+		
+		for (MTComponent mtComponent : cl) {
+			if (mtComponent instanceof Idea) {
+				mtComponent.removeFromParent();
+				self.snapToIdea((Idea)mtComponent);
+			}
+			
+		}
+		
 	}
 	
 
