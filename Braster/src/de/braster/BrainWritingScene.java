@@ -1,6 +1,7 @@
 package de.braster;
 import java.awt.event.KeyEvent;
 
+import org.mt4j.AbstractMTApplication;
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.MTComponent;
@@ -12,11 +13,13 @@ import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
 import org.mt4j.components.visibleComponents.widgets.buttons.MTSvgButton;
 import org.mt4j.components.visibleComponents.widgets.keyboard.MTKeyboard;
 import org.mt4j.components.visibleComponents.widgets.keyboard.MTTextKeyboard;
+import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
@@ -35,13 +38,15 @@ public class BrainWritingScene extends AbstractScene{
 		super(mtApplication, name);
 		
 		canv = getCanvas();
-		this.setClearColor(new MTColor(146, 150, 188, 255));
+		this.setClearColor(MTColor.BLACK);
 		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		
 		MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
+		
+		//Idea textArea =new Idea(mtApplication);
 		
 		textArea.setNoFill(true);
 		textArea.setNoStroke(true);
@@ -124,18 +129,34 @@ public class BrainWritingScene extends AbstractScene{
 				@Override
 				public boolean processGestureEvent(MTGestureEvent ge) {
 					TapEvent te = (TapEvent)ge;
-					if (te.isTapped()){
-						MTTextArea textArea = new MTTextArea(getMTApplication(),                                
-			                    FontManager.getInstance().createFont(getMTApplication(), "arial.ttf", 
-			                    		50, //fontzize 
-			                    		new MTColor(255, 255, 255, 255))); //Font color
-			    		
-			    		textArea.setNoFill(true);
-			    		textArea.setNoStroke(true);
+					if (te.isTapped() && t.getText().length() != 0){
+//						MTTextArea textArea = new MTTextArea(getMTApplication(),                                
+//			                    FontManager.getInstance().createFont(getMTApplication(), "arial.ttf", 
+//			                    		50, //fontzize 
+//			                    		new MTColor(255, 255, 255, 255))); //Font color
+//			    		
+//			    		textArea.setNoFill(true);
+//			    		textArea.setNoStroke(true);
+			    		Idea textArea = new Idea(getMTApplication(), canv);
+			    		Idea textArea2 = new Idea(getMTApplication(), canv);
+			    		Idea textArea3 = new Idea(getMTApplication(), canv);
 			    		
 			    		textArea.setText(t.getText());
+			    		textArea2.setText(t.getText()+t.getText());
+			    		textArea3.setText(t.getText());
+			    		
+			    		textArea.setName(t.getText());
+			    		textArea2.setName(t.getText()+t.getText());
+			    		textArea3.setName(t.getText());
+			    		
 			    		canv.addChild(textArea);
+			    		canv.addChild(textArea2);
+			    		canv.addChild(textArea3);
+			    		textArea.snapToIdea(textArea2);
+			    		textArea.snapToIdea(textArea3);
 			    		t.clear();
+			    		
+			    		System.out.print(textArea.getChildCount());
 					
 					}
 					return false;
