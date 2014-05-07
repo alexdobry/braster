@@ -30,7 +30,8 @@ public class SetupScene  extends AbstractScene{
 	private ArrayList<MTRoundRectangle> playerButtons;
 	
 	
-	public SetupScene( MTApplication mtApplication, String name) {
+	public SetupScene( MTApplication mtApplication, String name)
+	{
 		super(mtApplication, name);
 		
 		this.mtApp = mtApplication;		
@@ -46,7 +47,7 @@ public class SetupScene  extends AbstractScene{
 		canv.addChild(textFieldTitle);
 		
 		//fungiert als Label für die Problembeschreibung
-		MTTextField textFieldProblem = new MTTextField(mtApplication, 40, 150, 270, 60, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+		final MTTextField textFieldProblem = new MTTextField(mtApplication, 40, 150, 270, 60, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		36, new MTColor(255, 255, 255, 255)));
 		textFieldProblem.setNoFill(true);
 		textFieldProblem.setNoStroke(true);
@@ -54,7 +55,7 @@ public class SetupScene  extends AbstractScene{
 		canv.addChild(textFieldProblem);
 		
 		//fungiert als mehrzeilige textarea für die Problembeschreibung
-		final MTTextArea textArea = new MTTextArea(mtApplication,                                
+		MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
@@ -88,11 +89,26 @@ public class SetupScene  extends AbstractScene{
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
-										
+					
+					//Problem auslesen
+					MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(2);
+					String problem = textAreaProblem.getText();
+					int number;
+					//herausfinden, wieviel Spieler ausgewählt sind
+ 					for (MTRoundRectangle item: playerButtons)
+					{
+						 System.out.println(item.getFillColor().toString());
+						 System.out.println("Color{0.0,128.0,0.0_255.0}");
+						if(item.getFillColor().toString().equals("Color{0.0,128.0,0.0_255.0}") )
+						{
+							MTTextArea textArea = (MTTextArea)item.getChildByIndex(0);
+							number = Integer.parseInt(textArea.getText());
+						}
+					}
 					//Save the current scene on the scene stack before changing
 					mtApp.pushScene();
 					if (brainWritingScene == null){
-						brainWritingScene = new BrainWritingScene(mtApp, "Brain Writing");
+						brainWritingScene = new BrainWritingScene(mtApp, "Brain Writing", problem, number);
 						//Konstruktor erweitern um Anzahl Spieler, da genau soviele
 						//Tastaturen geladen werden
 					//Add the scene to the mt application
@@ -155,7 +171,8 @@ public class SetupScene  extends AbstractScene{
 		}
 	}
 	
-	private MTRoundRectangle getRoundRectWithText(float x, float y, float width, float height, String text, IFont font, MTColor background){
+	private MTRoundRectangle getRoundRectWithText(float x, float y, float width, float height, String text, IFont font, MTColor background)
+	{
 		MTRoundRectangle r = new MTRoundRectangle(getMTApplication(), x, y, 0, width, height, 12, 12);
 		r.unregisterAllInputProcessors();
 		r.setFillColor(background);
