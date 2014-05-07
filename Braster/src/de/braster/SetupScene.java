@@ -30,7 +30,7 @@ public class SetupScene  extends AbstractScene{
 	private ArrayList<MTRoundRectangle> playerButtons;
 	
 	
-	public SetupScene(final MTApplication mtApplication, String name) {
+	public SetupScene( MTApplication mtApplication, String name) {
 		super(mtApplication, name);
 		
 		this.mtApp = mtApplication;		
