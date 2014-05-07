@@ -103,6 +103,8 @@ public class Idea extends MTTextArea {
 		
 		idea.registerInputProcessor(new TapAndHoldProcessor((AbstractMTApplication) app, 1500));
 		
+		//TODO: bei erneuten ausführen wird der processor erneut hinzugefügt
+		//WARN - Warning: The same type of input processor (tap and hold processor) is already registered at component:
 		idea.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapAndHoldEvent th = (TapAndHoldEvent)ge;
