@@ -82,7 +82,7 @@ public class SetupScene  extends AbstractScene{
 		IFont font = FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		50, MTColor.BLACK, false);
 		
-		MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Start Brain Writing", font, MTColor.AQUA);
+		MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Start Brain Writing", font, MTColor.SILVER);
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -148,7 +148,7 @@ public class SetupScene  extends AbstractScene{
 				case 4:	x = 870;
 						y = 445;						
 			}
-			final MTRoundRectangle r = getRoundRectWithText(x, y, 180, 35, i+"", font, MTColor.AQUA);
+			final MTRoundRectangle r = getRoundRectWithText(x, y, 180, 35, i+"", font, MTColor.SILVER);
 			r.registerInputProcessor(new TapProcessor(getMTApplication()));
 			r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 			r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -159,9 +159,9 @@ public class SetupScene  extends AbstractScene{
 						//wenn angeklickt wird, werden alle Buttons in die Standardfarbe zurückgeführt
 						//und der angeklickte wird grün markiert						
 						for (MTRoundRectangle item: playerButtons) {
-							   item.setFillColor(MTColor.AQUA);
+							   item.setFillColor(MTColor.SILVER);
 						}
-						r.setFillColor(MTColor.GREEN);
+						r.setFillColor(MTColor.AQUA);
 					}
 					return false;
 				}
