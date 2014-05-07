@@ -101,6 +101,10 @@ public class BrainWritingScene extends AbstractScene{
 		//canv.addChild(test);
 		
 		
+		BWIdeaView iv = new BWIdeaView(mtApplication, kb1.getWidthXY(TransformSpace.LOCAL), kb1.getHeightXY(TransformSpace.LOCAL));
+		
+		canv.addChild(iv);
+		iv.setPositionGlobal(keyboardPositionRU);
 	}
 
 	public MTKeyboard makeKB(MTApplication mtApplication) {
