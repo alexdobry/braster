@@ -93,7 +93,7 @@ public class SetupScene  extends AbstractScene{
 					//Problem auslesen
 					MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(2);
 					String problem = textAreaProblem.getText();
-					int number;
+					int number = 0;
 					//herausfinden, wieviel Spieler ausgewählt sind
  					for (MTRoundRectangle item: playerButtons)
 					{

@@ -21,6 +21,7 @@ import org.mt4j.util.MTColor;
 import org.mt4j.util.font.FontManager;
 import org.mt4j.util.font.IFont;
 import org.mt4j.util.math.Vector3D;
+import org.mt4jx.components.visibleComponents.widgets.MTCheckbox;
 
 import processing.core.PImage;
 

@@ -34,7 +34,7 @@ public class BrainWritingScene extends AbstractScene{
 
 	MTCanvas canv;
 	
-	public BrainWritingScene(MTApplication mtApplication, String name) {
+	public BrainWritingScene(MTApplication mtApplication, String name, String problem, int players) {
 		super(mtApplication, name);
 		
 		canv = getCanvas();
