@@ -16,6 +16,8 @@ import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.AbstractComponentProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
 import org.mt4j.util.MTColor;
@@ -100,6 +102,8 @@ public class Idea extends MTTextArea {
 		idea.setPositionRelativeToParent(new Vector3D(idea.getWidthXY(TransformSpace.LOCAL)/2f, getHeightXY(TransformSpace.LOCAL)*1.5f+height));
 //		idea.removeAllGestureEventListeners();
 		idea.setGestureAllowance(DragProcessor.class, false);
+		idea.setGestureAllowance(ScaleProcessor.class, false);
+		idea.setGestureAllowance(RotateProcessor.class, false);
 		
 		idea.registerInputProcessor(new TapAndHoldProcessor((AbstractMTApplication) app, 1500));
 		
@@ -124,6 +128,8 @@ public class Idea extends MTTextArea {
 							
 							//TODO: logik für parent implementieren
 							idea.setGestureAllowance(DragProcessor.class, true);
+							idea.setGestureAllowance(ScaleProcessor.class, true);
+							idea.setGestureAllowance(RotateProcessor.class, true);
 							((Idea)parent).repositionChildren();
 						}
 					}
