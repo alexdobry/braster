@@ -56,9 +56,103 @@ public class ClusteringScene extends AbstractScene{
 		mtRoundRectangle.unregisterAllInputProcessors();
 		mtRoundRectangle.setFillColor(MTColor.GREY); 	
 		mtRoundRectangle.registerInputProcessor(new TapProcessor(this.mtApp));
+		
+		final MTCheckbox checkBox1 = new MTCheckbox(this.mtApp, 20);
+		checkBox1.setFillColor(MTColor.WHITE);		 
+        checkBox1.setBooleanValue(false);
+        checkBox1.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+            
+            @Override
+            public boolean processGestureEvent(MTGestureEvent ge) {
+                if(checkBox1.getBooleanValue()){
+                    
+                }
+                else{
+                   
+                }
+                return false;
+            }
+        });
+ 
+		
+		checkBox1.setPositionRelativeToParent(new Vector3D(50,this.mtApp.height-150));
+		mtRoundRectangle.addChild(checkBox1);
+		
+		
+		final MTCheckbox checkBox2 = new MTCheckbox(this.mtApp, 20);
+		checkBox2.setFillColor(MTColor.WHITE);
+        checkBox2.setBooleanValue(true);
+        checkBox2.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+            
+            @Override
+            public boolean processGestureEvent(MTGestureEvent ge) {
+                if(checkBox2.getBooleanValue()){
+                    
+                }
+                else{
+                   
+                }
+                return false;
+            }
+        });
+ 
+		
+		checkBox2.setPositionRelativeToParent(new Vector3D(50,this.mtApp.height-105));
+		mtRoundRectangle.addChild(checkBox2);
+		
+		
+		final MTCheckbox checkBox3 = new MTCheckbox(this.mtApp, 20);
+		checkBox3.setFillColor(MTColor.WHITE);
+        checkBox3.setBooleanValue(true);
+        checkBox3.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+            
+            @Override
+            public boolean processGestureEvent(MTGestureEvent ge) {
+                if(checkBox3.getBooleanValue()){
+                    
+                }
+                else{
+                   
+                }
+                return false;
+            }
+        });
+ 
+		
+		checkBox3.setPositionRelativeToParent(new Vector3D(50,this.mtApp.height-60));
+		mtRoundRectangle.addChild(checkBox3);
+			
+		 
+		IFont font = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+				15, MTColor.WHITE, false);
+		
+        final MTTextArea textArea1 = new MTTextArea(this.mtApp,font);
+        textArea1.setText("show tips");
+        textArea1.setFillColor(MTColor.GREY);
+        textArea1.setStrokeColor(MTColor.GREY);
+        textArea1.setPositionRelativeToParent(new Vector3D(120,this.mtApp.height-150));
+        mtRoundRectangle.addChild(textArea1);
+		
+        final MTTextArea textArea2 = new MTTextArea(this.mtApp,font);
+        textArea2.setText("show sorted ideas");
+        textArea2.setFillColor(MTColor.GREY);
+        textArea2.setStrokeColor(MTColor.GREY);
+        textArea2.setPositionRelativeToParent(new Vector3D(140,this.mtApp.height-105));
+        mtRoundRectangle.addChild(textArea2);
+        
+        final MTTextArea textArea3 = new MTTextArea(this.mtApp,font);
+        textArea3.setText("Anleitung");
+        textArea3.setFillColor(MTColor.GREY);
+        textArea3.setStrokeColor(MTColor.GREY);
+        textArea3.setPositionRelativeToParent(new Vector3D(120,this.mtApp.height-60));
+        mtRoundRectangle.addChild(textArea3);
+		
 		this.canv.addChild(mtRoundRectangle);	
 		
+
+		
 		//3 Radiobuttons mit jeweils label dahinter
+	
 	}
 	
 	
