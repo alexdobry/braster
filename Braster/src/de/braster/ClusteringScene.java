@@ -31,6 +31,7 @@ public class ClusteringScene extends AbstractScene{
 	private MTCanvas canv;
 	private MTApplication mtApp;
 	private Iscene evaluationScene;
+	private ArrayList<Idea> ideas;
 	
 	public ClusteringScene( MTApplication mtApplication, String name) 
 	{
