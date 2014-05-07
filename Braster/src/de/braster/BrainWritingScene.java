@@ -24,6 +24,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
+import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MT4jSettings;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.font.FontManager;
@@ -33,10 +34,10 @@ import org.mt4j.util.math.Vector3D;
 public class BrainWritingScene extends AbstractScene{
 
 	MTCanvas canv;
-	
+	final MTApplication mtApp;
 	public BrainWritingScene(MTApplication mtApplication, String name, String problem, int players) {
 		super(mtApplication, name);
-		
+		this.mtApp = mtApplication;
 		canv = getCanvas();
 		this.setClearColor(MTColor.BLACK);
 		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
@@ -52,6 +53,28 @@ public class BrainWritingScene extends AbstractScene{
 		textArea.setNoStroke(true);
 		
 		textArea.setText("Problem....");
+		
+		textArea.registerInputProcessor(new TapProcessor(mtApplication, 25, true, 350));
+		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent)ge;
+				if (te.isDoubleTap()){
+					
+					Iscene clusteringIscene = null;
+					mtApp.pushScene();
+					if (clusteringIscene == null){
+						clusteringIscene = new ClusteringScene(mtApp, "Clustering");
+						//Konstruktor erweitern um Anzahl Spieler, da genau soviele
+						//Tastaturen geladen werden
+					//Add the scene to the mt application
+					mtApp.addScene(clusteringIscene);
+					}
+					//Do the scene change
+					mtApp.changeScene(clusteringIscene);
+				}
+				return false;
+			}
+		});
 		this.getCanvas().addChild(textArea);
 		
 		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height/2f));
