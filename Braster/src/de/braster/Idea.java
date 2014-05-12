@@ -24,7 +24,6 @@ import org.mt4j.util.MTColor;
 import org.mt4j.util.font.FontManager;
 import org.mt4j.util.math.Vector3D;
 
-import com.sun.glass.events.GestureEvent;
 
 import processing.core.PApplet;
 
