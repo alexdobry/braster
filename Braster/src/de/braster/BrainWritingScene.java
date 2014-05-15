@@ -52,7 +52,7 @@ public class BrainWritingScene extends AbstractScene{
 		textArea.setNoFill(true);
 		textArea.setNoStroke(true);
 		
-		textArea.setText("Problem....");
+		textArea.setText(problem);
 		
 		textArea.registerInputProcessor(new TapProcessor(mtApplication, 25, true, 350));
 		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener() {

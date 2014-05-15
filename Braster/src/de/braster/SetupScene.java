@@ -5,18 +5,27 @@ import java.util.List;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
+import org.mt4j.components.TransformSpace;
+import org.mt4j.components.visibleComponents.shapes.AbstractShape;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTList;
 import org.mt4j.components.visibleComponents.widgets.MTListCell;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextField;
+import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
+import org.mt4j.components.visibleComponents.widgets.buttons.MTSvgButton;
+import org.mt4j.components.visibleComponents.widgets.keyboard.MTKeyboard;
 import org.mt4j.input.gestureAction.DefaultButtonClickAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
+import org.mt4j.util.MT4jSettings;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.font.FontManager;
 import org.mt4j.util.font.IFont;
@@ -30,7 +39,7 @@ public class SetupScene  extends AbstractScene{
 	private ArrayList<MTRoundRectangle> playerButtons;
 	
 	
-	public SetupScene( MTApplication mtApplication, String name)
+	public SetupScene( final MTApplication mtApplication, String name)
 	{
 		super(mtApplication, name);
 		
@@ -55,10 +64,24 @@ public class SetupScene  extends AbstractScene{
 		canv.addChild(textFieldProblem);
 		
 		//fungiert als mehrzeilige textarea für die Problembeschreibung
-		MTTextArea textArea = new MTTextArea(mtApplication,                                
+		final MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
+		textArea.unregisterAllInputProcessors();
+		textArea.registerInputProcessor(new TapProcessor(this.mtApp));
+		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener(){
+			public boolean processGestureEvent(MTGestureEvent ge){
+				TapEvent te = (TapEvent) ge;
+				   if (te.isTapped()){
+                       
+                       System.out.println("hallo");
+                       MTKeyboard kb1 = makeKB(mtApplication, textArea);                       
+                       kb1.setPositionGlobal(new Vector3D(mtApplication.width-(kb1.getWidthXY(TransformSpace.LOCAL)),mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f)));                    
+				   }
+				   return false;
+			}
+		});
 		
 		//wenn angeklickt wird, muss sich Tastatur öffnen
 		//eingegebener Text dann im Feld erscheinen
@@ -189,5 +212,26 @@ public class SetupScene  extends AbstractScene{
 	}
 	
 
+	
+public MTKeyboard makeKB(MTApplication mtApplication, MTTextArea t) {
+		
+		MTKeyboard keyboard = new MTKeyboard(mtApplication);
+		
+        t.setExpandDirection(ExpandDirection.DOWN);
+        t.setFontColor(MTColor.BLACK);		 
+		t.setFillColor(MTColor.SILVER);
+		t.unregisterAllInputProcessors();
+		t.setEnableCaret(true); 
+		keyboard.addTextInputListener(t);				
+				
+		getCanvas().addChild(keyboard);
+		
+		keyboard.scale(0.8f, 0.8f, 1, new Vector3D(0, 0, 0));
+		keyboard.removeAllGestureEventListeners(DragProcessor.class);
+		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
+		keyboard.removeAllGestureEventListeners(RotateProcessor.class);		
+
+		return keyboard;		
+	}
 
 }

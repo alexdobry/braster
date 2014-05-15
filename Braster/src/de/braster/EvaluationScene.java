@@ -25,17 +25,17 @@ public class EvaluationScene extends AbstractScene{
 		this.setClearColor(MTColor.WHITE);		
 		
 		//Bereich
-				MTEllipse area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),600, 600);
-				area.setFillColor(MTColor.BLUE);
-				this.canv.addChild(area);
+		MTEllipse area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),600, 600);
+		area.setFillColor(MTColor.BLUE);
+		this.canv.addChild(area);
 				
-				MTLine line1 = new MTLine(this.mtApp, 400, 0, 400, 500);
-				line1.setFillColor(MTColor.BLACK);
-				area.addChild(line1);
+		MTLine line1 = new MTLine(this.mtApp, 400, 0, 400, 500);
+		line1.setFillColor(MTColor.BLACK);
+		area.addChild(line1);
 				
-				MTLine line2 = new MTLine(this.mtApp, this.mtApp.width-400, 0, this.mtApp.width-400, 500);
-				line2.setFillColor(MTColor.BLACK);
-				area.addChild(line2);
+		MTLine line2 = new MTLine(this.mtApp, this.mtApp.width-400, 0, this.mtApp.width-400, 500);
+		line2.setFillColor(MTColor.BLACK);
+		area.addChild(line2);
 		
 	}
 
