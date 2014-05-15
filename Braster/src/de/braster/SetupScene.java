@@ -76,7 +76,7 @@ public class SetupScene  extends AbstractScene{
 				   if (te.isTapped()){
                        
                        System.out.println("hallo");
-                       MTKeyboard kb1 = makeKB(mtApplication, textArea);                       
+                       Keyboard kb1 = makeKB(mtApplication, textArea);                       
                        kb1.setPositionGlobal(new Vector3D(mtApplication.width-(kb1.getWidthXY(TransformSpace.LOCAL)),mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f)));                    
 				   }
 				   return false;
@@ -213,9 +213,9 @@ public class SetupScene  extends AbstractScene{
 	
 
 	
-public MTKeyboard makeKB(MTApplication mtApplication, MTTextArea t) {
+public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
 		
-		MTKeyboard keyboard = new MTKeyboard(mtApplication);
+		Keyboard keyboard = new Keyboard(mtApplication);
 		
         t.setExpandDirection(ExpandDirection.DOWN);
         t.setFontColor(MTColor.BLACK);		 
