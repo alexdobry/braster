@@ -194,7 +194,7 @@ public class BrainWritingScene extends AbstractScene{
 		getCanvas().addChild(keyboard);
 		
 		keyboard.scale(0.8f, 0.8f, 1, new Vector3D(0, 0, 0));
-		keyboard.removeAllGestureEventListeners(DragProcessor.class);
+		//keyboard.removeAllGestureEventListeners(DragProcessor.class);
 		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
 		keyboard.removeAllGestureEventListeners(RotateProcessor.class);
 		
