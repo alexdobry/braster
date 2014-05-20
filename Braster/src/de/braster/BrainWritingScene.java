@@ -30,6 +30,8 @@ import org.mt4j.util.MTColor;
 import org.mt4j.util.font.FontManager;
 import org.mt4j.util.math.Vector3D;
 
+import de.braster.BWKeyboard.KeyInfo;
+
 
 public class BrainWritingScene extends AbstractScene{
 
@@ -82,10 +84,11 @@ public class BrainWritingScene extends AbstractScene{
 		
 		
 		//Keyboards erstellen und positionieren
-		MTKeyboard kb1 = makeKB(mtApplication);
-		MTKeyboard kb2 = makeKB(mtApplication);
-		MTKeyboard kb3 = makeKB(mtApplication);
-		MTKeyboard kb4 = makeKB(mtApplication);
+		BWKeyboard kb1 = makeKB(mtApplication);
+//		BWKeyboard kb2 = new BWKeyboard(mtApplication); //tmp
+		BWKeyboard kb2 = makeKB(mtApplication);
+		BWKeyboard kb3 = makeKB(mtApplication);
+		BWKeyboard kb4 = makeKB(mtApplication);
 		
 		Vector3D keyboardPositionRU = new Vector3D(mtApplication.width/2f+(kb1.getWidthXY(TransformSpace.LOCAL)/2),
 				mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f),
@@ -111,6 +114,7 @@ public class BrainWritingScene extends AbstractScene{
 		kb3.rotateZGlobal(keyboardPositionLO, 90);
 		kb4.rotateZGlobal(keyboardPositionRO, 270);
 
+//		canv.addChild(kb2); //temp
 		//Keyboards Ende //
 		
 		//Objektbereiche definieren
@@ -130,9 +134,9 @@ public class BrainWritingScene extends AbstractScene{
 		iv.setPositionGlobal(keyboardPositionRU);
 	}
 
-	public MTKeyboard makeKB(MTApplication mtApplication) {
+	public BWKeyboard makeKB(MTApplication mtApplication) {
 		
-		MTKeyboard keyboard = new MTKeyboard(mtApplication);
+		BWKeyboard keyboard = new BWKeyboard(mtApplication);
 		
         final MTTextArea t = new MTTextArea(mtApplication, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 50, MTColor.BLACK)); 
         t.setExpandDirection(ExpandDirection.UP);
@@ -144,15 +148,11 @@ public class BrainWritingScene extends AbstractScene{
 		keyboard.snapToKeyboard(t);
 		keyboard.addTextInputListener(t);
 		
-		
-		// extra enter button
-		MTSvgButton keybAddTextButton = new MTSvgButton(mtApplication, MT4jSettings.getInstance().getDefaultSVGPath()
-				+ "play.svg");
-		//Transform
-		keybAddTextButton.scale(1.2f, 1.2f, 1, new Vector3D(0,0,0));
-		keybAddTextButton.translate(new Vector3D(600,150,0));
-		keybAddTextButton.setBoundsPickingBehaviour(AbstractShape.BOUNDS_ONLY_CHECK);
-		keybAddTextButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+		// eigener enter button
+		KeyInfo ki = keyboard.new KeyInfo("f", "\n", "\n", 		new Vector3D(615, 105),KeyInfo.NORMAL_KEY);
+			
+		//Event listener für den enter key
+		IGestureEventListener tp = new IGestureEventListener() {
 				@Override
 				public boolean processGestureEvent(MTGestureEvent ge) {
 					TapEvent te = (TapEvent)ge;
@@ -188,13 +188,15 @@ public class BrainWritingScene extends AbstractScene{
 					}
 					return false;
 				}
-			});
-		keyboard.addChild(keybAddTextButton);
+			};
+			
+		keyboard.addKeyFromOutside(ki, tp);
+
 		
 		getCanvas().addChild(keyboard);
 		
 		keyboard.scale(0.8f, 0.8f, 1, new Vector3D(0, 0, 0));
-		//keyboard.removeAllGestureEventListeners(DragProcessor.class);
+		keyboard.removeAllGestureEventListeners(DragProcessor.class);
 		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
 		keyboard.removeAllGestureEventListeners(RotateProcessor.class);
 		
