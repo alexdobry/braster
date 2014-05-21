@@ -39,7 +39,7 @@ public class SetupScene  extends AbstractScene{
 	private MTCanvas canv;
 	private MTApplication mtApp;
 	private Iscene brainWritingScene;
-	private ArrayList<MTRectangle> playerButtons;
+	private ArrayList<Positioncomponent> playerButtons;
 	
 	
 	public SetupScene( final MTApplication mtApplication, String name)
@@ -48,7 +48,7 @@ public class SetupScene  extends AbstractScene{
 		
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
-		this.playerButtons = new ArrayList<MTRectangle>();
+		this.playerButtons = new ArrayList<Positioncomponent>();
 		
 		//TextField fŸr Titel
 		MTTextField textFieldTitle = new MTTextField(mtApplication, mtApplication.width/2f-100, 30, 200, 60, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
@@ -93,7 +93,7 @@ public class SetupScene  extends AbstractScene{
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-			final ArrayList<MTRectangle> temp = playerButtons;
+			final ArrayList<Positioncomponent> temp = playerButtons;
 			
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				
@@ -105,14 +105,13 @@ public class SetupScene  extends AbstractScene{
 					String problem = textAreaProblem.getText();
 					int number = 0;
 					//herausfinden, wieviel Spieler ausgewählt sind
- 					for (MTRectangle item: temp)
-					{
-						 System.out.println(item.getFillColor().toString());
-						 System.out.println("Color{0.0,128.0,0.0_255.0}");
-						if(item.getFillColor().toString().equals("Color{0.0,128.0,0.0_255.0}") )
-						{
-							MTTextArea textArea = (MTTextArea)item.getChildByIndex(0);
-							number = Integer.parseInt(textArea.getText());
+ 					for (Positioncomponent item: temp)
+					{ 				
+ 						MTRectangle r2 = item.getRectangle();
+ 						System.out.println(r2.getStrokeColor());
+						if(r2.getStrokeColor().toString().equals("Color{255.0,0.0,0.0_255.0}"))
+						{							 
+							number = item.getPersonenanzahl();
 						}
 					}
 					//Save the current scene on the scene stack before changing
@@ -148,29 +147,30 @@ public class SetupScene  extends AbstractScene{
 		MTRectangle parent1 = p1.createRectangle(1);		
 		parent1.setPositionGlobal(new Vector3D(300,400));		
 		this.canv.addChild(parent1);
-		this.playerButtons.add(parent1);
+		this.playerButtons.add(p1);
 		
 		Positioncomponent p2 = new Positioncomponent(this.mtApp);
 		MTRectangle parent2 = p2.createRectangle(2);		
 		parent2.setPositionGlobal(new Vector3D(600,400));		
 		this.canv.addChild(parent2);
-		this.playerButtons.add(parent2);
+		this.playerButtons.add(p2);
 		
 		Positioncomponent p3 = new Positioncomponent(this.mtApp);
 		MTRectangle parent3 = p3.createRectangle(3);		
 		parent3.setPositionGlobal(new Vector3D(900,400));		
 		this.canv.addChild(parent3);
-		this.playerButtons.add(parent3);
+		this.playerButtons.add(p3);
 		
 		Positioncomponent p4 = new Positioncomponent(this.mtApp);
 		MTRectangle parent4 = p4.createRectangle(4);		
 		parent4.setPositionGlobal(new Vector3D(1200,400));		
 		this.canv.addChild(parent4);
-		this.playerButtons.add(parent4);
+		this.playerButtons.add(p4);
 		
-		for(final MTRectangle r :this.playerButtons)
+		for(final Positioncomponent pc :this.playerButtons)
 		{
-			final ArrayList<MTRectangle> temp = this.playerButtons;
+			final ArrayList<Positioncomponent> temp = this.playerButtons;
+			final MTRectangle r = pc.getRectangle();
 			r.registerInputProcessor(new TapProcessor(getMTApplication()));
 			r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 				public boolean processGestureEvent(MTGestureEvent ge) {
@@ -179,18 +179,17 @@ public class SetupScene  extends AbstractScene{
 					{
 						//wenn angeklickt wird, werden alle Buttons in die Standardfarbe zurückgeführt
 						//und der angeklickte wird grün markiert						
-						for (MTRectangle item: temp  ) 
+						for (Positioncomponent item: temp  ) 
 						{
-							   item.setStrokeColor(MTColor.BLACK);
+							MTRectangle r2 = item.getRectangle();
+							r2.setStrokeColor(MTColor.BLACK);
 						}
 						r.setStrokeColor(MTColor.RED);
 						r.setStrokeWeight(8);
 					}
 					return false;
 				}
-			});
-	
-			
+			});			
 		}	
 	}
 	

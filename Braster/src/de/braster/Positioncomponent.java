@@ -119,5 +119,11 @@ public class Positioncomponent extends MTRoundRectangle{
 		return this.personenanzahl;
 	}
 	
+	public MTRectangle getRectangle()
+	{
+		return this.parent;
+	}
+	 
+	
 
 }
