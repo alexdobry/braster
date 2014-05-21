@@ -1,5 +1,7 @@
 package de.braster;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.mt4j.AbstractMTApplication;
@@ -25,14 +27,18 @@ import org.mt4j.util.font.FontManager;
 import org.mt4j.util.math.Vector3D;
 
 
+
+
 import processing.core.PApplet;
 
 public class Idea extends MTTextArea {
 	
-	PApplet app;
-	MTCanvas canv;
-	Idea self;
+	private static PApplet app;
+	private static MTCanvas canv;
+	private Idea self = null;
+	private static final LinkedList<Idea> ideas = new LinkedList<Idea>();
 
+	
 	public Idea(PApplet pApplet, MTCanvas canv) {
 		super(pApplet);
 		this.canv=canv;
@@ -82,6 +88,13 @@ public class Idea extends MTTextArea {
 				return false;
 			}
 		});
+		
+		ideas.add(this);
+	}
+
+	public static LinkedList<Idea> getAllIdeas() {
+		
+		return ideas;
 	}
 
 	public void snapToIdea(final Idea idea) {

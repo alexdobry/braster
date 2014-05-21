@@ -1,5 +1,6 @@
 package de.braster;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 import org.mt4j.AbstractMTApplication;
 import org.mt4j.MTApplication;
@@ -14,10 +15,13 @@ import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
 import org.mt4j.components.visibleComponents.widgets.buttons.MTSvgButton;
 import org.mt4j.components.visibleComponents.widgets.keyboard.MTKeyboard;
 import org.mt4j.components.visibleComponents.widgets.keyboard.MTTextKeyboard;
+import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
@@ -167,6 +171,83 @@ public class BrainWritingScene extends AbstractScene{
 		kb3.setBWIV(iv3);
 		kb4.setBWIV(iv4);
 		
+		
+		/////////////////////////
+		
+//		final MTRectangle rect = new MTRectangle(mtApplication,0, 0, 100, 100);
+//        rect.unregisterAllInputProcessors();
+//        rect.removeAllGestureEventListeners();
+//        getCanvas().addChild(rect);
+//
+//        rect.registerInputProcessor(new DragProcessor(mtApplication));
+//        rect.addGestureListener(DragProcessor.class, new DefaultDragAction());
+//        
+//        rect.registerInputProcessor(new TapProcessor(mtApplication));
+//        rect.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+//              @Override
+//              public boolean processGestureEvent(MTGestureEvent ge) {
+//                    TapEvent te = (TapEvent)ge;
+//                    if(te.getId() == TapEvent.GESTURE_STARTED){
+//                          float r = (float)(Math.random()*255);
+//                          float g = (float)(Math.random()*255);
+//                          float b = (float)(Math.random()*255);
+//                          rect.setFillColor(new MTColor(r, g,b ));
+//                    }
+//
+//                    return false;
+//              }
+//        }); 
+//        
+//		MTEllipse ellipse = new MTEllipse(mtApplication, new Vector3D(mtApplication.width/2, mtApplication.height/2), 30, 30);
+//		 ellipse.unregisterAllInputProcessors();
+//		 ellipse.removeAllGestureEventListeners();
+//		 ellipse.registerInputProcessor(new FlickProcessor());
+//		 ellipse.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+//		@Override
+//		public boolean processGestureEvent(MTGestureEvent ge) {
+//		FlickEvent fe = (FlickEvent)ge;
+//		int x = 0;
+//		int y = 0;
+//		if(fe.getId() == FlickEvent.GESTURE_ENDED){
+//		         switch (fe.getDirection()) {
+//		case EAST:
+//		x = 10;
+//		break;
+//		case WEST:
+//		x = -10;
+//		break;
+//		case NORTH:
+//		y = -10;
+//		break;
+//		case NORTH_WEST:
+//		x = -10;
+//		y = -10;
+//		break;
+//		case NORTH_EAST:
+//		x = 10;
+//		y = -10;
+//		break;
+//		case SOUTH:
+//		y = 10;
+//		break;
+//		case SOUTH_WEST:
+//		x = -10;
+//		y = 10;
+//		break;
+//		case SOUTH_EAST:
+//		x = 10;
+//		         y = 10;
+//		break;
+//		default:
+//		break;
+//		}
+//		rect.translate(new Vector3D(x, y));
+//		}
+//		return false;
+//		}
+//		});
+//		getCanvas().addChild(ellipse);
+		
 	}
 
 	public BWKeyboard makeKB() {
@@ -246,16 +327,42 @@ public class BrainWritingScene extends AbstractScene{
 	
 	public class BWIdeaView extends MTRectangle{
 
+		
+		private LinkedList<Idea> ideas = Idea.getAllIdeas();
+		
+		private int iterator = 0;
+		private MTTextArea ideaArea = null;
+		
 		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
 			super(pApplet, width, height);
 			
 			setFillColor(MTColor.GREY);
 			setStrokeColor(MTColor.WHITE);
 			
-			MTTextArea ideaArea = new MTTextArea(pApplet, 0, 0, width, height*2/3);
+			ideaArea = new MTTextArea(pApplet);
+			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
 			ideaArea.setStrokeColor(MTColor.WHITE);
 			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.BLACK, true));
 			ideaArea.removeAllGestureEventListeners();
+//			ideaArea.setText("test");
+			
+			ideaArea.removeAllGestureEventListeners();
+			ideaArea.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
+			IGestureEventListener gl = new IGestureEventListener() {
+				
+				@Override
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					TapEvent te = (TapEvent)ge;
+					if (te.isTapped()){
+						
+						fillIdeaArea();
+					}
+					return false;
+				}
+			};
+			this.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
+			this.addGestureListener(TapProcessor.class, gl);
+			ideaArea.addGestureListener(TapProcessor.class, gl);
 			
 			MTTextArea editButton = new MTTextArea(pApplet);
 			editButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
@@ -269,7 +376,9 @@ public class BrainWritingScene extends AbstractScene{
 			
 			nextButton.removeAllGestureEventListeners();
 			editButton.removeAllGestureEventListeners();
-			ideaArea.removeAllGestureEventListeners();
+			
+			
+
 			
 			float radius = 20;
 			MTEllipse circle = new MTEllipse(pApplet, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-radius,this.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)-radius,0), radius, radius);
@@ -286,7 +395,6 @@ public class BrainWritingScene extends AbstractScene{
 					if (te.isTapped()){
 						kb.setVisible(true);
 						setVisible(false);
-						System.out.println("Circle");
 					}
 					return false;
 				}
@@ -299,6 +407,22 @@ public class BrainWritingScene extends AbstractScene{
 			
 		}
 
+		
+		public void fillIdeaArea() {
+			Idea i = null;
+			if (ideas.size() > 0) {
+				i = ideas.get(iterator);
+				
+				if (ideas.get(iterator) == ideas.getLast()) {
+					iterator = 0;
+				} else {
+					iterator++;
+				}
+				ideaArea.setText(i.getText());
+			}
+			
+			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
+		}
 	}
 	
 	
