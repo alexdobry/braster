@@ -16,6 +16,8 @@ import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
@@ -80,14 +82,17 @@ public class EvaluationScene extends AbstractScene{
 		//Bereich
 		area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),600, 600);
 		area.setFillColor(new MTColor(135,206,250));
+		area.setPickable(false);
 		this.canv.addChild(area);
 				
 		MTLine line1 = new MTLine(this.mtApp, 400, 0, 400, 500);
 		line1.setFillColor(MTColor.BLACK);
+		line1.setPickable(false);
 		area.addChild(line1);
 				
 		MTLine line2 = new MTLine(this.mtApp, this.mtApp.width-400, 0, this.mtApp.width-400, 500);
 		line2.setFillColor(MTColor.BLACK);
+		line2.setPickable(false);
 		area.addChild(line2);
 		
 		//diese dann alle in der mitte anzeigen lassen	
@@ -171,7 +176,6 @@ public class EvaluationScene extends AbstractScene{
 			}
 		});
 		mtRoundRectangle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-			 
 
 			@SuppressWarnings("deprecation")
 			public boolean processGestureEvent(MTGestureEvent ge) {
@@ -205,6 +209,20 @@ public class EvaluationScene extends AbstractScene{
 			}
 		});
 	
+		//this.clearAllGestures(mtRoundRectangle);
+		mtRoundRectangle.registerInputProcessor(new FlickProcessor(300, 5));
+		mtRoundRectangle.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				FlickEvent e = (FlickEvent)ge;
+				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
+				{
+					mtRoundRectangle.setFillColor(MTColor.AQUA);
+					
+				}
+					
+				return false;
+			}
+		});
 		 
 		this.area.addChild(mtRoundRectangle);
 		this.notes.add(mtRoundRectangle);
