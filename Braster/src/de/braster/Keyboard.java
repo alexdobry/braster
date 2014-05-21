@@ -137,7 +137,7 @@ public class Keyboard extends MTRoundRectangle implements IKeyListener {
 						+ "keybClose.svg");
 		//Transform
 		keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
-		keybCloseSvg.translate(new Vector3D(640,5,0));
+		keybCloseSvg.translate(new Vector3D(900,5,0));
 		keybCloseSvg.setBoundsPickingBehaviour(AbstractShape.BOUNDS_ONLY_CHECK);
 		keybCloseSvg.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			@Override
