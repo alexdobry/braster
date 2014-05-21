@@ -57,6 +57,7 @@ import org.mt4j.util.font.IFont;
 import org.mt4j.util.math.Vector3D;
 import org.mt4j.util.math.Vertex;
 
+import de.braster.BrainWritingScene.BWIdeaView;
 import processing.core.PApplet;
 
 /**
@@ -89,6 +90,7 @@ public class BWKeyboard extends MTRoundRectangle implements IKeyListener {
 	
 	private boolean hardwareInput;
 	
+	private BWIdeaView iv;
 
 	/**
 	 * Creates a new keyboard without an text input acceptor.
@@ -137,7 +139,9 @@ public class BWKeyboard extends MTRoundRectangle implements IKeyListener {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
-					onCloseButtonClicked();
+//					onCloseButtonClicked();
+					setVisible(false);
+					iv.setVisible(true);
 				}
 				return false;
 			}
@@ -254,6 +258,10 @@ public class BWKeyboard extends MTRoundRectangle implements IKeyListener {
 	}
 	
 	
+	public void setBWIV (BWIdeaView iv) {
+		this.iv = iv;
+	}
+ 	
 	public void addKeyFromOutside(KeyInfo keyInfo, IGestureEventListener tapP) {
 		MTColor keyColor = new MTColor(0,0,0,255);
 		

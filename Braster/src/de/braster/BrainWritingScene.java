@@ -7,6 +7,7 @@ import org.mt4j.components.MTCanvas;
 import org.mt4j.components.MTComponent;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.shapes.AbstractShape;
+import org.mt4j.components.visibleComponents.shapes.MTEllipse;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
@@ -30,6 +31,7 @@ import org.mt4j.util.MTColor;
 import org.mt4j.util.font.FontManager;
 import org.mt4j.util.math.Vector3D;
 
+import processing.core.PApplet;
 import de.braster.BWKeyboard.KeyInfo;
 
 
@@ -37,6 +39,17 @@ public class BrainWritingScene extends AbstractScene{
 
 	MTCanvas canv;
 	final MTApplication mtApp;
+	
+	BWKeyboard kb1;
+	BWKeyboard kb2;
+	BWKeyboard kb3;
+	BWKeyboard kb4;
+	
+	Vector3D keyboardPositionRU;
+	Vector3D keyboardPositionLU;
+	Vector3D keyboardPositionRO;
+	Vector3D keyboardPositionLO;
+	
 	public BrainWritingScene(MTApplication mtApplication, String name, String problem, int players) {
 		super(mtApplication, name);
 		this.mtApp = mtApplication;
@@ -48,8 +61,6 @@ public class BrainWritingScene extends AbstractScene{
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
-		
-		//Idea textArea =new Idea(mtApplication);
 		
 		textArea.setNoFill(true);
 		textArea.setNoStroke(true);
@@ -84,25 +95,25 @@ public class BrainWritingScene extends AbstractScene{
 		
 		
 		//Keyboards erstellen und positionieren
-		BWKeyboard kb1 = makeKB(mtApplication);
+		kb1 = makeKB();
 //		BWKeyboard kb2 = new BWKeyboard(mtApplication); //tmp
-		BWKeyboard kb2 = makeKB(mtApplication);
-		BWKeyboard kb3 = makeKB(mtApplication);
-		BWKeyboard kb4 = makeKB(mtApplication);
+		kb2 = makeKB();
+		kb3 = makeKB();
+		kb4 = makeKB();
 		
-		Vector3D keyboardPositionRU = new Vector3D(mtApplication.width/2f+(kb1.getWidthXY(TransformSpace.LOCAL)/2),
+		keyboardPositionRU = new Vector3D(mtApplication.width/2f+(kb1.getWidthXY(TransformSpace.LOCAL)/2),
 				mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f),
 				0);
 
-		Vector3D keyboardPositionLU = new Vector3D(mtApplication.width/2f-(kb2.getWidthXY(TransformSpace.LOCAL)/2),
+		keyboardPositionLU = new Vector3D(mtApplication.width/2f-(kb2.getWidthXY(TransformSpace.LOCAL)/2),
 				mtApplication.height-(kb2.getHeightXY(TransformSpace.LOCAL)/2f),
 				0);
 		
-		Vector3D keyboardPositionLO = new Vector3D(mtApplication.width/2f-(kb3.getWidthXY(TransformSpace.LOCAL)-(kb3.getHeightXY(TransformSpace.LOCAL)/2f)),
+		keyboardPositionLO = new Vector3D(mtApplication.width/2f-(kb3.getWidthXY(TransformSpace.LOCAL)-(kb3.getHeightXY(TransformSpace.LOCAL)/2f)),
 				(mtApplication.height/2f)-(kb3.getHeightXY(TransformSpace.LOCAL)/2f),
 				0);
 		
-		Vector3D keyboardPositionRO = new Vector3D(mtApplication.width/2f+kb3.getWidthXY(TransformSpace.LOCAL)-kb3.getHeightXY(TransformSpace.LOCAL)/2f,
+		keyboardPositionRO = new Vector3D(mtApplication.width/2f+kb3.getWidthXY(TransformSpace.LOCAL)-kb3.getHeightXY(TransformSpace.LOCAL)/2f,
 				mtApplication.height/2f-(kb3.getHeightXY(TransformSpace.LOCAL)/2f),
 				0);
 		
@@ -111,6 +122,7 @@ public class BrainWritingScene extends AbstractScene{
 		kb2.setPositionGlobal(keyboardPositionLU);
 		kb3.setPositionGlobal(keyboardPositionLO);
 		kb4.setPositionGlobal(keyboardPositionRO);
+		
 		kb3.rotateZGlobal(keyboardPositionLO, 90);
 		kb4.rotateZGlobal(keyboardPositionRO, 270);
 
@@ -128,17 +140,40 @@ public class BrainWritingScene extends AbstractScene{
 		//canv.addChild(test);
 		
 		
-		BWIdeaView iv = new BWIdeaView(mtApplication, kb1.getWidthXY(TransformSpace.LOCAL), kb1.getHeightXY(TransformSpace.LOCAL));
+		BWIdeaView iv1 = new BWIdeaView(mtApplication, kb1.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb1.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb1);
+		BWIdeaView iv2 = new BWIdeaView(mtApplication, kb2.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb2.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb2);
+		BWIdeaView iv3 = new BWIdeaView(mtApplication, kb3.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb3);
+		BWIdeaView iv4 = new BWIdeaView(mtApplication, kb4.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb4.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb4);
 		
-		canv.addChild(iv);
-		iv.setPositionGlobal(keyboardPositionRU);
+		canv.addChild(iv1);
+		canv.addChild(iv2);
+		canv.addChild(iv3);
+		canv.addChild(iv4);
+		iv1.setPositionGlobal(keyboardPositionRU);
+		iv2.setPositionGlobal(keyboardPositionLU);
+		iv3.setPositionGlobal(keyboardPositionLO);
+		iv4.setPositionGlobal(keyboardPositionRO);
+			
+		iv3.rotateZGlobal(keyboardPositionLO, 90);
+		iv4.rotateZGlobal(keyboardPositionRO, 270);
+		
+		iv1.setVisible(false);
+		iv2.setVisible(false);
+		iv3.setVisible(false);
+		iv4.setVisible(false);
+		
+		kb1.setBWIV(iv1);
+		kb2.setBWIV(iv2);
+		kb3.setBWIV(iv3);
+		kb4.setBWIV(iv4);
+		
 	}
 
-	public BWKeyboard makeKB(MTApplication mtApplication) {
+	public BWKeyboard makeKB() {
 		
-		BWKeyboard keyboard = new BWKeyboard(mtApplication);
+		BWKeyboard keyboard = new BWKeyboard(mtApp);
 		
-        final MTTextArea t = new MTTextArea(mtApplication, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 50, MTColor.BLACK)); 
+        final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 50, MTColor.BLACK)); 
         t.setExpandDirection(ExpandDirection.UP);
 		t.setStrokeColor(new MTColor(0,0 , 0, 255));
 		t.setFillColor(new MTColor(205,200,177, 255));
@@ -207,6 +242,63 @@ public class BrainWritingScene extends AbstractScene{
 
 		
 		
+	}
+	
+	public class BWIdeaView extends MTRectangle{
+
+		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
+			super(pApplet, width, height);
+			
+			setFillColor(MTColor.GREY);
+			setStrokeColor(MTColor.WHITE);
+			
+			MTTextArea ideaArea = new MTTextArea(pApplet, 0, 0, width, height*2/3);
+			ideaArea.setStrokeColor(MTColor.WHITE);
+			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.BLACK, true));
+			ideaArea.removeAllGestureEventListeners();
+			
+			MTTextArea editButton = new MTTextArea(pApplet);
+			editButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
+			editButton.setPositionRelativeToOther(this, new Vector3D(this.getWidthXY(TransformSpace.LOCAL)*1/4,this.getHeightXY(TransformSpace.LOCAL)*4/5,0));
+			editButton.setText("edit");
+			//TODO: next/prev vieleicht durch "fling" gesture ersetzen
+			MTTextArea nextButton = new MTTextArea(pApplet);
+			nextButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
+			nextButton.setPositionRelativeToOther(this, new Vector3D(this.getWidthXY(TransformSpace.LOCAL)*3/4,this.getHeightXY(TransformSpace.LOCAL)*4/5,0));
+			nextButton.setText("next");
+			
+			nextButton.removeAllGestureEventListeners();
+			editButton.removeAllGestureEventListeners();
+			ideaArea.removeAllGestureEventListeners();
+			
+			float radius = 20;
+			MTEllipse circle = new MTEllipse(pApplet, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-radius,this.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)-radius,0), radius, radius);
+			circle.setStrokeColor(MTColor.LIME);
+			circle.setGestureAllowance(DragProcessor.class, false);
+			circle.setGestureAllowance(ScaleProcessor.class, false);
+			
+			circle.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
+			circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+				
+				@Override
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					TapEvent te = (TapEvent)ge;
+					if (te.isTapped()){
+						kb.setVisible(true);
+						setVisible(false);
+						System.out.println("Circle");
+					}
+					return false;
+				}
+			});
+			
+			this.addChild(ideaArea);
+			this.addChild(nextButton);
+			this.addChild(editButton);
+			this.addChild(circle);
+			
+		}
+
 	}
 	
 	
