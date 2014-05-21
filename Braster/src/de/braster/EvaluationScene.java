@@ -52,25 +52,26 @@ public class EvaluationScene extends AbstractScene{
 		
 		
 		//muss noch die ganzen ideen aus dem clustern übergeben bekommen
+		//solange templiste mit ideen
 		ideas = new ArrayList<Note>();
 		notes = new ArrayList<MTRoundRectangle>();
 				
-		Note n1 = new Note("gute idee");
+		Note n1 = new Note("1");
 		ideas.add(n1);
 		
-		Note n2 = new Note("geht so idee");
+		Note n2 = new Note("2");
 		ideas.add(n2);
 		
-		Note n3 = new Note("schlechte idee");
+		Note n3 = new Note("3");
 		ideas.add(n3);
 		
-		Note n4 = new Note("gute idee");
+		Note n4 = new Note("4");
 		ideas.add(n4);
 		
-		Note n5 = new Note("geht so idee");
+		Note n5 = new Note("5");
 		ideas.add(n5);
 		
-		Note n6 = new Note("schlechte idee");
+		Note n6 = new Note("6");
 		ideas.add(n6);
 		
 				
@@ -96,14 +97,28 @@ public class EvaluationScene extends AbstractScene{
 		area.addChild(line2);
 		
 		//diese dann alle in der mitte anzeigen lassen	
-		int x = this.mtApp.width/2 -100;
+		//oben mitte alle ideen als icons
+		//selektierte dann weiter unten großzeigen
+		//problembeschreibung unter dem kreis
+		
+		
+		//möglichkeiten
+		//1. grid erzeugen als komponente
+		//2. platz ausrechnen und einfach durch iterieren
+		//problem? was bei sehr vielen ideen
+		//bereich defnieren mit scrollwindow?
+		
+		int x =410;
 		int y= 10;	
 		for(Note n: this.ideas)
 		{			
-			//posi mitgeben
-			int abstand = 550 / this.ideas.size();			 
+			if(x > this.mtApp.width-510) 
+			{
+				y+=40;
+				x=410;
+			}
 			createNoteItem(n.getName(), x , y );
-			y+= abstand; 
+			x += 120;		  
 		}
 		//bei anklicken müssen die ideen groß angezeigt werden
 		//bei geste nach rechts nach links verschieben in papierkorb
@@ -116,13 +131,13 @@ public class EvaluationScene extends AbstractScene{
 	private void createNoteItem(String name, int x, int y)
 	{
 		IFont font = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		30, MTColor.BLACK, false);
+        		10, MTColor.BLACK, false);
 		
 		//Algorithmuss überlegen auf welche Position die Idee kommt, da sonst alle übereinenader gestapelt sind
 		//dazu Höhe auslesen, in welchem Bereich diese liegen dürfen
 		
-		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 200, 40, 12, 12);
-		mtRoundRectangle.setSizeLocal(200,40);
+		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 100, 30, 12, 12);
+		mtRoundRectangle.setSizeLocal(100,30);
 		mtRoundRectangle.unregisterAllInputProcessors();
 		mtRoundRectangle.setStrokeColor(MTColor.WHITE); 
  
@@ -185,24 +200,7 @@ public class EvaluationScene extends AbstractScene{
 					//die idee wird vergrößert dargestellt
 					//alle andere ideen werden verkleinert wieder					
 					//je nach vorherigem status
-					boolean isBig=false;
-					if(mtRoundRectangle.getHeightXYVectLocal().y > 41)
-					{
-						System.out.println(mtRoundRectangle.getHeightXYVectLocal().y);
-						isBig = true;
-					}
-					 
-					for(MTRoundRectangle r : notes)
-					{
-						r.setSizeLocal(200,40);
-						r.setPositionGlobal(new Vector3D(mtApp.width/2,r.getCenterPointGlobal().y)); 
-					}
-
-					if(!isBig)
-					{
-						mtRoundRectangle.setSizeLocal(400,80);
-						mtRoundRectangle.setPositionGlobal(new Vector3D(mtApp.width/2,mtRoundRectangle.getCenterPointGlobal().y)); 
-					}
+				
 
 				}
 				return false;
