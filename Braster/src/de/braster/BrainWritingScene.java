@@ -286,17 +286,17 @@ public class BrainWritingScene extends AbstractScene{
 			    		
 			    		textArea.setText(t.getText());
 			    		textArea2.setText(t.getText()+t.getText());
-			    		textArea3.setText(t.getText());
+			    		textArea3.setText(t.getText()+t.getText()+t.getText());
 			    		
 			    		textArea.setName(t.getText());
 			    		textArea2.setName(t.getText()+t.getText());
-			    		textArea3.setName(t.getText());
+			    		textArea3.setName(t.getText()+t.getText()+t.getText());
 			    		
-			    		canv.addChild(textArea);
-			    		canv.addChild(textArea2);
-			    		canv.addChild(textArea3);
-			    		textArea.snapToIdea(textArea2);
-			    		textArea.snapToIdea(textArea3);
+//			    		canv.addChild(textArea);
+//			    		canv.addChild(textArea2);
+//			    		canv.addChild(textArea3);
+//			    		textArea.snapToIdea(textArea2);
+//			    		textArea.snapToIdea(textArea3);
 			    		t.clear();
 			    		
 			    		System.out.print(textArea.getChildCount());
@@ -364,30 +364,21 @@ public class BrainWritingScene extends AbstractScene{
 			this.addGestureListener(TapProcessor.class, gl);
 			ideaArea.addGestureListener(TapProcessor.class, gl);
 			
-			MTTextArea editButton = new MTTextArea(pApplet);
-			editButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
-			editButton.setPositionRelativeToOther(this, new Vector3D(this.getWidthXY(TransformSpace.LOCAL)*1/4,this.getHeightXY(TransformSpace.LOCAL)*4/5,0));
-			editButton.setText("edit");
+			MTTextArea addButton = new MTTextArea(pApplet);
+			addButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
+			addButton.setPositionRelativeToOther(this, new Vector3D(this.getWidthXY(TransformSpace.LOCAL)*1/4,this.getHeightXY(TransformSpace.LOCAL)*4/5,0));
+			addButton.setText("  ADD  ");
 			//TODO: next/prev vieleicht durch "fling" gesture ersetzen
-			MTTextArea nextButton = new MTTextArea(pApplet);
-			nextButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
-			nextButton.setPositionRelativeToOther(this, new Vector3D(this.getWidthXY(TransformSpace.LOCAL)*3/4,this.getHeightXY(TransformSpace.LOCAL)*4/5,0));
-			nextButton.setText("next");
+//			MTTextArea nextButton = new MTTextArea(pApplet);
+//			nextButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
+//			nextButton.setPositionRelativeToOther(this, new Vector3D(this.getWidthXY(TransformSpace.LOCAL)*3/4,this.getHeightXY(TransformSpace.LOCAL)*4/5,0));
+//			nextButton.setText("next");
+//			
+//			nextButton.removeAllGestureEventListeners();
+			addButton.removeAllGestureEventListeners();
 			
-			nextButton.removeAllGestureEventListeners();
-			editButton.removeAllGestureEventListeners();
-			
-			
-
-			
-			float radius = 20;
-			MTEllipse circle = new MTEllipse(pApplet, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-radius,this.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)-radius,0), radius, radius);
-			circle.setStrokeColor(MTColor.LIME);
-			circle.setGestureAllowance(DragProcessor.class, false);
-			circle.setGestureAllowance(ScaleProcessor.class, false);
-			
-			circle.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
-			circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			addButton.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
+			addButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 				
 				@Override
 				public boolean processGestureEvent(MTGestureEvent ge) {
@@ -399,11 +390,32 @@ public class BrainWritingScene extends AbstractScene{
 					return false;
 				}
 			});
+
+			
+			float radius = 20;
+//			MTEllipse circle = new MTEllipse(pApplet, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-radius,this.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)-radius,0), radius, radius);
+//			circle.setStrokeColor(MTColor.LIME);
+//			circle.setGestureAllowance(DragProcessor.class, false);
+//			circle.setGestureAllowance(ScaleProcessor.class, false);
+			
+//			circle.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
+//			circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+//				
+//				@Override
+//				public boolean processGestureEvent(MTGestureEvent ge) {
+//					TapEvent te = (TapEvent)ge;
+//					if (te.isTapped()){
+//						kb.setVisible(true);
+//						setVisible(false);
+//					}
+//					return false;
+//				}
+//			});
 			
 			this.addChild(ideaArea);
-			this.addChild(nextButton);
-			this.addChild(editButton);
-			this.addChild(circle);
+//			this.addChild(nextButton);
+			this.addChild(addButton);
+//			this.addChild(circle);
 			
 		}
 

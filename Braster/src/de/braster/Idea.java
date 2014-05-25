@@ -34,7 +34,7 @@ import processing.core.PApplet;
 public class Idea extends MTTextArea {
 	
 	private static PApplet app;
-	private static MTCanvas canv;
+	private MTCanvas canv;
 	private Idea self = null;
 	private static final LinkedList<Idea> ideas = new LinkedList<Idea>();
 
@@ -97,6 +97,10 @@ public class Idea extends MTTextArea {
 		return ideas;
 	}
 
+	public void updateCanvas(MTCanvas canv) {
+		this.canv = canv;
+	}
+	
 	public void snapToIdea(final Idea idea) {
 		
 		
