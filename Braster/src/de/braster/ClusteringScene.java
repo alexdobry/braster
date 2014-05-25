@@ -47,13 +47,16 @@ public class ClusteringScene extends AbstractScene{
 		ideas = Idea.getAllIdeas();
 		float posx = 0;
 		float posy = 0;
+		
+		float padding = 20;
+		
 		Random rng = new Random();
 		for (Idea idea : ideas) {
 			canv.addChild(idea);
-			posy = rng.nextFloat() * mtApp.height;
-			posx = rng.nextFloat() * mtApp.width;
-			idea.setPositionGlobal(new Vector3D(posx, posy));
-			idea.updateCanvas(canv);
+			posy = rng.nextFloat() * (mtApp.height-padding*2);
+			posx = rng.nextFloat() * (mtApp.width-padding*2);
+			idea.setPositionGlobal(new Vector3D(posx+padding, posy+padding));
+			idea.updateCanvas(canv); //TODO:
 		}
 		
 		
