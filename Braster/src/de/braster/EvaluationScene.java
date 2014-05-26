@@ -9,6 +9,8 @@ import org.mt4j.components.interfaces.IMTComponent3D;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
 import org.mt4j.components.visibleComponents.shapes.MTLine;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
+import org.mt4j.components.visibleComponents.widgets.MTList;
+import org.mt4j.components.visibleComponents.widgets.MTListCell;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.input.gestureAction.DefaultButtonClickAction;
 import org.mt4j.input.gestureAction.DefaultDragAction;
@@ -18,6 +20,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEven
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
@@ -28,52 +31,49 @@ import org.mt4j.util.font.FontManager;
 import org.mt4j.util.font.IFont;
 import org.mt4j.util.math.Vector3D;
 
+import processing.core.PApplet;
+
 public class EvaluationScene extends AbstractScene{
 
 	private MTCanvas canv;
 	private MTApplication mtApp;
-	private ArrayList<Note> ideas;
-    private ArrayList<MTRoundRectangle> notes;
-    private MTEllipse area;
+ 
+ 
+
 	/** The last event. */
 	private MTGestureEvent lastEvent;
 	/** The use custom target. */
 	private boolean useCustomTarget;
 	/** The drag target. */
-	private IMTComponent3D dragTarget;
+	private IMTComponent3D dragTarget;	
+
+    private MTEllipse area;
+    
+	private ArrayList<Note> ideas;
+	private ArrayList<Note> rubbish;
+	private ArrayList<Note> bestIdeas;
+	
+	private MTList listMiddle;
+	private MTList listLeft;
+	private MTList listRight;
 
 	
 	public EvaluationScene( MTApplication mtApplication, String name)
-	{
-		
-		
-		
-		super(mtApplication, name);
-		
+	{		
+		super(mtApplication, name);		
 		
 		//muss noch die ganzen ideen aus dem clustern übergeben bekommen
 		//solange templiste mit ideen
 		ideas = new ArrayList<Note>();
-		notes = new ArrayList<MTRoundRectangle>();
-				
-		Note n1 = new Note("1");
-		ideas.add(n1);
-		
-		Note n2 = new Note("2");
-		ideas.add(n2);
-		
-		Note n3 = new Note("3");
-		ideas.add(n3);
-		
-		Note n4 = new Note("4");
-		ideas.add(n4);
-		
-		Note n5 = new Note("5");
-		ideas.add(n5);
-		
-		Note n6 = new Note("6");
-		ideas.add(n6);
-		
+		rubbish = new ArrayList<Note>();
+		bestIdeas = new ArrayList<Note>();
+			
+		for(int i=1;i<30;i++)
+		{
+			Note n = new Note(i+"");
+			ideas.add(n);			
+		}
+		 
 				
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
@@ -86,71 +86,44 @@ public class EvaluationScene extends AbstractScene{
 		area.setPickable(false);
 		this.canv.addChild(area);
 				
-		MTLine line1 = new MTLine(this.mtApp, 400, 0, 400, 500);
+	 	MTLine line1 = new MTLine(this.mtApp, area.getCenterPointLocal().x-240, 0,  area.getCenterPointLocal().x-240, 500);	 
 		line1.setFillColor(MTColor.BLACK);
 		line1.setPickable(false);
 		area.addChild(line1);
 				
-		MTLine line2 = new MTLine(this.mtApp, this.mtApp.width-400, 0, this.mtApp.width-400, 500);
+		MTLine line2 = new MTLine(this.mtApp, area.getCenterPointLocal().x+240, 0,area.getCenterPointLocal().x+240, 500);  
 		line2.setFillColor(MTColor.BLACK);
 		line2.setPickable(false);
 		area.addChild(line2);
 		
-		//diese dann alle in der mitte anzeigen lassen	
-		//oben mitte alle ideen als icons
-		//selektierte dann weiter unten großzeigen
-		//problembeschreibung unter dem kreis
+		//Listen erzeugen
+	 	listMiddle = new MTList(mtApp,  area.getCenterPointLocal().x-220, 10,  440, 300);		 
+			
+		listLeft = new MTList(mtApp, area.getCenterPointLocal().x-500, 10, 240 , 200);	 
+				
+		listRight = new MTList(mtApp,area.getCenterPointLocal().x+260, 10, 240 , 200);
+		 
 		
+		//dort passiert das liste füllen, was bereits implementiert habe
+		//zunächst nur mittlere liste füllen
+		//nach jedem drag&drop vorgang die neue liste updaten
+		updateList(listMiddle,ideas);
 		
-		//möglichkeiten
-		//1. grid erzeugen als komponente
-		//2. platz ausrechnen und einfach durch iterieren
-		//problem? was bei sehr vielen ideen
-		//bereich defnieren mit scrollwindow?
+		 
 		
-		int x =410;
-		int y= 10;	
-		for(Note n: this.ideas)
-		{			
-			if(x > this.mtApp.width-510) 
-			{
-				y+=40;
-				x=410;
-			}
-			createNoteItem(n.getName(), x , y );
-			x += 120;		  
-		}
-		//bei anklicken müssen die ideen groß angezeigt werden
-		//bei geste nach rechts nach links verschieben in papierkorb
-		//bei nach rechts in den ordner für bessere ideen verschieben		
-	}
-	
-	
-	
-	
-	private void createNoteItem(String name, int x, int y)
-	{
-		IFont font = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		10, MTColor.BLACK, false);
+		//temporär untere rectangle für die selektierte idee in der mitte
+		MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, area.getRadiusX()-100, 400, 0, 200, 60, 12, 12);			
+		mtRoundRectangle.setStrokeColor(MTColor.BLACK);		
 		
-		//Algorithmuss überlegen auf welche Position die Idee kommt, da sonst alle übereinenader gestapelt sind
-		//dazu Höhe auslesen, in welchem Bereich diese liegen dürfen
-		
-		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 100, 30, 12, 12);
-		mtRoundRectangle.setSizeLocal(100,30);
-		mtRoundRectangle.unregisterAllInputProcessors();
-		mtRoundRectangle.setStrokeColor(MTColor.WHITE); 
- 
-		
-		MTTextArea rText = new MTTextArea(this.mtApp, font);
+		MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		10, MTColor.BLACK, false));
 		rText.unregisterAllInputProcessors();
 		rText.setPickable(false);
 		rText.setNoFill(true);
 		rText.setNoStroke(true);
-		rText.setText(name);
+		rText.setText("bla");
 		mtRoundRectangle.addChild(rText);
 		rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
-		
 		mtRoundRectangle.registerInputProcessor(new TapProcessor(getMTApplication()));
 		mtRoundRectangle.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(mtRoundRectangle));
 		mtRoundRectangle.addGestureListener(DragProcessor.class, new DefaultDragAction() {
@@ -169,9 +142,7 @@ public class EvaluationScene extends AbstractScene{
 						if (dragTarget instanceof MTComponent){
 							MTComponent baseComp = (MTComponent)dragTarget;
 							
-							baseComp.sendToFront();
-							
-						 
+							baseComp.sendToFront();						 
 						}
 							
 						translate(dragTarget, dragEvent);
@@ -182,6 +153,30 @@ public class EvaluationScene extends AbstractScene{
 					case MTGestureEvent.GESTURE_CANCELED:
 						break;
 					case MTGestureEvent.GESTURE_ENDED:
+						//wenn Gesture zu Ende, wird die Position bestimmt
+						if (dragTarget instanceof MTRoundRectangle){
+							MTRoundRectangle baseComp = (MTRoundRectangle)dragTarget;
+							
+							Vector3D centerPoint = baseComp.getCenterPointRelativeToParent();
+							//wenn links von MTline1 dann wird zur listeLeft gehauen
+							//element verschwindet
+							//liste updaten
+							//rechts dasselbe
+							if(centerPoint.x <  area.getCenterPointLocal().x-240)
+							{
+								MTTextArea tempText = (MTTextArea) baseComp.getChildren()[0];
+								rubbish.add(new Note(tempText.getText()));
+								updateLeftList(listLeft,rubbish);
+								baseComp.destroy();
+							}
+							else if(centerPoint.x>  area.getCenterPointLocal().x+240)
+							{
+								MTTextArea tempText = (MTTextArea)  baseComp.getChildren()[0];
+								bestIdeas.add(new Note(tempText.getText()));
+								updateLeftList(listRight, bestIdeas);
+							}
+						}
+						
 						break;
 					default:
 						break;
@@ -190,41 +185,171 @@ public class EvaluationScene extends AbstractScene{
 				return false;
 			}
 		});
-		mtRoundRectangle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-
-			@SuppressWarnings("deprecation")
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				TapEvent te = (TapEvent)ge;
-				if (te.isTapped()){
-						 		
-					//die idee wird vergrößert dargestellt
-					//alle andere ideen werden verkleinert wieder					
-					//je nach vorherigem status
-				
-
-				}
-				return false;
-			}
-		});
-	
-		//this.clearAllGestures(mtRoundRectangle);
-		mtRoundRectangle.registerInputProcessor(new FlickProcessor(300, 5));
-		mtRoundRectangle.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				FlickEvent e = (FlickEvent)ge;
-				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
-				{
-					mtRoundRectangle.setFillColor(MTColor.AQUA);
-					
-				}
-					
-				return false;
-			}
-		});
 		 
-		this.area.addChild(mtRoundRectangle);
-		this.notes.add(mtRoundRectangle);
+		area.addChild(mtRoundRectangle);
 		
+		//diese dann alle in der mitte anzeigen lassen	
+		//oben mitte alle ideen als icons
+		//selektierte dann weiter unten großzeigen
+		//problembeschreibung unter dem kreis
+		
+		
+		 
+		 
+		//bei anklicken müssen die ideen groß angezeigt werden
+		//bei geste nach rechts nach links verschieben in papierkorb
+		//bei nach rechts in den ordner für bessere ideen verschieben		
 	}
-
+	
+	
+	
+	private void updateLeftList(MTList item, ArrayList<Note> list)
+	{//die liste leeren
+		item.removeAllListElements();
+		//und dann nacheinander die elemente der arraylist in die komponente packen 
+	//	MTList item = new MTList(this.mtApp, 410,0, this.mtApp.width-820,300);	 
+		item.setFillColor(new MTColor(135,206,250));
+		item.setStrokeColor(new MTColor(135,206,250));
+		//Gesten für eine Idee
+				
+		area.addChild(item);
+		
+		int x = 10;
+		int y = 15;
+		
+		MTListCell cell = new MTListCell(this.mtApp,240, 60);
+		cell.setStrokeColor(new MTColor(135,206,250));
+		cell.setFillColor(new MTColor(135,206,250));
+				
+		for(Note n: list)
+		{			
+			if(x >  120) 
+			{				 
+				x = 10;
+				cell = new MTListCell(this.mtApp,240, 60);	
+				cell.setStrokeColor(new MTColor(135,206,250));
+				cell.setFillColor(new MTColor(135,206,250));
+				item.addChild(cell);
+			}
+	 
+			MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 80, 30, 12, 12);			
+			mtRoundRectangle.setStrokeColor(MTColor.BLACK);	
+			
+			MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+	        		10, MTColor.BLACK, false));
+			rText.unregisterAllInputProcessors();
+			rText.setPickable(false);
+			rText.setNoFill(true);
+			rText.setNoStroke(true);
+			rText.setText(n.getName());
+			mtRoundRectangle.addChild(rText);
+			rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
+			
+			mtRoundRectangle.unregisterAllInputProcessors();
+			//mtRoundRectangle.setGestureAllowance(TapProcessor.class, false);
+			mtRoundRectangle.registerInputProcessor(new TapProcessor(mtApp));
+			mtRoundRectangle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+				
+				@Override
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					TapEvent te = (TapEvent)ge;
+					if (te.isTapped())
+					{
+					 
+					//	MTRoundRectangle newRectangle = new MTRoundRectangle(mtApp , 410, 400, 0, 100, 30, 12, 12);		
+						//newRectangle.setStrokeColor(MTColor.BLACK);
+						//area.addChild(newRectangle);
+						System.out.println("klappptptppt");
+					}
+					return false;
+				}
+			});
+			cell.addChild(mtRoundRectangle);
+			 
+			item.addChild(cell);
+			
+			x += 90;		  
+		}		
+	}
+	
+	
+	//aufruf nachdem ein element verschoben wurde
+	//und zu beginn für die mittlere Liste
+	private void updateList(MTList item, ArrayList<Note> list)
+	{
+		//die liste leeren
+		item.removeAllListElements();
+		//und dann nacheinander die elemente der arraylist in die komponente packen 
+	//	MTList item = new MTList(this.mtApp, 410,0, this.mtApp.width-820,300);	 
+		item.setFillColor(new MTColor(135,206,250));
+		item.setStrokeColor(new MTColor(135,206,250));
+		//Gesten für eine Idee
+				
+		area.addChild(item);
+		
+		int x = 10;
+		int y = 15;
+		
+		MTListCell cell = new MTListCell(this.mtApp,420, 60);
+		cell.setStrokeColor(new MTColor(135,206,250));
+		cell.setFillColor(new MTColor(135,206,250));
+				
+		for(Note n: this.ideas)
+		{			
+			if(x > 320) 
+			{				 
+				x = 10;
+				cell = new MTListCell(this.mtApp,420, 60);	
+				cell.setStrokeColor(new MTColor(135,206,250));
+				cell.setFillColor(new MTColor(135,206,250));
+				item.addChild(cell);
+			}
+	 
+			MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 100, 30, 12, 12);			
+			mtRoundRectangle.setStrokeColor(MTColor.BLACK);	
+			
+			MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+	        		10, MTColor.BLACK, false));
+			rText.unregisterAllInputProcessors();
+			rText.setPickable(false);
+			rText.setNoFill(true);
+			rText.setNoStroke(true);
+			rText.setText(n.getName());
+			mtRoundRectangle.addChild(rText);
+			rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
+			
+			mtRoundRectangle.unregisterAllInputProcessors();
+			//mtRoundRectangle.setGestureAllowance(TapProcessor.class, false);
+			mtRoundRectangle.registerInputProcessor(new TapProcessor(mtApp));
+			mtRoundRectangle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+				
+				@Override
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					TapEvent te = (TapEvent)ge;
+					if (te.isTapped())
+					{
+					 
+						//MTRoundRectangle newRectangle = new MTRoundRectangle(mtApp , 410, 400, 0, 100, 30, 12, 12);		
+						//newRectangle.setStrokeColor(MTColor.BLACK);
+						//area.addChild(newRectangle);
+						System.out.println("klappptptppt");
+					}
+					return false;
+				}
+			});
+			cell.addChild(mtRoundRectangle);
+			 
+			item.addChild(cell);
+			
+			x += 120;		  
+		}		
+	}
+	
+	 
+	
+	
+	
+	
+	
+	 
 }
