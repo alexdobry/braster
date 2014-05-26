@@ -3,6 +3,8 @@ package de.braster;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Random;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
@@ -31,7 +33,7 @@ public class ClusteringScene extends AbstractScene{
 	private MTCanvas canv;
 	private MTApplication mtApp;
 	private Iscene evaluationScene;
-	private ArrayList<Idea> ideas;
+	private LinkedList<Idea> ideas;
 	
 	public ClusteringScene( MTApplication mtApplication, String name) 
 	{
@@ -42,10 +44,25 @@ public class ClusteringScene extends AbstractScene{
 		//setzt Hintergrundfarbe
 		this.setClearColor(MTColor.WHITE);
 		
-		createItem();
+		ideas = Idea.getAllIdeas();
+		float posx = 0;
+		float posy = 0;
 		
-		createLeftMenubar();
+		float padding = 20;
 		
+		Random rng = new Random();
+		for (Idea idea : ideas) {
+			canv.addChild(idea);
+			posy = rng.nextFloat() * (mtApp.height-padding*2);
+			posx = rng.nextFloat() * (mtApp.width-padding*2);
+			idea.setPositionGlobal(new Vector3D(posx+padding, posy+padding));
+			idea.updateCanvas(canv); //TODO:
+		}
+		
+		
+		
+//		createItem();
+//		createLeftMenubar();
 		createRightMenubar();
 	}
 
