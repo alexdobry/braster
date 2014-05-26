@@ -50,10 +50,6 @@ public class SetupScene  extends AbstractScene{
 		this.canv = getCanvas();
 		this.playerButtons = new ArrayList<Positioncomponent>();
 		
-		//tuio fix?
-		
-		
-		
 		//TextField für Titel
 		MTTextField textFieldTitle = new MTTextField(mtApplication, mtApplication.width/2f-100, 30, 200, 60, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		50, new MTColor(255, 255, 255, 255)));
@@ -68,6 +64,7 @@ public class SetupScene  extends AbstractScene{
                 		50, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
 		
+		
 		textArea.unregisterAllInputProcessors();
 		textArea.registerInputProcessor(new TapProcessor(this.mtApp));
 		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener(){
@@ -76,7 +73,9 @@ public class SetupScene  extends AbstractScene{
 				   if (te.isTapped())
 				   {                       
                        Keyboard kb = makeKB(mtApplication, textArea);  
-                       kb.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(kb.getHeightXY(TransformSpace.LOCAL)/2f)));                    
+                       kb.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(kb.getHeightXY(TransformSpace.LOCAL)/2f))); 
+                       textArea.setHeightLocal(100);
+               		   textArea.setWidthLocal(500);
 				   }
 				   return false;
 			}
@@ -244,10 +243,8 @@ public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 			TapEvent te = (TapEvent)ge;
 			if (te.isTapped() )
-			{
-				
-				keyboard.onCloseButtonClicked();
-				
+			{				
+				keyboard.onCloseButtonClicked();				
 			}
 			return false;
 			}
