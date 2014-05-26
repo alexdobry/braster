@@ -55,6 +55,8 @@ public class EvaluationScene extends AbstractScene{
 	private MTList listMiddle;
 	private MTList listLeft;
 	private MTList listRight;
+	
+	private Iscene finalScene;
 
 	
 	public EvaluationScene( MTApplication mtApplication, String name)
@@ -67,7 +69,7 @@ public class EvaluationScene extends AbstractScene{
 		rubbish = new ArrayList<Note>();
 		bestIdeas = new ArrayList<Note>();
 			
-		for(int i=1;i<30;i++)
+		for(int i=1;i<4;i++)
 		{
 			Note n = new Note(i+"");
 			ideas.add(n);			
@@ -123,17 +125,70 @@ public class EvaluationScene extends AbstractScene{
 		textProblem.setPositionRelativeToParent(rectangleProblem.getCenterPointLocal());
 		rectangleProblem.addChild(textProblem);
 		
-		this.canv.addChild(rectangleProblem);
-	 
-		
-		
-		 
-		 
-		
-		
+		this.canv.addChild(rectangleProblem);		
 	}
 	
+	public EvaluationScene( MTApplication mtApplication, String name, ArrayList<Note> tideas, ArrayList<Note> trubbish)
+	{		
+		super(mtApplication, name);		
+		
+		//muss noch die ganzen ideen aus dem clustern übergeben bekommen
+		//solange templiste mit ideen
+		ideas = tideas;
+		rubbish = trubbish;
+		bestIdeas = new ArrayList<Note>();
+				
+		this.mtApp = mtApplication;		
+		this.canv = getCanvas();
 	
+		this.setClearColor(MTColor.WHITE);		
+		
+		//Bereich
+		area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),600, 600);
+		area.setFillColor(new MTColor(135,206,250));
+		area.setPickable(false);
+		this.canv.addChild(area);
+				
+	 	MTLine line1 = new MTLine(this.mtApp, area.getCenterPointLocal().x-240, 0,  area.getCenterPointLocal().x-240, 500);	 
+		line1.setFillColor(MTColor.BLACK);
+		line1.setPickable(false);
+		area.addChild(line1);
+				
+		MTLine line2 = new MTLine(this.mtApp, area.getCenterPointLocal().x+240, 0,area.getCenterPointLocal().x+240, 500);  
+		line2.setFillColor(MTColor.BLACK);
+		line2.setPickable(false);
+		area.addChild(line2);
+		
+		//Listen erzeugen
+	 	listMiddle = new MTList(mtApp,  area.getCenterPointLocal().x-220, 10,  440, 300);		 
+			
+		listLeft = new MTList(mtApp, area.getCenterPointLocal().x-500, 10, 240 , 200);	 
+				
+		listRight = new MTList(mtApp,area.getCenterPointLocal().x+260, 10, 240 , 200);
+		 
+		
+		//dort passiert das liste füllen, was bereits implementiert habe
+		//zunächst nur mittlere liste füllen
+		//nach jedem drag&drop vorgang die neue liste updaten
+		updateList(listMiddle,ideas);
+		updateLeftList(listLeft,rubbish);
+		 
+		//Problembeschreibung
+		MTRoundRectangle rectangleProblem = new MTRoundRectangle(this.mtApp, this.mtApp.width/2-250, this.mtApp.height-100, 0, 500, 60, 12, 12);			
+		rectangleProblem.setStrokeColor(MTColor.BLACK);	
+		
+		MTTextArea textProblem = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		30, MTColor.BLACK, false));
+		textProblem.unregisterAllInputProcessors();
+		textProblem.setPickable(false);
+		textProblem.setNoFill(true);
+		textProblem.setNoStroke(true);
+		textProblem.setText("Hier steht das Problem...");
+		textProblem.setPositionRelativeToParent(rectangleProblem.getCenterPointLocal());
+		rectangleProblem.addChild(textProblem);
+		
+		this.canv.addChild(rectangleProblem);		
+	}
 	
 	private void updateLeftList(MTList item, ArrayList<Note> list)
 	{//die liste leeren
@@ -178,26 +233,8 @@ public class EvaluationScene extends AbstractScene{
 			rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
 			
 			mtRoundRectangle.unregisterAllInputProcessors();
-			//mtRoundRectangle.setGestureAllowance(TapProcessor.class, false);
-			mtRoundRectangle.registerInputProcessor(new TapProcessor(mtApp));
-			mtRoundRectangle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-				
-				@Override
-				public boolean processGestureEvent(MTGestureEvent ge) {
-					TapEvent te = (TapEvent)ge;
-					if (te.isTapped())
-					{
-					 
-					//	MTRoundRectangle newRectangle = new MTRoundRectangle(mtApp , 410, 400, 0, 100, 30, 12, 12);		
-						//newRectangle.setStrokeColor(MTColor.BLACK);
-						//area.addChild(newRectangle);
-						System.out.println("klappptptppt");
-					}
-					return false;
-				}
-			});
-			cell.addChild(mtRoundRectangle);
 			 
+			cell.addChild(mtRoundRectangle);			 
 			item.addChild(cell);
 			
 			x += 90;		  
@@ -210,7 +247,8 @@ public class EvaluationScene extends AbstractScene{
 	private void updateList(MTList item, ArrayList<Note> list)
 	{
 		//die liste leeren
-		item.removeAllListElements();
+		item.removeAllListElements();	
+		
 		//und dann nacheinander die elemente der arraylist in die komponente packen 
 	//	MTList item = new MTList(this.mtApp, 410,0, this.mtApp.width-820,300);	 
 		item.setFillColor(new MTColor(135,206,250));
@@ -226,21 +264,37 @@ public class EvaluationScene extends AbstractScene{
 		cell.setPickable(true);
 		cell.setStrokeColor(new MTColor(135,206,250));
 		cell.setFillColor(new MTColor(135,206,250));
-		/*cell.unregisterAllInputProcessors();
+		cell.unregisterAllInputProcessors();
 		cell.registerInputProcessor(new TapProcessor(mtApp));
 		cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
-				if (te.isTapped())
-				{				 
-					MTRoundRectangle newRectangle = new MTRoundRectangle(mtApp , 410, 400, 0, 100, 30, 12, 12);		
-					newRectangle.setStrokeColor(MTColor.BLACK);
-					area.addChild(newRectangle);
-					System.out.println("klappptptppt");
+				if (te.isTapped()) 
+				{		
+					//wird die unten angezeigt und aus der liste entfernt
+					MTListCell clickedCell = (MTListCell) te.getTarget();
+					Vector3D clickedPosition = te.getCursor().getPosition();
+					for(MTComponent selectedComponent : clickedCell.getChildren())
+					{
+						MTRoundRectangle childRectangle = (MTRoundRectangle) selectedComponent;
+						//wenn in x-Richtung zwischen die maximalen Ausmaße geklickt wurde
+						if(childRectangle.getCenterPointGlobal().x - 50 < clickedPosition.x && childRectangle.getCenterPointGlobal().x + 50 > clickedPosition.x)
+						{
+							createSelectedIdea(childRectangle);
+						 
+							//selektierte aus der liste löschen
+							removeNote(childRectangle);
+							childRectangle.destroy();
+							updateList(listMiddle,ideas);
+							break;
+						}
+					}
+					
+					 
 				}
 				return false;
 			}
-		});*/
+		});
 		for(Note n: this.ideas)
 		{			
 			if(x > 320) 
@@ -298,10 +352,11 @@ public class EvaluationScene extends AbstractScene{
 			
 			cell.addChild(mtRoundRectangle);
 			item.addListElement(cell); 
-			//item.addChild(cell);
+			 
 			
 			x += 120;		  
-		}		
+		}	
+		
 	}
 	
 	 
@@ -383,7 +438,7 @@ public class EvaluationScene extends AbstractScene{
 								MTTextArea tempText = (MTTextArea) baseComp.getChildren()[0];
 								rubbish.add(new Note(tempText.getText()));
 								updateLeftList(listLeft,rubbish);
-								baseComp.destroy();
+								baseComp.destroy();								
 							}
 							else if(centerPoint.x>  area.getCenterPointLocal().x+240)
 							{
@@ -392,8 +447,39 @@ public class EvaluationScene extends AbstractScene{
 								updateLeftList(listRight, bestIdeas);
 								baseComp.destroy();
 							}
+							
 						}
-						
+						//Falls keine Elemente mehr drin sind
+						if(ideas.size()==0 && bestIdeas.size()==1)
+						{
+							//FinalScene gehen
+							mtApp.pushScene();
+							if (finalScene == null){
+								finalScene = new FinalScene(mtApp, "Final", "Wer ist deutscher Meister", "BVB Borussia");
+								//Konstruktor erweitern um Anzahl Spieler, da genau soviele
+								//Tastaturen geladen werden
+							//Add the scene to the mt application
+							mtApp.addScene(finalScene);
+							}
+							//Do the scene change
+							mtApp.changeScene(finalScene);
+						}
+						if(ideas.size()==0 && bestIdeas.size()>1)
+						{
+							//rechten ideen in die mitte
+							//alle restlichen in papierkorb
+							//FinalScene gehen
+							mtApp.pushScene();
+							if (finalScene == null)
+							{				
+								//Im konstruktor müssen die ideen als 2 listen übergeben werden
+								finalScene = new EvaluationScene(mtApp, "Evaluation Again", bestIdeas, rubbish);
+								mtApp.addScene(finalScene);
+							}
+							//Do the scene change
+							mtApp.changeScene(finalScene);
+					
+						}
 						break;
 					default:
 						break;
