@@ -109,20 +109,27 @@ public class EvaluationScene extends AbstractScene{
 		updateList(listMiddle,ideas);
 		
 		 
+		//Problembeschreibung
+		MTRoundRectangle rectangleProblem = new MTRoundRectangle(this.mtApp, this.mtApp.width/2-250, this.mtApp.height-100, 0, 500, 60, 12, 12);			
+		rectangleProblem.setStrokeColor(MTColor.BLACK);	
 		
-		//temporär untere rectangle für die selektierte idee in der mitte
+		MTTextArea textProblem = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		30, MTColor.BLACK, false));
+		textProblem.unregisterAllInputProcessors();
+		textProblem.setPickable(false);
+		textProblem.setNoFill(true);
+		textProblem.setNoStroke(true);
+		textProblem.setText("Hier steht das Problem...");
+		textProblem.setPositionRelativeToParent(rectangleProblem.getCenterPointLocal());
+		rectangleProblem.addChild(textProblem);
 		
-		//diese dann alle in der mitte anzeigen lassen	
-		//oben mitte alle ideen als icons
-		//selektierte dann weiter unten großzeigen
-		//problembeschreibung unter dem kreis
+		this.canv.addChild(rectangleProblem);
+	 
 		
 		
 		 
 		 
-		//bei anklicken müssen die ideen groß angezeigt werden
-		//bei geste nach rechts nach links verschieben in papierkorb
-		//bei nach rechts in den ordner für bessere ideen verschieben	
+		
 		
 	}
 	
@@ -247,13 +254,28 @@ public class EvaluationScene extends AbstractScene{
 				cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapEvent te = (TapEvent)ge;
-						if (te.isTapped())
+						if (te.isTapped()) 
 						{		
-							createSelectedIdea();
-							//MTRoundRectangle newRectangle = new MTRoundRectangle(mtApp , 410, 400, 0, 100, 30, 12, 12);		
-							//newRectangle.setStrokeColor(MTColor.BLACK);
-							//area.addChild(newRectangle);
-							System.out.println("klappptptppt");
+							//wird die unten angezeigt und aus der liste entfernt
+							MTListCell clickedCell = (MTListCell) te.getTarget();
+							Vector3D clickedPosition = te.getCursor().getPosition();
+							for(MTComponent selectedComponent : clickedCell.getChildren())
+							{
+								MTRoundRectangle childRectangle = (MTRoundRectangle) selectedComponent;
+								//wenn in x-Richtung zwischen die maximalen Ausmaße geklickt wurde
+								if(childRectangle.getCenterPointGlobal().x - 50 < clickedPosition.x && childRectangle.getCenterPointGlobal().x + 50 > clickedPosition.x)
+								{
+									createSelectedIdea(childRectangle);
+								 
+									//selektierte aus der liste löschen
+									removeNote(childRectangle);
+									childRectangle.destroy();
+									updateList(listMiddle,ideas);
+									break;
+								}
+							}
+							
+							 
 						}
 						return false;
 					}
@@ -284,10 +306,30 @@ public class EvaluationScene extends AbstractScene{
 	
 	 
 	
-	private void createSelectedIdea()
+	private void removeNote(MTRoundRectangle rectangle)
 	{
+		MTTextArea textArea = (MTTextArea) rectangle.getChildren()[0];
+		for(Note n : ideas)
+		{			 
+			if(n.getName().equals(textArea.getText()))
+			{
+				ideas.remove(n);
+				break;
+			}
+		}
+	}
+	
+	
+	private void createSelectedIdea(MTRoundRectangle selectedRectangle)
+	{
+		 
+		 
 		MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, area.getRadiusX()-100, 400, 0, 200, 60, 12, 12);			
-		mtRoundRectangle.setStrokeColor(MTColor.BLACK);		
+		mtRoundRectangle.setStrokeColor(MTColor.BLACK);			
+
+		MTTextArea tempText = (MTTextArea) selectedRectangle.getChildren()[0];
+	 
+		
 		
 		MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
         		10, MTColor.BLACK, false));
@@ -295,7 +337,7 @@ public class EvaluationScene extends AbstractScene{
 		rText.setPickable(false);
 		rText.setNoFill(true);
 		rText.setNoStroke(true);
-		rText.setText("bla");
+		rText.setText(tempText.getText());
 		mtRoundRectangle.addChild(rText);
 		rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
 		mtRoundRectangle.registerInputProcessor(new TapProcessor(getMTApplication()));
