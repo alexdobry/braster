@@ -447,6 +447,13 @@ public class EvaluationScene extends AbstractScene{
 								updateLeftList(listRight, bestIdeas);
 								baseComp.destroy();
 							}
+							else if(centerPoint.x >  area.getCenterPointLocal().x-240 && centerPoint.x < area.getCenterPointLocal().x+240 && centerPoint.y < 300 )
+							{
+								MTTextArea tempText = (MTTextArea)  baseComp.getChildren()[0];
+								ideas.add(new Note(tempText.getText()));
+								updateList(listMiddle, ideas);
+								baseComp.destroy();
+							}
 							
 						}
 						//Falls keine Elemente mehr drin sind

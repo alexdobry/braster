@@ -13,29 +13,25 @@ public class Positioncomponent extends MTRoundRectangle{
 	private MTApplication mtApp;
 	private int personenanzahl;
 	
-	public Positioncomponent(MTApplication mtApplication)
+	public Positioncomponent(MTApplication mtApplication, int anzahl)
 	{
 		super(mtApplication,0,0,0,0,0, 0, 0);
 		this.mtApp = mtApplication;
-		parent = new MTRectangle(mtApplication, 260, 130);
+		parent = new MTRectangle(mtApplication, 160, 100);
 		parent.unregisterAllInputProcessors();
 		parent.setFillColor(MTColor.WHITE);
-		parent.setStrokeColor(MTColor.BLACK);	 
-	}	
-	
-	
-	public MTRectangle createRectangle(int anzahl)
-	{
+		parent.setStrokeColor(MTColor.BLACK);
+		
 		this.personenanzahl = anzahl;
 		MTRectangle child1;
 		MTRectangle child2;
 		MTRectangle child3;
 		MTRectangle child4;
-		switch (anzahl)
+		switch (personenanzahl)
 		{			
 			case 1: //1 Kasten(unten)
-				child1 = new MTRectangle(this.mtApp,60,30);
-				child1.setPositionRelativeToOther(parent, new Vector3D(130,115));
+				child1 = new MTRectangle(this.mtApp,50,25);
+				child1.setPositionRelativeToOther(parent, new Vector3D(80,87.5f));
 				child1.unregisterAllInputProcessors();
 				child1.setFillColor(MTColor.SILVER);
 				child1.setStrokeColor(MTColor.SILVER);
@@ -43,73 +39,78 @@ public class Positioncomponent extends MTRoundRectangle{
 				break;
 			case 2: //2 kästen (links und rechts)
 
-				child1 = new MTRectangle(this.mtApp,30,60);
-				child1.setPositionRelativeToOther(parent, new Vector3D(15,85));
+				child1 = new MTRectangle(this.mtApp,25,50);
+				child1.setPositionRelativeToOther(parent, new Vector3D(12.5f,60));
 				child1.unregisterAllInputProcessors();
 				child1.setFillColor(MTColor.SILVER);
 				child1.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child1);
 
-				child2 = new MTRectangle(this.mtApp,30,60);
-				child2.setPositionRelativeToOther(parent, new Vector3D(245,85));
+				child2 = new MTRectangle(this.mtApp,25,50);
+				child2.setPositionRelativeToOther(parent, new Vector3D(147.5f,60));
 				child2.unregisterAllInputProcessors();
 				child2.setFillColor(MTColor.SILVER);
 				child2.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child2);
 				break;
-			case 3: //3 kästen (links, unten und rechts)
-				child1 = new MTRectangle(this.mtApp,60,30);
-				child1.setPositionRelativeToOther(parent, new Vector3D(130,115));
+			case 3: //3 kästen (unten, links und rechts)
+				child1 = new MTRectangle(this.mtApp,50,25);
+				child1.setPositionRelativeToOther(parent, new Vector3D(80,87.5f));
 				child1.unregisterAllInputProcessors();
 				child1.setFillColor(MTColor.SILVER);
 				child1.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child1);
 
-				child2 = new MTRectangle(this.mtApp,30,60);
-				child2.setPositionRelativeToOther(parent, new Vector3D(15,85));
+				child2 = new MTRectangle(this.mtApp,25,50);
+				child2.setPositionRelativeToOther(parent, new Vector3D(12.5f,40));
 				child2.unregisterAllInputProcessors();
 				child2.setFillColor(MTColor.SILVER);
 				child2.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child2);
 
-				child3 = new MTRectangle(this.mtApp,30,60);
-				child3.setPositionRelativeToOther(parent, new Vector3D(245,85));
+				child3 = new MTRectangle(this.mtApp,25,50);
+				child3.setPositionRelativeToOther(parent, new Vector3D(147.5f,40));
 				child3.unregisterAllInputProcessors();
 				child3.setFillColor(MTColor.SILVER);
 				child3.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child3);
 
 				break;
-			case 4: //4 kästen (links, links unten, rechts unten und rechts)
-				child1 = new MTRectangle(this.mtApp,30,60);
-				child1.setPositionRelativeToOther(parent, new Vector3D(15,65));
+			case 4: //4 kästen (links, rechts, unten links und rechts unten)
+				child1 = new MTRectangle(this.mtApp,25,50);
+				child1.setPositionRelativeToOther(parent, new Vector3D(12.5f,40));
 				child1.unregisterAllInputProcessors();
 				child1.setFillColor(MTColor.SILVER);
 				child1.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child1);
 
-				child2 = new MTRectangle(this.mtApp,30,60);
-				child2.setPositionRelativeToOther(parent, new Vector3D(245,65));
+				child2 = new MTRectangle(this.mtApp,25,50);
+				child2.setPositionRelativeToOther(parent, new Vector3D(147.5f,40));
 				child2.unregisterAllInputProcessors();
 				child2.setFillColor(MTColor.SILVER);
 				child2.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child2);
 				
-				child3 = new MTRectangle(this.mtApp,60,30);
-				child3.setPositionRelativeToOther(parent, new Vector3D(65,115));
+				child3 = new MTRectangle(this.mtApp,50,25);
+				child3.setPositionRelativeToOther(parent, new Vector3D(40,87.5f));
 				child3.unregisterAllInputProcessors();
 				child3.setFillColor(MTColor.SILVER);
 				child3.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child3);
 
-				child4 = new MTRectangle(this.mtApp,60,30);
-				child4.setPositionRelativeToOther(parent, new Vector3D(195,115));
+				child4 = new MTRectangle(this.mtApp,50,25);
+				child4.setPositionRelativeToOther(parent, new Vector3D(120,87.5f));
 				child4.unregisterAllInputProcessors();
 				child4.setFillColor(MTColor.SILVER);
 				child4.setStrokeColor(MTColor.SILVER);
 				parent.addChild(child4);
 				break;
 		}	
+	}	
+	
+	
+	public MTRectangle createRectangle(int anzahl)
+	{
 		return parent;
 	}	
 	
