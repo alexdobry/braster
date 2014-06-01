@@ -3,6 +3,8 @@ package de.braster;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
@@ -64,7 +66,9 @@ public class SetupScene  extends AbstractScene{
                 		50, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
 		
-		
+		textArea.setText("Problem eingeben...");
+		textArea.setHeightLocal(100);
+		textArea.setWidthLocal(500);
 		textArea.unregisterAllInputProcessors();
 		textArea.registerInputProcessor(new TapProcessor(this.mtApp));
 		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener(){
@@ -72,20 +76,16 @@ public class SetupScene  extends AbstractScene{
 				TapEvent te = (TapEvent) ge;
 				   if (te.isTapped())
 				   {                       
-                       Keyboard kb = makeKB(mtApplication, textArea);  
-                       kb.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(kb.getHeightXY(TransformSpace.LOCAL)/2f))); 
-                       textArea.setHeightLocal(100);
-               		   textArea.setWidthLocal(500);
+				       Keyboard keyboard = makeKB(mtApplication, textArea);  
+                       keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f)));                    
 				   }
 				   return false;
 			}
 		});
 		
 		//wenn angeklickt wird, muss sich Tastatur öffnen
-		//eingegebener Text dann im Feld erscheinen
-	
-		textArea.setHeightLocal(100);
-		textArea.setWidthLocal(500);
+		//eingegebener Text dann im Feld erscheinen		
+		
 		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, 240));		
 		canv.addChild(textArea);			
 					
@@ -118,17 +118,32 @@ public class SetupScene  extends AbstractScene{
 						}
 					}
 					//Save the current scene on the scene stack before changing
-					mtApp.pushScene();
-					if (brainWritingScene == null){
-						brainWritingScene = new BrainWritingScene(mtApp, "Brain Writing", problem, number);
-						//Konstruktor erweitern um Anzahl Spieler, da genau soviele
-						//Tastaturen geladen werden
-					//Add the scene to the mt application
-					mtApp.addScene(brainWritingScene);
-					}
-					//Do the scene change
-					mtApp.changeScene(brainWritingScene);
-				}
+ 					//wenn beides eingegeben wurde, wird in die nächste szene geleitet
+ 					if(number>0 && problem.length()>0)
+ 					{
+ 						//Save the current scene on the scene stack before changing
+ 						mtApp.pushScene();
+ 						if (brainWritingScene == null){
+ 							brainWritingScene = new BrainWritingScene(mtApp, "Brain Writing", problem, number);
+ 							//Konstruktor erweitern um Anzahl Spieler, da genau soviele
+ 							//Tastaturen geladen werden
+ 							//Add the scene to the mt application
+ 							mtApp.addScene(brainWritingScene);
+ 						}
+ 						//Do the scene change
+ 						mtApp.changeScene(brainWritingScene);
+ 					}
+ 					
+ 					//andernfalls kleinen popup, was fehlt
+ 					else if(problem.length()==0 || problem.equals("Problem eingeben..."))
+ 					{
+ 						JOptionPane.showMessageDialog(null, "Bitte das Problem definieren.");
+ 					}
+ 					else if(number==0)
+ 					{
+ 						JOptionPane.showMessageDialog(null, "Bitte die Personenanzahl eingeben.");
+ 					}
+			}
 				return false;
 			}
 		});
@@ -136,40 +151,37 @@ public class SetupScene  extends AbstractScene{
 		
 		
 		//erzeugt 4 Buttons für die Spieleranzahl
-		createPlayerButtons();
-		
-		
-				
+		createPlayerButtons();				
 	}
 
 	
 	private void createPlayerButtons()
 	{		
 		//new Playerbuttons
-		Positioncomponent p1 = new Positioncomponent(this.mtApp);
-		MTRectangle parent1 = p1.createRectangle(1);		
-		parent1.setPositionGlobal(new Vector3D(300,400));		
+		Positioncomponent p1 = new Positioncomponent(this.mtApp,1);
+		MTRectangle parent1 = p1.getRectangle();
+		parent1.setPositionGlobal(new Vector3D(this.mtApp.width/5,450));		
 		this.canv.addChild(parent1);
 		this.playerButtons.add(p1);
 		
-		Positioncomponent p2 = new Positioncomponent(this.mtApp);
-		MTRectangle parent2 = p2.createRectangle(2);		
-		parent2.setPositionGlobal(new Vector3D(600,400));		
+		Positioncomponent p2 = new Positioncomponent(this.mtApp,2);
+		MTRectangle parent2 = p2.getRectangle();		
+		parent2.setPositionGlobal(new Vector3D((this.mtApp.width/5)*2,450));		
 		this.canv.addChild(parent2);
 		this.playerButtons.add(p2);
 		
-		Positioncomponent p3 = new Positioncomponent(this.mtApp);
-		MTRectangle parent3 = p3.createRectangle(3);		
-		parent3.setPositionGlobal(new Vector3D(900,400));		
+		Positioncomponent p3 = new Positioncomponent(this.mtApp,3);
+		MTRectangle parent3 = p3.getRectangle();		
+		parent3.setPositionGlobal(new Vector3D((this.mtApp.width/5)*3,450));		
 		this.canv.addChild(parent3);
 		this.playerButtons.add(p3);
 		
-		Positioncomponent p4 = new Positioncomponent(this.mtApp);
-		MTRectangle parent4 = p4.createRectangle(4);		
-		parent4.setPositionGlobal(new Vector3D(1200,400));		
+		Positioncomponent p4 = new Positioncomponent(this.mtApp,4);
+		MTRectangle parent4 = p4.getRectangle();		
+		parent4.setPositionGlobal(new Vector3D((this.mtApp.width/5)*4,450));		
 		this.canv.addChild(parent4);
 		this.playerButtons.add(p4);
-		
+	
 		for(final Positioncomponent pc :this.playerButtons)
 		{
 			final ArrayList<Positioncomponent> temp = this.playerButtons;
@@ -222,8 +234,9 @@ public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
         t.setExpandDirection(ExpandDirection.DOWN);
         t.setFontColor(MTColor.BLACK);		 
 		t.setFillColor(MTColor.SILVER);
-		t.unregisterAllInputProcessors();
 		t.setEnableCaret(true); 
+		t.setWidthLocal(500);
+		t.setHeightLocal(100);
 		keyboard.addTextInputListener(t);				
 				
 		getCanvas().addChild(keyboard);
@@ -232,7 +245,6 @@ public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
 		keyboard.removeAllGestureEventListeners(DragProcessor.class);
 		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
 		keyboard.removeAllGestureEventListeners(RotateProcessor.class);		
-
 
 		//enter
 		KeyInfo enter = keyboard.new KeyInfo("f", "\n", "\n", 		new Vector3D(615, 105),KeyInfo.NORMAL_KEY);
