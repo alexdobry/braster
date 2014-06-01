@@ -1,18 +1,25 @@
 package de.braster;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.MTComponent;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
+import org.mt4j.components.visibleComponents.shapes.AbstractShape;
+import org.mt4j.components.visibleComponents.shapes.MTEllipse;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
+import org.mt4j.components.visibleComponents.widgets.buttons.MTSvgButton;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent.FlickDirection;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
@@ -20,6 +27,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
+import org.mt4j.util.MT4jSettings;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
@@ -29,20 +37,23 @@ import de.braster.BWKeyboard.KeyInfo;
 
 public class BrainWritingScene extends AbstractScene{
 
-	MTCanvas canv;
+	private MTCanvas canv;
 	final MTApplication mtApp;
 	
-	BWKeyboard kb1;
-	BWKeyboard kb2;
-	BWKeyboard kb3;
-	BWKeyboard kb4;
+	private BWKeyboard kb1;
+	private BWKeyboard kb2;
+	private BWKeyboard kb3;
+	private BWKeyboard kb4;
 	
-	Vector3D keyboardPositionRU;
-	Vector3D keyboardPositionLU;
-	Vector3D keyboardPositionRO;
-	Vector3D keyboardPositionLO;
+	private Vector3D keyboardPositionRU;
+	private Vector3D keyboardPositionLU;
+	private Vector3D keyboardPositionRO;
+	private Vector3D keyboardPositionLO;
+	private Vector3D keyboardPositionMiddle;
 	
-	public BrainWritingScene(MTApplication mtApplication, String name, String problem, int players) {
+	private List<MTEllipse> readyButtons = new LinkedList<MTEllipse>();
+	
+	public BrainWritingScene(MTApplication mtApplication, String name, String problem, final int players) {
 		super(mtApplication, name);
 		this.mtApp = mtApplication;
 		canv = getCanvas();
@@ -58,24 +69,27 @@ public class BrainWritingScene extends AbstractScene{
 		textArea.setNoStroke(true);
 		
 		textArea.setText(problem);
-		
+		textArea.setGestureAllowance(DragProcessor.class, false);
 		textArea.registerInputProcessor(new TapProcessor(mtApplication, 25, true, 350));
 		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isDoubleTap()){
+					if (checkReady(players)) {
+						
 					
-					Iscene clusteringIscene = null;
-					mtApp.pushScene();
-					if (clusteringIscene == null){
-						clusteringIscene = new ClusteringScene(mtApp, "Clustering");
-						//Konstruktor erweitern um Anzahl Spieler, da genau soviele
-						//Tastaturen geladen werden
-					//Add the scene to the mt application
-					mtApp.addScene(clusteringIscene);
+						Iscene clusteringIscene = null;
+						mtApp.pushScene();
+						if (clusteringIscene == null){
+							clusteringIscene = new ClusteringScene(mtApp, "Clustering");
+							//Konstruktor erweitern um Anzahl Spieler, da genau soviele
+							//Tastaturen geladen werden
+						//Add the scene to the mt application
+						mtApp.addScene(clusteringIscene);
+						}
+						//Do the scene change
+						mtApp.changeScene(clusteringIscene);
 					}
-					//Do the scene change
-					mtApp.changeScene(clusteringIscene);
 				}
 				return false;
 			}
@@ -109,6 +123,9 @@ public class BrainWritingScene extends AbstractScene{
 				mtApplication.height/2f-(kb3.getHeightXY(TransformSpace.LOCAL)/2f),
 				0);
 		
+		keyboardPositionMiddle = new Vector3D(mtApplication.width/2f,
+				mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f),
+				0);
 		
 		kb1.setPositionGlobal(keyboardPositionRU);
 		kb2.setPositionGlobal(keyboardPositionLU);
@@ -118,24 +135,78 @@ public class BrainWritingScene extends AbstractScene{
 		kb3.rotateZGlobal(keyboardPositionLO, 90);
 		kb4.rotateZGlobal(keyboardPositionRO, 270);
 
-//		canv.addChild(kb2); //temp
 		//Keyboards Ende //
 		
-		//Objektbereiche definieren
 		
-		MTComponent field = new MTComponent(mtApplication);
-		MTTextArea test = new MTTextArea(mtApplication);
-		test.setFillColor(new MTColor(255,255,255, 255));
-		test.setSizeXYGlobal(mtApplication.width*0.7f, mtApplication.height*0.7f);
-		test.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height, 0));
+
 		
 		//canv.addChild(test);
 		
 		
-		BWIdeaView iv1 = new BWIdeaView(mtApplication, kb1.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb1.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb1);
-		BWIdeaView iv2 = new BWIdeaView(mtApplication, kb2.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb2.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb2);
-		BWIdeaView iv3 = new BWIdeaView(mtApplication, kb3.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb3);
-		BWIdeaView iv4 = new BWIdeaView(mtApplication, kb4.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb4.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb4);
+		final BWIdeaView iv1 = new BWIdeaView(mtApplication, kb1.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb1.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb1);
+		final BWIdeaView iv2 = new BWIdeaView(mtApplication, kb2.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb2.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb2);
+		final BWIdeaView iv3 = new BWIdeaView(mtApplication, kb3.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb3);
+		final BWIdeaView iv4 = new BWIdeaView(mtApplication, kb4.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb4.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb4);
+		
+
+		
+		iv1.registerInputProcessor(new FlickProcessor());
+		iv1.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				FlickEvent e = (FlickEvent)ge;
+				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
+					if (e.getDirection() == FlickDirection.WEST) {
+						iv1.fillIdeaArea();
+					}
+				return false;
+			}
+		});
+		
+		
+		iv2.registerInputProcessor(new FlickProcessor());
+		iv2.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				FlickEvent e = (FlickEvent)ge;
+				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
+					if (e.getDirection() == FlickDirection.WEST) {
+						iv2.fillIdeaArea();
+					}
+				return false;
+			}
+		});
+		
+		iv3.registerInputProcessor(new FlickProcessor());
+		iv3.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				FlickEvent e = (FlickEvent)ge;
+				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
+					if (e.getDirection() == FlickDirection.NORTH) {
+						iv3.fillIdeaArea();
+					}
+				return false;
+			}
+		});
+		
+		iv4.registerInputProcessor(new FlickProcessor());
+		iv4.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				FlickEvent e = (FlickEvent)ge;
+				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
+					if (e.getDirection() == FlickDirection.SOUTH) {
+						iv4.fillIdeaArea();
+					}
+				return false;
+			}
+		});
+
 		
 		canv.addChild(iv1);
 		canv.addChild(iv2);
@@ -160,82 +231,56 @@ public class BrainWritingScene extends AbstractScene{
 		kb4.setBWIV(iv4);
 		
 		
-		/////////////////////////
+		switch (players) {
+		case 1:
+			kb1.setPositionGlobal(keyboardPositionMiddle);
+			iv1.setPositionGlobal(keyboardPositionMiddle);
+			kb1.setVisible(true);
+			kb2.setVisible(false);
+			kb3.setVisible(false);
+			kb4.setVisible(false);
+			break;
+		case 2:
+			kb1.setVisible(false);
+			kb2.setVisible(false);
+			kb3.setVisible(true);
+			kb4.setVisible(true);
+			
+			break;
+		case 3:
+			kb1.setPositionGlobal(keyboardPositionMiddle);
+			iv1.setPositionGlobal(keyboardPositionMiddle);
+			kb1.setVisible(true);
+			kb2.setVisible(false);
+			kb3.setVisible(true);
+			kb4.setVisible(true);
+			
+			break;
+		case 4:
+			kb1.setVisible(true);
+			kb2.setVisible(true);
+			kb3.setVisible(true);
+			kb4.setVisible(true);
+			
+			break;
+
+		default:
+			break;
+		}
 		
-//		final MTRectangle rect = new MTRectangle(mtApplication,0, 0, 100, 100);
-//        rect.unregisterAllInputProcessors();
-//        rect.removeAllGestureEventListeners();
-//        getCanvas().addChild(rect);
-//
-//        rect.registerInputProcessor(new DragProcessor(mtApplication));
-//        rect.addGestureListener(DragProcessor.class, new DefaultDragAction());
-//        
-//        rect.registerInputProcessor(new TapProcessor(mtApplication));
-//        rect.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-//              @Override
-//              public boolean processGestureEvent(MTGestureEvent ge) {
-//                    TapEvent te = (TapEvent)ge;
-//                    if(te.getId() == TapEvent.GESTURE_STARTED){
-//                          float r = (float)(Math.random()*255);
-//                          float g = (float)(Math.random()*255);
-//                          float b = (float)(Math.random()*255);
-//                          rect.setFillColor(new MTColor(r, g,b ));
-//                    }
-//
-//                    return false;
-//              }
-//        }); 
-//        
-//		MTEllipse ellipse = new MTEllipse(mtApplication, new Vector3D(mtApplication.width/2, mtApplication.height/2), 30, 30);
-//		 ellipse.unregisterAllInputProcessors();
-//		 ellipse.removeAllGestureEventListeners();
-//		 ellipse.registerInputProcessor(new FlickProcessor());
-//		 ellipse.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
-//		@Override
-//		public boolean processGestureEvent(MTGestureEvent ge) {
-//		FlickEvent fe = (FlickEvent)ge;
-//		int x = 0;
-//		int y = 0;
-//		if(fe.getId() == FlickEvent.GESTURE_ENDED){
-//		         switch (fe.getDirection()) {
-//		case EAST:
-//		x = 10;
-//		break;
-//		case WEST:
-//		x = -10;
-//		break;
-//		case NORTH:
-//		y = -10;
-//		break;
-//		case NORTH_WEST:
-//		x = -10;
-//		y = -10;
-//		break;
-//		case NORTH_EAST:
-//		x = 10;
-//		y = -10;
-//		break;
-//		case SOUTH:
-//		y = 10;
-//		break;
-//		case SOUTH_WEST:
-//		x = -10;
-//		y = 10;
-//		break;
-//		case SOUTH_EAST:
-//		x = 10;
-//		         y = 10;
-//		break;
-//		default:
-//		break;
-//		}
-//		rect.translate(new Vector3D(x, y));
-//		}
-//		return false;
-//		}
-//		});
-//		getCanvas().addChild(ellipse);
 		
+	}
+
+	private boolean checkReady(int players) {
+		int count = 0;
+		for (MTEllipse ellipse : readyButtons) {
+			if (ellipse.getFillColor().equals(MTColor.GREEN)) {
+				count++;
+				System.out.println(count);
+			}
+		}
+		
+		return  count == players ? true : false;
 	}
 
 	public BWKeyboard makeKB() {
@@ -268,34 +313,55 @@ public class BrainWritingScene extends AbstractScene{
 //			    		
 //			    		textArea.setNoFill(true);
 //			    		textArea.setNoStroke(true);
-			    		Idea textArea = new Idea(getMTApplication(), canv);
-			    		Idea textArea2 = new Idea(getMTApplication(), canv);
-			    		Idea textArea3 = new Idea(getMTApplication(), canv);
+			    		Idea idea = new Idea(getMTApplication(), canv);
+			    		idea.setText(t.getText());
+			    		idea.setName(t.getText());
 			    		
-			    		textArea.setText(t.getText());
-			    		textArea2.setText(t.getText()+t.getText());
-			    		textArea3.setText(t.getText()+t.getText()+t.getText());
-			    		
-			    		textArea.setName(t.getText());
-			    		textArea2.setName(t.getText()+t.getText());
-			    		textArea3.setName(t.getText()+t.getText()+t.getText());
-			    		
-//			    		canv.addChild(textArea);
-//			    		canv.addChild(textArea2);
-//			    		canv.addChild(textArea3);
-//			    		textArea.snapToIdea(textArea2);
-//			    		textArea.snapToIdea(textArea3);
 			    		t.clear();
 			    		
-			    		System.out.print(textArea.getChildCount());
+			    		System.out.print(idea.getChildCount());
 					
 					}
 					return false;
 				}
 			};
 			
+				
 		keyboard.addKeyFromOutside(ki, tp);
 
+		//ready button
+		
+		float radius = 35;
+		final MTEllipse circle = new MTEllipse(mtApp, 
+				new Vector3D(keyboard.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-radius*1.2f, keyboard.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)-radius*1.2f, 0),
+				radius, 
+				radius);
+		circle.setStrokeColor(MTColor.GRAY);
+		circle.setFillColor(MTColor.WHITE);
+		circle.setGestureAllowance(DragProcessor.class, false);
+		circle.setGestureAllowance(ScaleProcessor.class, false);
+		readyButtons.add(circle); //für das überprüfen aller farben
+		
+		circle.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
+		circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent)ge;
+				if (te.isTapped()){
+					if (circle.getFillColor().equals(MTColor.WHITE)) {
+						circle.setFillColor(MTColor.GREEN);
+					} else {
+						circle.setFillColor(MTColor.WHITE);
+					}
+				}
+				return false;
+			}
+		});
+		
+		
+		keyboard.addChild(circle);
+		
 		
 		getCanvas().addChild(keyboard);
 		
@@ -334,7 +400,6 @@ public class BrainWritingScene extends AbstractScene{
 			ideaArea.removeAllGestureEventListeners();
 //			ideaArea.setText("test");
 			
-			ideaArea.removeAllGestureEventListeners();
 			ideaArea.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
 			IGestureEventListener gl = new IGestureEventListener() {
 				
@@ -343,14 +408,33 @@ public class BrainWritingScene extends AbstractScene{
 					TapEvent te = (TapEvent)ge;
 					if (te.isTapped()){
 						
-						fillIdeaArea();
+//						fillIdeaArea();
 					}
 					return false;
 				}
 			};
-			this.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
-			this.addGestureListener(TapProcessor.class, gl);
-			ideaArea.addGestureListener(TapProcessor.class, gl);
+			
+//			IGestureEventListener fl = new IGestureEventListener() {
+//				
+//				@Override
+//				public boolean processGestureEvent(MTGestureEvent ge) {
+//					FlickEvent e = (FlickEvent)ge;
+//					if (e.getId() == MTGestureEvent.GESTURE_ENDED)
+//						if (e.getDirection() == FlickDirection.WEST) {
+//							fillIdeaArea();
+//						}
+//					return false;
+//				}
+//			};
+//			
+//			
+////			this.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
+//			this.registerInputProcessor(new FlickProcessor());
+////			this.addGestureListener(TapProcessor.class, gl);
+//			this.addGestureListener(FlickProcessor.class, fl);
+////			ideaArea.addGestureListener(TapProcessor.class, gl);
+//			ideaArea.addGestureListener(FlickProcessor.class, fl);
+//			
 			
 			MTTextArea addButton = new MTTextArea(pApplet);
 			addButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
@@ -380,12 +464,34 @@ public class BrainWritingScene extends AbstractScene{
 			});
 
 			
-			float radius = 20;
-//			MTEllipse circle = new MTEllipse(pApplet, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-radius,this.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)-radius,0), radius, radius);
+			MTSvgButton keybCloseSvg = new MTSvgButton(pApplet, MT4jSettings.getInstance().getDefaultSVGPath()
+					+ "keybClose.svg");
+			//Transform
+			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
+			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0)); //2x ist notwendig
+			
+			keybCloseSvg.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-25, 25,0));
+			keybCloseSvg.setBoundsPickingBehaviour(AbstractShape.BOUNDS_ONLY_CHECK);
+			keybCloseSvg.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+				@Override
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					TapEvent te = (TapEvent)ge;
+					if (te.isTapped()){
+						kb.setVisible(true);
+						setVisible(false);
+					}
+					return false;
+				}
+			});
+			this.addChild(keybCloseSvg);
+			
+			
+//			float radius = 20;
+//			MTEllipse circle = new MTEllipse(pApplet, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-radius,radius,0), radius, radius);
 //			circle.setStrokeColor(MTColor.LIME);
 //			circle.setGestureAllowance(DragProcessor.class, false);
 //			circle.setGestureAllowance(ScaleProcessor.class, false);
-			
+//			
 //			circle.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
 //			circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 //				
@@ -402,8 +508,10 @@ public class BrainWritingScene extends AbstractScene{
 			
 			this.addChild(ideaArea);
 //			this.addChild(nextButton);
-			this.addChild(addButton);
+//			this.addChild(addButton);
 //			this.addChild(circle);
+			
+			setGestureAllowance(DragProcessor.class, false);
 			
 		}
 
