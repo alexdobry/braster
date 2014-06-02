@@ -180,7 +180,7 @@ public class Idea extends MTTextArea {
 //		setGestureAllowance(TapAndHoldProcessor.class, true); //das todo unten
 		
 		idea.registerInputProcessor(new TapAndHoldProcessor(app, 1500));
-		
+		idea.addGestureListener(TapAndHoldProcessor.class, new TapAndHoldVisualizer(app, canvas));
 		//TODO: bei erneuten ausführen wird der processor erneut hinzugefügt
 		//WARN - Warning: The same type of input processor (tap and hold processor) is already registered at component:
 		idea.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
@@ -204,6 +204,7 @@ public class Idea extends MTTextArea {
 							idea.setGestureAllowance(DragProcessor.class, true);
 							idea.setGestureAllowance(ScaleProcessor.class, false);
 							idea.setGestureAllowance(RotateProcessor.class, false);
+							idea.setGestureAllowance(TapAndHoldProcessor.class, false);
 							((Idea)parent).repositionChildren();
 						}
 					}
