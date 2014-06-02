@@ -50,12 +50,13 @@ public class BrainWritingScene extends AbstractScene{
 	private Vector3D keyboardPositionRO;
 	private Vector3D keyboardPositionLO;
 	private Vector3D keyboardPositionMiddle;
-	
+	private int players;
 	private List<MTEllipse> readyButtons = new LinkedList<MTEllipse>();
 	
 	public BrainWritingScene(MTApplication mtApplication, String name, String problem, final int players) {
 		super(mtApplication, name);
 		this.mtApp = mtApplication;
+		this.players = players;
 		canv = getCanvas();
 		this.setClearColor(MTColor.BLACK);
 		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
@@ -96,7 +97,7 @@ public class BrainWritingScene extends AbstractScene{
 		});
 		this.getCanvas().addChild(textArea);
 		
-		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height/2f));
+		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height*0.2f));
 		
 		
 		
@@ -366,12 +367,36 @@ public class BrainWritingScene extends AbstractScene{
 					} else {
 						circle.setFillColor(MTColor.WHITE);
 					}
+					
+					if (checkReady(players)) {
+						
+						
+						Iscene clusteringIscene = null;
+						mtApp.pushScene();
+						if (clusteringIscene == null){
+							clusteringIscene = new ClusteringScene(mtApp, "Clustering");
+							//Konstruktor erweitern um Anzahl Spieler, da genau soviele
+							//Tastaturen geladen werden
+						//Add the scene to the mt application
+						mtApp.addScene(clusteringIscene);
+						}
+						//Do the scene change
+						mtApp.changeScene(clusteringIscene);
+					}
 				}
 				return false;
 			}
 		});
 		
 		
+		MTTextArea bereit = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 20, MTColor.BLACK)); 
+		bereit.setText("Bereit");
+		bereit.setNoFill(true);
+		bereit.setNoStroke(true);
+		
+		circle.addChild(bereit);
+		bereit.setPositionRelativeToParent(circle.getCenterPointLocal());
+		bereit.setPickable(false);
 		keyboard.addChild(circle);
 		
 		
