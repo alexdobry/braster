@@ -89,7 +89,7 @@ public class ClusteringScene extends AbstractScene{
 
 		mtRoundRectangle.addChild(rText);
 		rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
-		
+		mtRoundRectangle.scale(1.2f, 1.2f, 1, new Vector3D(0, 0, 0));
 		
 		canv.addChild(mtRoundRectangle);
 //		createItem();
@@ -209,7 +209,7 @@ public class ClusteringScene extends AbstractScene{
 	//create right menubar, um mit der nächsten Scene zu beginnen
 	private void createRightMenubar()
 	{		
-		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, this.mtApp.width-220, this.mtApp.height-80, 0, 200, 60, 12, 12);
+		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, this.mtApp.width-240, this.mtApp.height-80, 0, 200, 60, 12, 12);
 		mtRoundRectangle.unregisterAllInputProcessors();
 		mtRoundRectangle.setFillColor(MTColor.GREY);  	
 		mtRoundRectangle.registerInputProcessor(new TapProcessor(this.mtApp));
@@ -243,6 +243,8 @@ public class ClusteringScene extends AbstractScene{
 		rText.setNoFill(true);
 		rText.setNoStroke(true);
 		rText.setText("             Go to \n Evaluation Scene");
+		
+		mtRoundRectangle.scale(1.2f, 1.2f, 1, mtRoundRectangle.getCenterPointRelativeToParent());
 		mtRoundRectangle.addChild(rText);
 		rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
 		
