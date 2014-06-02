@@ -145,7 +145,7 @@ public class BWKeyboard extends MTRoundRectangle {
 //					onCloseButtonClicked();
 					setVisible(false);
 					iv.setVisible(true);
-					iv.fillIdeaArea();
+					iv.fillIdeaArea(1);
 				}
 				return false;
 			}

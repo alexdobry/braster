@@ -158,7 +158,10 @@ public class BrainWritingScene extends AbstractScene{
 				FlickEvent e = (FlickEvent)ge;
 				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
 					if (e.getDirection() == FlickDirection.WEST) {
-						iv1.fillIdeaArea();
+						iv1.fillIdeaArea(1);
+					}
+					if (e.getDirection() == FlickDirection.EAST) {
+						iv1.fillIdeaArea(-1);
 					}
 				return false;
 			}
@@ -173,7 +176,10 @@ public class BrainWritingScene extends AbstractScene{
 				FlickEvent e = (FlickEvent)ge;
 				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
 					if (e.getDirection() == FlickDirection.WEST) {
-						iv2.fillIdeaArea();
+						iv2.fillIdeaArea(1);
+					}
+					if (e.getDirection() == FlickDirection.EAST) {
+						iv2.fillIdeaArea(-1);
 					}
 				return false;
 			}
@@ -187,7 +193,10 @@ public class BrainWritingScene extends AbstractScene{
 				FlickEvent e = (FlickEvent)ge;
 				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
 					if (e.getDirection() == FlickDirection.NORTH) {
-						iv3.fillIdeaArea();
+						iv3.fillIdeaArea(1);
+					}
+					if (e.getDirection() == FlickDirection.SOUTH) {
+						iv3.fillIdeaArea(-1);
 					}
 				return false;
 			}
@@ -201,7 +210,10 @@ public class BrainWritingScene extends AbstractScene{
 				FlickEvent e = (FlickEvent)ge;
 				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
 					if (e.getDirection() == FlickDirection.SOUTH) {
-						iv4.fillIdeaArea();
+						iv4.fillIdeaArea(1);
+					}
+					if (e.getDirection() == FlickDirection.NORTH) {
+						iv4.fillIdeaArea(-1);
 					}
 				return false;
 			}
@@ -516,17 +528,26 @@ public class BrainWritingScene extends AbstractScene{
 		}
 
 		
-		public void fillIdeaArea() {
+		public void fillIdeaArea(int direction) {
 			Idea i = null;
 			if (ideas.size() > 0) {
+					
 				i = ideas.get(iterator);
 				
-				if (ideas.get(iterator) == ideas.getLast()) {
+				if (ideas.get(iterator) == ideas.getLast() && direction == 1) {
 					iterator = 0;
-				} else {
+				} else if (direction == 1) {
 					iterator++;
 				}
+				
+				if (ideas.get(iterator) == ideas.getFirst() && direction == -1) {
+					iterator = ideas.size()-1;
+				} else if (direction == -1) {
+					iterator--;
+				}
+				
 				ideaArea.setText(i.getText());
+				
 			}
 			
 			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
