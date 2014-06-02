@@ -39,13 +39,16 @@ public class Idea extends MTTextArea {
 	private MTCanvas canvas;
 	private Idea self = null;
 	private static final LinkedList<Idea> ideas = new LinkedList<Idea>();
-
+	private static LinkedList<Idea> parents = new LinkedList<Idea>();
+	private LinkedList<Idea> children = new LinkedList<Idea>();
 	
 	public Idea(MTApplication pApplet, MTCanvas canv) {
 		super(pApplet);
 		this.canvas=canv;
 		app = pApplet;
 		this.self = this;
+		ideas.add(this);
+		parents.add(this);
 		
 		setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.WHITE, true));
 		setStrokeColor(MTColor.LIME);
@@ -66,17 +69,11 @@ public class Idea extends MTTextArea {
 					break;
 				case DragEvent.GESTURE_ENDED:
 					
-					System.out.print("I was here\n");
 					PickResult pr = self.getParent().pick(de.getDragCursor().getCurrentEvtPosX(),de.getDragCursor().getCurrentEvtPosY());
 					
 					List<PickEntry> pe = pr.getPickList();
-//					for (PickEntry pickEntry : pe) {
-//						System.out.print(pickEntry.hitObj.toString() + " " + pe.size() +"\n");
-//					}
-					
 					if (pe.size() >= 2) {
 						Object obj = pe.get(1).hitObj;
-//						System.out.print(obj);
 						if (obj instanceof Idea) {
 							Idea i = (Idea)obj;
 							if (i.getParent() instanceof Idea) {
@@ -84,11 +81,11 @@ public class Idea extends MTTextArea {
 							} else {
 								(i).snapToIdea(self);
 							}
-							
+							parents.remove(i); //als parent von der liste entfernen
 						}
 					}
 					
-					
+					System.out.println(parents);
 					break;
 				default:
 					break;
@@ -133,7 +130,7 @@ public class Idea extends MTTextArea {
 //			}
 //		});
 		
-		ideas.add(this);
+		
 	}
 
 	public static LinkedList<Idea> getAllIdeas() {
@@ -195,7 +192,7 @@ public class Idea extends MTTextArea {
 					if (th.isHoldComplete()){
 						MTComponent parent = idea.getParent();
 						if (parent instanceof Idea) {
-							
+							Idea i = (Idea)parent;
 							idea.removeFromParent();
 							canvas.addChild(idea);
 							idea.setPositionGlobal(th.getLocationOnScreen());
@@ -205,7 +202,8 @@ public class Idea extends MTTextArea {
 							idea.setGestureAllowance(ScaleProcessor.class, false);
 							idea.setGestureAllowance(RotateProcessor.class, false);
 							idea.setGestureAllowance(TapAndHoldProcessor.class, false);
-							((Idea)parent).repositionChildren();
+							i.repositionChildren();
+							parents.add(idea); //wird zu einem neuen parent
 						}
 					}
 					break;
@@ -216,6 +214,13 @@ public class Idea extends MTTextArea {
 			}
 		});
 	}
+	
+	
+	public LinkedList<Idea> getAllParents() {
+		return parents;
+	}
+	
+	
 	/**
 	 * Rückt bei entfernten Kindern alle zusammen damit keine lücken auftreten
 	 */
