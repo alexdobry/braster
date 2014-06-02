@@ -28,15 +28,17 @@ public class ClusteringScene extends AbstractScene{
 	private MTApplication mtApp;
 	private Iscene evaluationScene;
 	private LinkedList<Idea> ideas;
+	private MTRoundRectangle mtRoundRectangle;
 	
 	public ClusteringScene( MTApplication mtApplication, String name) 
 	{
 		super(mtApplication, name);
-		
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
 		//setzt Hintergrundfarbe
 		this.setClearColor(MTColor.WHITE);
+		
+		mtRoundRectangle = new MTRoundRectangle(this.mtApp, 30, 60, 0, 200, 60, 12, 12);
 		
 		ideas = Idea.getAllIdeas();
 		float posx = 0;
@@ -67,21 +69,43 @@ public class ClusteringScene extends AbstractScene{
 		rText.setText(ideas.size() + " Ideen übrig");
 		
 		
-
-		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, 30, 60, 0, 200, 60, 12, 12);
 		mtRoundRectangle.unregisterAllInputProcessors();
-		mtRoundRectangle.setFillColor(MTColor.GREY);  	
+		if (ideas.size() != 0 ) {
+			mtRoundRectangle.setFillColor(MTColor.GREEN); 
+		} else {
+			mtRoundRectangle.setFillColor(MTColor.RED);
+		}
 		mtRoundRectangle.registerInputProcessor(new TapProcessor(this.mtApp));
 		mtRoundRectangle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			int count = 0;
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
-				if (te.isTapped()){
-					if (count < ideas.size()) {
-						ideas.get(count++).setVisible(true);
-						rText.setText(ideas.size()-count + " Ideen übrig");
+				
+				switch (te.getId()) {
+				case MTGestureEvent.GESTURE_STARTED:
+					mtRoundRectangle.setFillColor(new MTColor(220,220,220,255));
+					break;
+				case MTGestureEvent.GESTURE_UPDATED:
+					break;
+				case MTGestureEvent.GESTURE_ENDED:
+					if (te.isTapped()){
+						
+						
+						if (count < ideas.size()) {
+							ideas.get(count++).setVisible(true);
+							rText.setText(ideas.size()-count + " Ideen übrig");
+						}
+						
+						if (ideas.size()-count != 0) {
+							mtRoundRectangle.setFillColor(MTColor.GREEN);
+						} else {
+							mtRoundRectangle.setFillColor(MTColor.RED);
+						}
+						
 					}
+					break;
 				}
+				
 				return false;
 			}
 		});

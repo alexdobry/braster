@@ -427,12 +427,13 @@ public class BrainWritingScene extends AbstractScene{
 		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
 			super(pApplet, width, height);
 			
-			setFillColor(MTColor.GREY);
+			setFillColor(MTColor.WHITE);
 			setStrokeColor(MTColor.WHITE);
 			
 			ideaArea = new MTTextArea(pApplet);
 			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
-			ideaArea.setStrokeColor(MTColor.WHITE);
+			ideaArea.setFillColor(MTColor.GREEN);
+			ideaArea.setStrokeColor(MTColor.LIME);
 			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.BLACK, true));
 			ideaArea.removeAllGestureEventListeners();
 //			ideaArea.setText("test");
