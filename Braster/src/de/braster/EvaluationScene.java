@@ -37,6 +37,7 @@ public class EvaluationScene extends AbstractScene{
 
 	private MTCanvas canv;
 	private MTApplication mtApp;
+	private MTColor listColor;
  
  
 
@@ -79,12 +80,12 @@ public class EvaluationScene extends AbstractScene{
 		
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
-	
+		this.listColor = new MTColor(255,127,0);
 		this.setClearColor(MTColor.WHITE);		
 		
 		//Bereich
 		area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),600, 600);
-		area.setFillColor(new MTColor(135,206,250));
+		area.setFillColor(new MTColor(255,127,0));
 		area.setPickable(false);
 		this.canv.addChild(area);
 				
@@ -139,12 +140,12 @@ public class EvaluationScene extends AbstractScene{
 				
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
-	
+		this.listColor = new MTColor(255,127,0);
 		this.setClearColor(MTColor.WHITE);		
 		
 		//Bereich
 		area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),600, 600);
-		area.setFillColor(new MTColor(135,206,250));
+		area.setFillColor(listColor);
 		area.setPickable(false);
 		this.canv.addChild(area);
 				
@@ -193,8 +194,8 @@ public class EvaluationScene extends AbstractScene{
 		item.removeAllListElements();
 		//und dann nacheinander die elemente der arraylist in die komponente packen 
 	//	MTList item = new MTList(this.mtApp, 410,0, this.mtApp.width-820,300);	 
-		item.setFillColor(new MTColor(135,206,250));
-		item.setStrokeColor(new MTColor(135,206,250));
+		item.setFillColor(listColor);
+		item.setStrokeColor(listColor);
 		//Gesten für eine Idee
 				
 		area.addChild(item);
@@ -203,8 +204,8 @@ public class EvaluationScene extends AbstractScene{
 		int y = 15;
 		
 		MTListCell cell = new MTListCell(this.mtApp,240, 60);
-		cell.setStrokeColor(new MTColor(135,206,250));
-		cell.setFillColor(new MTColor(135,206,250));
+		cell.setStrokeColor(listColor);
+		cell.setFillColor(listColor);
 				
 		for(Note n: list)
 		{			
@@ -212,8 +213,8 @@ public class EvaluationScene extends AbstractScene{
 			{				 
 				x = 10;
 				cell = new MTListCell(this.mtApp,240, 60);	
-				cell.setStrokeColor(new MTColor(135,206,250));
-				cell.setFillColor(new MTColor(135,206,250));
+				cell.setStrokeColor(listColor);
+				cell.setFillColor(listColor);
 				item.addChild(cell);
 			}
 	 
@@ -249,8 +250,8 @@ public class EvaluationScene extends AbstractScene{
 		
 		//und dann nacheinander die elemente der arraylist in die komponente packen 
 	//	MTList item = new MTList(this.mtApp, 410,0, this.mtApp.width-820,300);	 
-		item.setFillColor(new MTColor(135,206,250));
-		item.setStrokeColor(new MTColor(135,206,250));
+		item.setFillColor(listColor);
+		item.setStrokeColor(listColor);
 		//Gesten für eine Idee
 		
 		area.addChild(item);
@@ -260,8 +261,8 @@ public class EvaluationScene extends AbstractScene{
 		
 		MTListCell cell = new MTListCell(this.mtApp,420, 60);
 		cell.setPickable(true);
-		cell.setStrokeColor(new MTColor(135,206,250));
-		cell.setFillColor(new MTColor(135,206,250));
+		cell.setStrokeColor(listColor);
+		cell.setFillColor(listColor);
 		cell.unregisterAllInputProcessors();
 		cell.registerInputProcessor(new TapProcessor(mtApp));
 		cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -299,8 +300,8 @@ public class EvaluationScene extends AbstractScene{
 			{				 
 				x = 10;
 				cell = new MTListCell(this.mtApp,420, 60);	
-				cell.setStrokeColor(new MTColor(135,206,250));
-				cell.setFillColor(new MTColor(135,206,250));
+				cell.setStrokeColor(listColor);
+				cell.setFillColor(listColor);
 				cell.unregisterAllInputProcessors();
 				cell.registerInputProcessor(new TapProcessor(mtApp));
 				cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -351,11 +352,9 @@ public class EvaluationScene extends AbstractScene{
 			
 			cell.addChild(mtRoundRectangle);
 			item.addListElement(cell); 
-			 
-			
+			 			
 			x += 120;		  
-		}	
-		
+		}			
 	}
 	
 	 
@@ -375,9 +374,7 @@ public class EvaluationScene extends AbstractScene{
 	
 	
 	private void createSelectedIdea(MTRoundRectangle selectedRectangle)
-	{
-		 
-		 
+	{		 
 		MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, area.getRadiusX()-100, 400, 0, 200, 60, 0, 0);			
 		mtRoundRectangle.setStrokeColor(MTColor.LIME);			
 		mtRoundRectangle.setFillColor(MTColor.GREEN);
