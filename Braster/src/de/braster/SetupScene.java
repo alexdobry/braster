@@ -42,6 +42,8 @@ public class SetupScene  extends AbstractScene{
 	private MTApplication mtApp;
 	private Iscene brainWritingScene;
 	private ArrayList<Positioncomponent> playerButtons;
+	private MTTextArea t;
+	private static String problemDefinition = "";
 	
 	
 	public SetupScene( final MTApplication mtApplication, String name)
@@ -61,22 +63,23 @@ public class SetupScene  extends AbstractScene{
 		canv.addChild(textFieldTitle);
 						
 		//fungiert als mehrzeilige textarea für die Problembeschreibung
-		final MTTextArea textArea = new MTTextArea(mtApplication,                                
+		 t = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
 		
-		textArea.setText("Problem eingeben...");
-		textArea.setHeightLocal(100);
-		textArea.setWidthLocal(500);
-		textArea.unregisterAllInputProcessors();
-		textArea.registerInputProcessor(new TapProcessor(this.mtApp));
-		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener(){
+		t.setText("Problem eingeben...");
+		t.setHeightLocal(100);
+		t.setWidthLocal(500);
+		t.unregisterAllInputProcessors();
+		t.registerInputProcessor(new TapProcessor(this.mtApp));
+		t.addGestureListener(TapProcessor.class, new IGestureEventListener(){
 			public boolean processGestureEvent(MTGestureEvent ge){
 				TapEvent te = (TapEvent) ge;
 				   if (te.isTapped())
-				   {                       
-				       Keyboard keyboard = makeKB(mtApplication, textArea);  
+				   {              
+					   t.setText("Problem eingeben...");
+				       Keyboard keyboard = makeKB(mtApplication, t);  
                        keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f)));                    
 				   }
 				   return false;
@@ -86,8 +89,8 @@ public class SetupScene  extends AbstractScene{
 		//wenn angeklickt wird, muss sich Tastatur öffnen
 		//eingegebener Text dann im Feld erscheinen		
 		
-		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, 240));		
-		canv.addChild(textArea);			
+		t.setPositionGlobal(new Vector3D(mtApplication.width/2f, 240));		
+		canv.addChild(t);			
 					
 		IFont font = FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		50, MTColor.BLACK, false);
@@ -106,6 +109,7 @@ public class SetupScene  extends AbstractScene{
 					//Problem auslesen
 					MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(1);
 					String problem = textAreaProblem.getText();
+					problemDefinition = problem;
 					int number = 0;
 					//herausfinden, wieviel Spieler ausgewählt sind
  					for (Positioncomponent item: temp)
@@ -264,6 +268,11 @@ public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
 		keyboard.addKeyFromOutside(enter, tp);
 		
 		return keyboard;		
+	}
+
+	public static String getProblem()
+	{
+		return problemDefinition;
 	}
 
 }

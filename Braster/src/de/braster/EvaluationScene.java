@@ -1,6 +1,7 @@
 package de.braster;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
@@ -57,7 +58,7 @@ public class EvaluationScene extends AbstractScene{
 	private MTList listRight;
 	
 	private Iscene finalScene;
-
+	private LinkedList<Idea> ideasPa;
 	
 	public EvaluationScene( MTApplication mtApplication, String name)
 	{		
@@ -65,10 +66,17 @@ public class EvaluationScene extends AbstractScene{
 		
 		//muss noch die ganzen ideen aus dem clustern übergeben bekommen
 		//solange templiste mit ideen
+		ideasPa = Idea.getAllIdeas();
 		ideas = new ArrayList<Note>();
 		rubbish = new ArrayList<Note>();
 		bestIdeas = new ArrayList<Note>();
 			
+		for (Idea i : ideasPa)
+		{
+			Note n = new Note(i.getText());
+			ideas.add(n);
+		}
+		
 		for(int i=1;i<4;i++)
 		{
 			Note n = new Note(i+"");
@@ -121,7 +129,7 @@ public class EvaluationScene extends AbstractScene{
 		textProblem.setPickable(false);
 		textProblem.setNoFill(true);
 		textProblem.setNoStroke(true);
-		textProblem.setText("Hier steht das Problem...");
+		textProblem.setText(SetupScene.getProblem());
 		textProblem.setPositionRelativeToParent(rectangleProblem.getCenterPointLocal());
 		rectangleProblem.addChild(textProblem);
 		
@@ -219,14 +227,14 @@ public class EvaluationScene extends AbstractScene{
 				item.addChild(cell);
 			}
 	 
-			MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 80, 30, 12, 12);			
-			mtRoundRectangle.setStrokeColor(MTColor.BLACK);	
-			
+			MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 80, 30, 0, 0);			
+			mtRoundRectangle.setStrokeColor(MTColor.LIME);	
+			mtRoundRectangle.setFillColor(MTColor.GREEN);
 			MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		10, MTColor.BLACK, false));
+	        		10, MTColor.WHITE, false));
 			rText.unregisterAllInputProcessors();
 			rText.setPickable(false);
-			rText.setNoFill(true);
+			rText.setFillColor(MTColor.GREEN);
 			rText.setNoStroke(true);
 			rText.setText(n.getName());
 			mtRoundRectangle.addChild(rText);
@@ -337,14 +345,15 @@ public class EvaluationScene extends AbstractScene{
 				item.addListElement(cell);				
 			}
 	 
-			MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 100, 30, 12, 12);			
-			mtRoundRectangle.setStrokeColor(MTColor.BLACK);	
+			MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, x, y, 0, 100, 30, 0, 0);			
+			mtRoundRectangle.setStrokeColor(MTColor.LIME);
+			mtRoundRectangle.setFillColor(MTColor.GREEN);
 			mtRoundRectangle.setPickable(true);
 			MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		10, MTColor.BLACK, false));
+	        		10, MTColor.WHITE, false));
 			rText.unregisterAllInputProcessors();
 			rText.setPickable(false);
-			rText.setNoFill(true);
+			rText.setFillColor(MTColor.GREEN);
 			rText.setNoStroke(true);
 			rText.setText(n.getName());
 			mtRoundRectangle.addChild(rText);
@@ -379,18 +388,16 @@ public class EvaluationScene extends AbstractScene{
 	{
 		 
 		 
-		MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, area.getRadiusX()-100, 400, 0, 200, 60, 12, 12);			
-		mtRoundRectangle.setStrokeColor(MTColor.BLACK);			
-
-		MTTextArea tempText = (MTTextArea) selectedRectangle.getChildren()[0];
-	 
-		
+		MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, area.getRadiusX()-100, 400, 0, 200, 60, 0, 0);			
+		mtRoundRectangle.setStrokeColor(MTColor.LIME);			
+		mtRoundRectangle.setFillColor(MTColor.GREEN);
+		MTTextArea tempText = (MTTextArea) selectedRectangle.getChildren()[0];		
 		
 		MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		10, MTColor.BLACK, false));
+        		10, MTColor.WHITE, false));
 		rText.unregisterAllInputProcessors();
 		rText.setPickable(false);
-		rText.setNoFill(true);
+		rText.setFillColor(MTColor.GREEN);
 		rText.setNoStroke(true);
 		rText.setText(tempText.getText());
 		mtRoundRectangle.addChild(rText);
@@ -462,7 +469,7 @@ public class EvaluationScene extends AbstractScene{
 							//FinalScene gehen
 							mtApp.pushScene();
 							if (finalScene == null){
-								finalScene = new FinalScene(mtApp, "Final", "Wer ist deutscher Meister", "BVB Borussia");
+								finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), "BVB Borussia");
 								//Konstruktor erweitern um Anzahl Spieler, da genau soviele
 								//Tastaturen geladen werden
 							//Add the scene to the mt application
@@ -499,8 +506,5 @@ public class EvaluationScene extends AbstractScene{
 		area.addChild(mtRoundRectangle);
 		
 	}
-	
-	
-	
-	 
+		 
 }
