@@ -103,14 +103,12 @@ public class EvaluationScene extends AbstractScene{
 			
 		listLeft = new MTList(mtApp, area.getCenterPointLocal().x-500, 10, 240 , 200);	 
 				
-		listRight = new MTList(mtApp,area.getCenterPointLocal().x+260, 10, 240 , 200);
-		 
+		listRight = new MTList(mtApp,area.getCenterPointLocal().x+260, 10, 240 , 200);		 
 		
 		//dort passiert das liste füllen, was bereits implementiert habe
 		//zunächst nur mittlere liste füllen
 		//nach jedem drag&drop vorgang die neue liste updaten
-		updateList(listMiddle,ideas);
-		
+		updateList(listMiddle,ideas);		
 		 
 		//Problembeschreibung
 		MTRoundRectangle rectangleProblem = new MTRoundRectangle(this.mtApp, this.mtApp.width/2-250, this.mtApp.height-100, 0, 500, 60, 12, 12);			
@@ -165,8 +163,7 @@ public class EvaluationScene extends AbstractScene{
 			
 		listLeft = new MTList(mtApp, area.getCenterPointLocal().x-500, 10, 240 , 200);	 
 				
-		listRight = new MTList(mtApp,area.getCenterPointLocal().x+260, 10, 240 , 200);
-		 
+		listRight = new MTList(mtApp,area.getCenterPointLocal().x+260, 10, 240 , 200);		 
 		
 		//dort passiert das liste füllen, was bereits implementiert habe
 		//zunächst nur mittlere liste füllen
@@ -459,10 +456,11 @@ public class EvaluationScene extends AbstractScene{
 						//Falls keine Elemente mehr drin sind
 						if(ideas.size()==0 && bestIdeas.size()==1)
 						{
+							String result = bestIdeas.get(0).getName();
 							//FinalScene gehen
-							mtApp.pushScene();
+							mtApp.pushScene();							
 							if (finalScene == null){
-								finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), "BVB Borussia");
+								finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), result);
 								//Konstruktor erweitern um Anzahl Spieler, da genau soviele
 								//Tastaturen geladen werden
 							//Add the scene to the mt application
