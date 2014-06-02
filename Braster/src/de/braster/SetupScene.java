@@ -233,8 +233,7 @@ public class SetupScene  extends AbstractScene{
 public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
 		
 		final Keyboard keyboard = new Keyboard(mtApplication);
-		
-		
+				
         t.setExpandDirection(ExpandDirection.DOWN);
         t.setFontColor(MTColor.BLACK);		 
 		t.setFillColor(MTColor.WHITE);
