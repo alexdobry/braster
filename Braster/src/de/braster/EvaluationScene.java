@@ -77,13 +77,6 @@ public class EvaluationScene extends AbstractScene{
 			ideas.add(n);
 		}
 		
-		for(int i=1;i<4;i++)
-		{
-			Note n = new Note(i+"");
-			ideas.add(n);			
-		}
-		 
-				
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
 	
