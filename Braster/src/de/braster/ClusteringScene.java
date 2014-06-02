@@ -1,8 +1,5 @@
 package de.braster;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -10,10 +7,9 @@ import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.font.IFont;
+import org.mt4j.components.visibleComponents.shapes.MTRectangle.PositionAnchor;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
-import org.mt4j.components.visibleComponents.widgets.MTTextField;
-import org.mt4j.components.visibleComponents.widgets.buttons.MTImageButton;
 import org.mt4j.input.gestureAction.DefaultButtonClickAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -24,8 +20,6 @@ import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 import org.mt4jx.components.visibleComponents.widgets.MTCheckbox;
-
-import processing.core.PImage;
 
 public class ClusteringScene extends AbstractScene{
 
@@ -46,21 +40,58 @@ public class ClusteringScene extends AbstractScene{
 		
 		ideas = Idea.getAllIdeas();
 		float posx = 0;
-		float posy = 0;
+		float posy = 100;
 		
-		float padding = 20;
+		float padding = 50;
 		
 		Random rng = new Random();
 		for (Idea idea : ideas) {
+			idea.setAnchor(PositionAnchor.UPPER_LEFT);
+			idea.setVisible(false);
 			canv.addChild(idea);
-			posy = rng.nextFloat() * (mtApp.height-padding*2);
-			posx = rng.nextFloat() * (mtApp.width-padding*2);
+			//			posy = rng.nextFloat() * (mtApp.height-padding*2);
+//			posx = rng.nextFloat() * (mtApp.width-padding*2);
 			idea.setPositionGlobal(new Vector3D(posx+padding, posy+padding));
 			idea.updateCanvas(canv); //TODO:
+			idea.setAnchor(PositionAnchor.CENTER); //sonnst gibts beim gruppieren probleme TODO: fix it?
 		}
 		
+		IFont font = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		20, MTColor.WHITE, false);
+		
+		final MTTextArea rText = new MTTextArea(this.mtApp, font);
+		rText.unregisterAllInputProcessors();
+		rText.setPickable(false);
+		rText.setNoFill(true);
+		rText.setNoStroke(true);
+		rText.setText(ideas.size() + " Ideen übrig");
 		
 		
+
+		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, 30, 60, 0, 200, 60, 12, 12);
+		mtRoundRectangle.unregisterAllInputProcessors();
+		mtRoundRectangle.setFillColor(MTColor.GREY);  	
+		mtRoundRectangle.registerInputProcessor(new TapProcessor(this.mtApp));
+		mtRoundRectangle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			int count = 0;
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent)ge;
+				if (te.isTapped()){
+					if (count < ideas.size()) {
+						ideas.get(count++).setVisible(true);
+						rText.setText(ideas.size()-count + " Ideen übrig");
+					}
+				}
+				return false;
+			}
+		});
+		
+
+		mtRoundRectangle.addChild(rText);
+		rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
+		
+		
+		canv.addChild(mtRoundRectangle);
 //		createItem();
 //		createLeftMenubar();
 		createRightMenubar();
