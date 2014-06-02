@@ -28,7 +28,7 @@ public class FinalScene extends AbstractScene{
 		textArea.unregisterAllInputProcessors();
 		 
 		
-		//wenn angeklickt wird, muss sich Tastatur öffnen
+		//wenn angeklickt wird, muss sich Tastatur ï¿½ffnen
 		//eingegebener Text dann im Feld erscheinen
 		 
 		textArea.setPickable(false);
@@ -36,7 +36,7 @@ public class FinalScene extends AbstractScene{
 		textArea.setNoStroke(true);
 		textArea.setHeightLocal(600);
 		textArea.setWidthLocal(600);
-		textArea.setText("Für das Problem \n \n" + problem +"\n\nwurde folgende Lösung gefunden  \n \n" +result+".");		
+		textArea.setText("FÃ¼r das Problem \n \n" + problem +"\n\nwurde folgende LÃ¶sung gefunden  \n \n" +result+".");		
 		textArea.setPositionRelativeToParent(new Vector3D(mtApplication.width/2,mtApplication.height/2));
 		canvas.addChild(textArea);	
 	}

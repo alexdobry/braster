@@ -66,7 +66,7 @@ public class ClusteringScene extends AbstractScene{
 		rText.setPickable(false);
 		rText.setNoFill(true);
 		rText.setNoStroke(true);
-		rText.setText(ideas.size() + " Ideen übrig");
+		rText.setText(ideas.size() + " Ideen Ã¼brig");
 		
 		
 		mtRoundRectangle.unregisterAllInputProcessors();
@@ -93,7 +93,7 @@ public class ClusteringScene extends AbstractScene{
 						
 						if (count < ideas.size()) {
 							ideas.get(count++).setVisible(true);
-							rText.setText(ideas.size()-count + " Ideen übrig");
+							rText.setText(ideas.size()-count + " Ideen Ã¼brig");
 						}
 						
 						if (ideas.size()-count != 0) {
@@ -230,7 +230,7 @@ public class ClusteringScene extends AbstractScene{
 	}
 	
 	
-	//create right menubar, um mit der nächsten Scene zu beginnen
+	//create right menubar, um mit der nï¿½chsten Scene zu beginnen
 	private void createRightMenubar()
 	{		
 		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, this.mtApp.width-240, this.mtApp.height-80, 0, 200, 60, 12, 12);
@@ -309,7 +309,7 @@ public class ClusteringScene extends AbstractScene{
 					//entweder wird die idee ausgeklappt
 					//oder wieder eingeklappt
 					//je nach vorherigem status
-					//höhe nach text ausrichten
+					//hï¿½he nach text ausrichten
 					//dazu ne methode schreiben
 					
 					mtRoundRectangle.setSizeLocal(300, 500);
