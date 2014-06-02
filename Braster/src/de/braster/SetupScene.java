@@ -60,6 +60,8 @@ public class SetupScene  extends AbstractScene{
 		textFieldTitle.setNoStroke(true);
 		textFieldTitle.setText("Braster");
 		canv.addChild(textFieldTitle);
+		problemDefinition = "Problem eingeben...";
+		
 						
 		//fungiert als mehrzeilige textarea für die Problembeschreibung
 		final MTTextArea textArea = new MTTextArea(mtApplication,                                
@@ -106,9 +108,8 @@ public class SetupScene  extends AbstractScene{
 				if (te.isTapped()){
 					
 					//Problem auslesen
-					MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(1);
-					String problem = textAreaProblem.getText();
-					problemDefinition = problem;
+					MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(1);					 
+					problemDefinition = textAreaProblem.getText();
 					int number = 0;
 					//herausfinden, wieviel Spieler ausgewählt sind
  					for (Positioncomponent item: temp)
@@ -122,12 +123,12 @@ public class SetupScene  extends AbstractScene{
 					}
 					//Save the current scene on the scene stack before changing
  					//wenn beides eingegeben wurde, wird in die nächste szene geleitet
- 					if(number>0 && problem.length()>0)
+ 					if(number>0 && problemDefinition.length()>0)
  					{
  						//Save the current scene on the scene stack before changing
  						mtApp.pushScene();
  						if (brainWritingScene == null){
- 							brainWritingScene = new BrainWritingScene(mtApp, "Brain Writing", problem, number);
+ 							brainWritingScene = new BrainWritingScene(mtApp, "Brain Writing", problemDefinition, number);
  							//Konstruktor erweitern um Anzahl Spieler, da genau soviele
  							//Tastaturen geladen werden
  							//Add the scene to the mt application
@@ -138,7 +139,7 @@ public class SetupScene  extends AbstractScene{
  					}
  					
  					//andernfalls kleinen popup, was fehlt
- 					else if(problem.length()==0 || problem.equals("Problem eingeben..."))
+ 					else if(problemDefinition.length()==0 || problemDefinition.equals("Problem eingeben..."))
  					{
  						JOptionPane.showMessageDialog(null, "Bitte das Problem definieren.");
  					}
