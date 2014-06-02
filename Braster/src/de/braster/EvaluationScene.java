@@ -71,13 +71,13 @@ public class EvaluationScene extends AbstractScene{
 		ideas = new ArrayList<Note>();
 		rubbish = new ArrayList<Note>();
 		bestIdeas = new ArrayList<Note>();
-			
+		
 		for (Idea i : ideasPa)
 		{
 			Note n = new Note(i.getText());
 			ideas.add(n);
 		}
-		
+		ideas.add(new Note(ideasPa.size()+""));
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
 		this.listColor = new MTColor(255,127,0);
