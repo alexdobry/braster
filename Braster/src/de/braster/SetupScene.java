@@ -54,8 +54,9 @@ public class SetupScene  extends AbstractScene{
 		this.playerButtons = new ArrayList<Positioncomponent>();
 		
 		//TextField fŸr Titel
-		MTTextField textFieldTitle = new MTTextField(mtApplication, mtApplication.width/2f-100, 30, 200, 60, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		50, new MTColor(255, 255, 255, 255)));
+		MTTextField textFieldTitle = new MTTextField(mtApplication, 0, 100, mtApplication.width/4, mtApplication.height/7, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+        		100, new MTColor(255, 255, 255, 255)));
+		textFieldTitle.setPositionGlobal(new Vector3D(mtApplication.width/2,100));
 		textFieldTitle.setNoFill(true);
 		textFieldTitle.setNoStroke(true);
 		textFieldTitle.setText("Braster");
@@ -72,6 +73,7 @@ public class SetupScene  extends AbstractScene{
 		textArea.setText("Problem eingeben...");
 		textArea.setHeightLocal(100);
 		textArea.setWidthLocal(500);
+		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height/3));
 		textArea.unregisterAllInputProcessors();
 		textArea.registerInputProcessor(new TapProcessor(this.mtApp));
 		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener(){
@@ -80,7 +82,7 @@ public class SetupScene  extends AbstractScene{
 				   if (te.isTapped())
 				   { 		
 					   textArea.setText("");
-				       Keyboard keyboard = makeKB(mtApplication, textArea);  
+				       Keyboard keyboard = makeKB(mtApplication, textArea);
                        keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f)));                    
 				   }
 				   return false;
@@ -90,13 +92,13 @@ public class SetupScene  extends AbstractScene{
 		//wenn angeklickt wird, muss sich Tastatur öffnen
 		//eingegebener Text dann im Feld erscheinen		
 		
-		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, 240));		
+				
 		canv.addChild(textArea);			
 					
 		IFont font = FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		50, MTColor.BLACK, false);
 		
-		MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Start Brain Writing", font, MTColor.SILVER);
+		MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Brainwriting starten", font, MTColor.SILVER);
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -164,25 +166,25 @@ public class SetupScene  extends AbstractScene{
 		//new Playerbuttons
 		Positioncomponent p1 = new Positioncomponent(this.mtApp,1);
 		MTRectangle parent1 = p1.getRectangle();
-		parent1.setPositionGlobal(new Vector3D(this.mtApp.width/5,450));		
+		parent1.setPositionGlobal(new Vector3D(this.mtApp.width/5,mtApp.height/3*2));		
 		this.canv.addChild(parent1);
 		this.playerButtons.add(p1);
 		
 		Positioncomponent p2 = new Positioncomponent(this.mtApp,2);
 		MTRectangle parent2 = p2.getRectangle();		
-		parent2.setPositionGlobal(new Vector3D((this.mtApp.width/5)*2,450));		
+		parent2.setPositionGlobal(new Vector3D((this.mtApp.width/5)*2,mtApp.height/3*2));		
 		this.canv.addChild(parent2);
 		this.playerButtons.add(p2);
 		
 		Positioncomponent p3 = new Positioncomponent(this.mtApp,3);
 		MTRectangle parent3 = p3.getRectangle();		
-		parent3.setPositionGlobal(new Vector3D((this.mtApp.width/5)*3,450));		
+		parent3.setPositionGlobal(new Vector3D((this.mtApp.width/5)*3,mtApp.height/3*2));		
 		this.canv.addChild(parent3);
 		this.playerButtons.add(p3);
 		
 		Positioncomponent p4 = new Positioncomponent(this.mtApp,4);
 		MTRectangle parent4 = p4.getRectangle();		
-		parent4.setPositionGlobal(new Vector3D((this.mtApp.width/5)*4,450));		
+		parent4.setPositionGlobal(new Vector3D((this.mtApp.width/5)*4,mtApp.height/3*2));		
 		this.canv.addChild(parent4);
 		this.playerButtons.add(p4);
 	
@@ -245,7 +247,8 @@ public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
 				
 		getCanvas().addChild(keyboard);
 		
-		keyboard.scale(0.8f, 0.8f, 1, new Vector3D(0, 0, 0));
+		keyboard.scale(1.5f, 1.5f, 1, new Vector3D(0, 0, 0));
+	//	keyboard.setPositionGlobal(new Vector3D(mtApp.width/2,mtApp.height-(keyboard.getHeightXYVectLocal().y/2)));
 		keyboard.removeAllGestureEventListeners(DragProcessor.class);
 		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
 		keyboard.removeAllGestureEventListeners(RotateProcessor.class);		
