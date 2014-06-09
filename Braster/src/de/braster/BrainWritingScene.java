@@ -29,6 +29,10 @@ import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MT4jSettings;
 import org.mt4j.util.MTColor;
+import org.mt4j.util.animation.Animation;
+import org.mt4j.util.animation.AnimationEvent;
+import org.mt4j.util.animation.IAnimationListener;
+import org.mt4j.util.animation.MultiPurposeInterpolator;
 import org.mt4j.util.math.Vector3D;
 
 import processing.core.PApplet;
@@ -108,24 +112,24 @@ public class BrainWritingScene extends AbstractScene{
 		kb3 = makeKB();
 		kb4 = makeKB();
 		
-		keyboardPositionRU = new Vector3D(mtApplication.width/2f+(kb1.getWidthXY(TransformSpace.LOCAL)/2),
-				mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f),
+		keyboardPositionRU = new Vector3D(mtApplication.width-(kb1.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2),
+				mtApplication.height-(kb1.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f),
 				0);
 
-		keyboardPositionLU = new Vector3D(mtApplication.width/2f-(kb2.getWidthXY(TransformSpace.LOCAL)/2),
-				mtApplication.height-(kb2.getHeightXY(TransformSpace.LOCAL)/2f),
+		keyboardPositionLU = new Vector3D((kb2.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2),
+				mtApplication.height-(kb2.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f),
 				0);
 		
-		keyboardPositionLO = new Vector3D(mtApplication.width/2f-(kb3.getWidthXY(TransformSpace.LOCAL)-(kb3.getHeightXY(TransformSpace.LOCAL)/2f)),
-				(mtApplication.height/2f)-(kb3.getHeightXY(TransformSpace.LOCAL)/2f),
+		keyboardPositionLO = new Vector3D((kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2),
+				(mtApplication.height/2f)-(kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f),
 				0);
 		
-		keyboardPositionRO = new Vector3D(mtApplication.width/2f+kb3.getWidthXY(TransformSpace.LOCAL)-kb3.getHeightXY(TransformSpace.LOCAL)/2f,
-				mtApplication.height/2f-(kb3.getHeightXY(TransformSpace.LOCAL)/2f),
+		keyboardPositionRO = new Vector3D(mtApplication.width-kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2,
+				mtApplication.height/2f-(kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f),
 				0);
 		
 		keyboardPositionMiddle = new Vector3D(mtApplication.width/2f,
-				mtApplication.height-(kb1.getHeightXY(TransformSpace.LOCAL)/2f),
+				mtApplication.height-(kb1.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f),
 				0);
 		
 		kb1.setPositionGlobal(keyboardPositionRU);
@@ -149,76 +153,6 @@ public class BrainWritingScene extends AbstractScene{
 		final BWIdeaView iv3 = new BWIdeaView(mtApplication, kb3.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb3);
 		final BWIdeaView iv4 = new BWIdeaView(mtApplication, kb4.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb4.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb4);
 		
-
-		
-		iv1.registerInputProcessor(new FlickProcessor());
-		iv1.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
-			
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				FlickEvent e = (FlickEvent)ge;
-				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
-					if (e.getDirection() == FlickDirection.WEST) {
-						iv1.fillIdeaArea(1);
-					}
-					if (e.getDirection() == FlickDirection.EAST) {
-						iv1.fillIdeaArea(-1);
-					}
-				return false;
-			}
-		});
-		
-		
-		iv2.registerInputProcessor(new FlickProcessor());
-		iv2.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
-			
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				FlickEvent e = (FlickEvent)ge;
-				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
-					if (e.getDirection() == FlickDirection.WEST) {
-						iv2.fillIdeaArea(1);
-					}
-					if (e.getDirection() == FlickDirection.EAST) {
-						iv2.fillIdeaArea(-1);
-					}
-				return false;
-			}
-		});
-		
-		iv3.registerInputProcessor(new FlickProcessor());
-		iv3.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
-			
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				FlickEvent e = (FlickEvent)ge;
-				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
-					if (e.getDirection() == FlickDirection.NORTH) {
-						iv3.fillIdeaArea(1);
-					}
-					if (e.getDirection() == FlickDirection.SOUTH) {
-						iv3.fillIdeaArea(-1);
-					}
-				return false;
-			}
-		});
-		
-		iv4.registerInputProcessor(new FlickProcessor());
-		iv4.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
-			
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				FlickEvent e = (FlickEvent)ge;
-				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
-					if (e.getDirection() == FlickDirection.SOUTH) {
-						iv4.fillIdeaArea(1);
-					}
-					if (e.getDirection() == FlickDirection.NORTH) {
-						iv4.fillIdeaArea(-1);
-					}
-				return false;
-			}
-		});
 
 		
 		canv.addChild(iv1);
@@ -423,90 +357,69 @@ public class BrainWritingScene extends AbstractScene{
 		
 		private int iterator = 0;
 		private MTTextArea ideaArea = null;
+		private MultiPurposeInterpolator leftAnimation = null, rightAnimation = null;
+		private Animation animLeft, animRight;
+		Vector3D trans = new Vector3D(), rot = new Vector3D(), scale = new Vector3D();
 		
 		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
 			super(pApplet, width, height);
 			
 			setFillColor(MTColor.WHITE);
 			setStrokeColor(MTColor.WHITE);
+			setGestureAllowance(DragProcessor.class, false);
 			
+			leftAnimation = new MultiPurposeInterpolator(getWidthXYRelativeToParent()/2, getCenterPointLocal().x-getWidthXYRelativeToParent()/2 , 1000, 0.1f, 0.8f, 1);
+			rightAnimation = new MultiPurposeInterpolator( getWidthXYRelativeToParent()/2, getWidthXYRelativeToParent() ,1000, 0.1f, 0.8f, 1);
+			animLeft = new Animation("Idee nach links", leftAnimation, ideaArea);
+			animRight = new Animation("Idee nacht rechts", rightAnimation, ideaArea);
+			//Ideenanzeige
 			ideaArea = new MTTextArea(pApplet);
 			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
 			ideaArea.setFillColor(MTColor.GREEN);
 			ideaArea.setStrokeColor(MTColor.LIME);
 			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.BLACK, true));
 			ideaArea.removeAllGestureEventListeners();
-//			ideaArea.setText("test");
+			ideaArea.setPickable(false);
+			this.addChild(ideaArea);
+		
 			
-			ideaArea.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
-			IGestureEventListener gl = new IGestureEventListener() {
+			animLeft.addAnimationListener(new IAnimationListener() {
 				
 				@Override
-				public boolean processGestureEvent(MTGestureEvent ge) {
-					TapEvent te = (TapEvent)ge;
-					if (te.isTapped()){
-						
-//						fillIdeaArea();
+				public void processAnimationEvent(AnimationEvent ae) {
+					// TODO Auto-generated method stub
+					if (ae.getId() == AnimationEvent.ANIMATION_UPDATED) {
+						ideaArea.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
 					}
-					return false;
-				}
-			};
-			
-//			IGestureEventListener fl = new IGestureEventListener() {
-//				
-//				@Override
-//				public boolean processGestureEvent(MTGestureEvent ge) {
-//					FlickEvent e = (FlickEvent)ge;
-//					if (e.getId() == MTGestureEvent.GESTURE_ENDED)
-//						if (e.getDirection() == FlickDirection.WEST) {
-//							fillIdeaArea();
-//						}
-//					return false;
-//				}
-//			};
-//			
-//			
-////			this.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
-//			this.registerInputProcessor(new FlickProcessor());
-////			this.addGestureListener(TapProcessor.class, gl);
-//			this.addGestureListener(FlickProcessor.class, fl);
-////			ideaArea.addGestureListener(TapProcessor.class, gl);
-//			ideaArea.addGestureListener(FlickProcessor.class, fl);
-//			
-			
-			MTTextArea addButton = new MTTextArea(pApplet);
-			addButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
-			addButton.setPositionRelativeToOther(this, new Vector3D(this.getWidthXY(TransformSpace.LOCAL)*1/4,this.getHeightXY(TransformSpace.LOCAL)*4/5,0));
-			addButton.setText("  ADD  ");
-			//TODO: next/prev vieleicht durch "fling" gesture ersetzen
-//			MTTextArea nextButton = new MTTextArea(pApplet);
-//			nextButton.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.GREEN, true));
-//			nextButton.setPositionRelativeToOther(this, new Vector3D(this.getWidthXY(TransformSpace.LOCAL)*3/4,this.getHeightXY(TransformSpace.LOCAL)*4/5,0));
-//			nextButton.setText("next");
-//			
-//			nextButton.removeAllGestureEventListeners();
-			addButton.removeAllGestureEventListeners();
-			
-			addButton.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
-			addButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-				
-				@Override
-				public boolean processGestureEvent(MTGestureEvent ge) {
-					TapEvent te = (TapEvent)ge;
-					if (te.isTapped()){
-						kb.setVisible(true);
-						setVisible(false);
+					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
+						ideaArea.setPositionRelativeToParent(getCenterPointLocal());
+						fillIdeaArea(1);
 					}
-					return false;
 				}
 			});
-
 			
+			animRight.addAnimationListener(new IAnimationListener() {
+				
+				@Override
+				public void processAnimationEvent(AnimationEvent ae) {
+					// TODO Auto-generated method stub
+					if (ae.getId() == AnimationEvent.ANIMATION_UPDATED) {
+						ideaArea.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
+					}
+					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
+						ideaArea.setPositionRelativeToParent(getCenterPointLocal());
+						fillIdeaArea(-11);
+					}
+				}
+			});
+			
+			
+			//Zur tastatur welchseln
 			MTSvgButton keybCloseSvg = new MTSvgButton(pApplet, MT4jSettings.getInstance().getDefaultSVGPath()
 					+ "keybClose.svg");
-			//Transform
+
 			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
-			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0)); //2x ist notwendig
+			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0)); //2x ist notwendig aufgrund wie die tastatur auf ihre gräße kommt
 			
 			keybCloseSvg.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-25, 25,0));
 			keybCloseSvg.setBoundsPickingBehaviour(AbstractShape.BOUNDS_ONLY_CHECK);
@@ -522,50 +435,71 @@ public class BrainWritingScene extends AbstractScene{
 				}
 			});
 			this.addChild(keybCloseSvg);
+				
+			registerInputProcessor(new FlickProcessor());
+			addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+				
+				@Override
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					FlickEvent e = (FlickEvent)ge;
+					getLocalMatrix().decompose(trans, rot, scale); //versuch die aktuelle Rotation zu bestimmen
+					if (e.getId() == MTGestureEvent.GESTURE_ENDED)  {
+						
+						//flick Gesten abhängig der tastatur orientation
+						//nord orientation
+						if (e.getDirection() == FlickDirection.WEST && rot.z == 0) {
+							animLeft.start();
+						}
+						if (e.getDirection() == FlickDirection.EAST && rot.z == 0) {
+							animRight.start();
+						}
+						
+						//ost-orientation
+						if (e.getDirection() == FlickDirection.NORTH && rot.z > 0) {
+							animLeft.start();
+						}
+						if (e.getDirection() == FlickDirection.SOUTH && rot.z > 0) {
+							animRight.start();
+						}
+						
+						//west-orientation
+						if (e.getDirection() == FlickDirection.SOUTH && rot.z < 0) {
+							animLeft.start();
+						}
+						if (e.getDirection() == FlickDirection.NORTH && rot.z < 0) {
+							animRight.start();
+						}
+						
+						System.out.println(rot.toString());
+					}
+						
+					return false;
+				}
+			});
 			
-			
-//			float radius = 20;
-//			MTEllipse circle = new MTEllipse(pApplet, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-radius,radius,0), radius, radius);
-//			circle.setStrokeColor(MTColor.LIME);
-//			circle.setGestureAllowance(DragProcessor.class, false);
-//			circle.setGestureAllowance(ScaleProcessor.class, false);
-//			
-//			circle.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
-//			circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-//				
-//				@Override
-//				public boolean processGestureEvent(MTGestureEvent ge) {
-//					TapEvent te = (TapEvent)ge;
-//					if (te.isTapped()){
-//						kb.setVisible(true);
-//						setVisible(false);
-//					}
-//					return false;
-//				}
-//			});
-			
-			this.addChild(ideaArea);
-//			this.addChild(nextButton);
-//			this.addChild(addButton);
-//			this.addChild(circle);
-			
-			setGestureAllowance(DragProcessor.class, false);
+
 			
 		}
 
-		
+		/**
+		 * Wechselt durch die Liste der Ideen in der angegebenen Richtung.
+		 * 
+		 * @param direction -1 = zurück; 1 = vorwärts
+		 */
 		public void fillIdeaArea(int direction) {
 			Idea i = null;
 			if (ideas.size() > 0) {
 					
 				i = ideas.get(iterator);
 				
+				//flick nach links = vorwärts
 				if (ideas.get(iterator) == ideas.getLast() && direction == 1) {
 					iterator = 0;
 				} else if (direction == 1) {
 					iterator++;
 				}
 				
+				//flick nach rechts = zurück 
 				if (ideas.get(iterator) == ideas.getFirst() && direction == -1) {
 					iterator = ideas.size()-1;
 				} else if (direction == -1) {
