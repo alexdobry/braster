@@ -351,7 +351,6 @@ public class BrainWritingScene extends AbstractScene{
 		private LinkedList<Idea> ideas = Idea.getAllIdeas();
 		
 		private int iterator = 0;
-		private MTTextArea ideaArea = null;
 		private MultiPurposeInterpolator leftAnimation = null, rightAnimation = null, scaleAnimation = null;
 		private Animation animLeft, animRight, animScale, animReverseScale;
 		Vector3D trans = new Vector3D(), rot = new Vector3D(), scale = new Vector3D();

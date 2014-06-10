@@ -141,7 +141,7 @@ public class BWKeyboard extends MTRoundRectangle {
 			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
-				if (te.isTapped()){
+				if (te.isTapped() && Idea.getAllIdeas().size() > 0){
 //					onCloseButtonClicked();
 					setVisible(false);
 					iv.setVisible(true);
