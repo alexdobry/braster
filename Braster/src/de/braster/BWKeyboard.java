@@ -132,7 +132,7 @@ public class BWKeyboard extends MTRoundRectangle {
 //		/*
 		//TODO load button only once!
 		MTSvgButton keybCloseSvg = new MTSvgButton(pa, MT4jSettings.getInstance().getDefaultSVGPath()
-						+ "keybClose.svg");
+						+ "showIdeas.svg");
 		//Transform
 		keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
 		keybCloseSvg.translate(new Vector3D(640,5,0));

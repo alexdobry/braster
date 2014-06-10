@@ -343,11 +343,6 @@ public class BrainWritingScene extends AbstractScene{
 		
 
 		return keyboard;
-		
-		
-
-		
-		
 	}
 	
 	public class BWIdeaView extends MTRectangle{
@@ -357,62 +352,18 @@ public class BrainWritingScene extends AbstractScene{
 		
 		private int iterator = 0;
 		private MTTextArea ideaArea = null;
-		private MultiPurposeInterpolator leftAnimation = null, rightAnimation = null;
-		private Animation animLeft, animRight;
+		private MultiPurposeInterpolator leftAnimation = null, rightAnimation = null, scaleAnimation = null;
+		private Animation animLeft, animRight, animScale, animReverseScale;
 		Vector3D trans = new Vector3D(), rot = new Vector3D(), scale = new Vector3D();
+
+		private PApplet pApplet;
 		
 		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
 			super(pApplet, width, height);
-			
+			this.pApplet = pApplet;
 			setFillColor(MTColor.WHITE);
 			setStrokeColor(MTColor.WHITE);
 			setGestureAllowance(DragProcessor.class, false);
-			
-			leftAnimation = new MultiPurposeInterpolator(getWidthXYRelativeToParent()/2, getCenterPointLocal().x-getWidthXYRelativeToParent()/2 , 1000, 0.1f, 0.8f, 1);
-			rightAnimation = new MultiPurposeInterpolator( getWidthXYRelativeToParent()/2, getWidthXYRelativeToParent() ,1000, 0.1f, 0.8f, 1);
-			animLeft = new Animation("Idee nach links", leftAnimation, ideaArea);
-			animRight = new Animation("Idee nacht rechts", rightAnimation, ideaArea);
-			//Ideenanzeige
-			ideaArea = new MTTextArea(pApplet);
-			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
-			ideaArea.setFillColor(MTColor.GREEN);
-			ideaArea.setStrokeColor(MTColor.LIME);
-			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.BLACK, true));
-			ideaArea.removeAllGestureEventListeners();
-			ideaArea.setPickable(false);
-			this.addChild(ideaArea);
-		
-			
-			animLeft.addAnimationListener(new IAnimationListener() {
-				
-				@Override
-				public void processAnimationEvent(AnimationEvent ae) {
-					// TODO Auto-generated method stub
-					if (ae.getId() == AnimationEvent.ANIMATION_UPDATED) {
-						ideaArea.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
-					}
-					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
-						ideaArea.setPositionRelativeToParent(getCenterPointLocal());
-						fillIdeaArea(1);
-					}
-				}
-			});
-			
-			animRight.addAnimationListener(new IAnimationListener() {
-				
-				@Override
-				public void processAnimationEvent(AnimationEvent ae) {
-					// TODO Auto-generated method stub
-					if (ae.getId() == AnimationEvent.ANIMATION_UPDATED) {
-						ideaArea.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
-					}
-					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
-						ideaArea.setPositionRelativeToParent(getCenterPointLocal());
-						fillIdeaArea(-11);
-					}
-				}
-			});
-			
 			
 			//Zur tastatur welchseln
 			MTSvgButton keybCloseSvg = new MTSvgButton(pApplet, MT4jSettings.getInstance().getDefaultSVGPath()
@@ -444,30 +395,36 @@ public class BrainWritingScene extends AbstractScene{
 					FlickEvent e = (FlickEvent)ge;
 					getLocalMatrix().decompose(trans, rot, scale); //versuch die aktuelle Rotation zu bestimmen
 					if (e.getId() == MTGestureEvent.GESTURE_ENDED)  {
-						
 						//flick Gesten abhängig der tastatur orientation
 						//nord orientation
 						if (e.getDirection() == FlickDirection.WEST && rot.z == 0) {
 							animLeft.start();
+							animScale.start();
 						}
 						if (e.getDirection() == FlickDirection.EAST && rot.z == 0) {
 							animRight.start();
+							animScale.start();
+							
 						}
 						
 						//ost-orientation
 						if (e.getDirection() == FlickDirection.NORTH && rot.z > 0) {
 							animLeft.start();
+							animScale.start();
 						}
 						if (e.getDirection() == FlickDirection.SOUTH && rot.z > 0) {
 							animRight.start();
+							animScale.start();
 						}
 						
 						//west-orientation
 						if (e.getDirection() == FlickDirection.SOUTH && rot.z < 0) {
 							animLeft.start();
+							animScale.start();
 						}
 						if (e.getDirection() == FlickDirection.NORTH && rot.z < 0) {
 							animRight.start();
+							animScale.start();
 						}
 						
 						System.out.println(rot.toString());
@@ -506,14 +463,124 @@ public class BrainWritingScene extends AbstractScene{
 					iterator--;
 				}
 				
-				ideaArea.setText(i.getText());
-				
+//				ideaArea.setText(i.getText());
+//				setAnimations(ideaArea, ideaArea.getWidthXY(TransformSpace.LOCAL));
+				showIdea(i.getText(), direction);
 			}
-			
-			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
 		}
+		
+		
+		private void showIdea(String s, int direction) {
+			//Ideenanzeige
+			MTTextArea ideaArea = new MTTextArea(pApplet);
+			
+			ideaArea.setFillColor(MTColor.GREEN);
+			ideaArea.setStrokeColor(MTColor.LIME);
+			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.BLACK, true));
+			ideaArea.removeAllGestureEventListeners();
+			ideaArea.setPickable(false);
+			ideaArea.setText(s);
+			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
+			this.addChild(ideaArea);
+			setAnimations(ideaArea, ideaArea.getWidthXY(TransformSpace.LOCAL));
+			ideaArea.setWidthXYRelativeToParent(0);
+			animReverseScale.start();
+			
+		}
+		
+		
+		
+		/**
+		 * Setzt Animation für eine Textarea.
+		 * @param t
+		 * @param width
+		 */
+		private void setAnimations (final MTTextArea t, final float width) {
+			scaleAnimation = new MultiPurposeInterpolator(width, 0, 300, 0, 1, 1);
+			leftAnimation = new MultiPurposeInterpolator(getWidthXYRelativeToParent()/2, getCenterPointLocal().x-getWidthXYRelativeToParent()/2, 300, 0.1f, 0.8f, 1);
+			rightAnimation = new MultiPurposeInterpolator( getWidthXYRelativeToParent()/2, getWidthXYRelativeToParent(), 300, 0.1f, 0.8f, 1);
+			MultiPurposeInterpolator reverseScaleAnimation = new MultiPurposeInterpolator(0, width, 300, 1, 0, 1);
+			
+			animScale = new Animation("Idee verschwinden lassen", scaleAnimation, t);
+			animScale.addAnimationListener(new IAnimationListener() {
+				
+				@Override
+				public void processAnimationEvent(AnimationEvent ae) {
+					
+					switch (ae.getId()) {
+					case AnimationEvent.ANIMATION_STARTED:
+						
+					case AnimationEvent.ANIMATION_UPDATED:
+						t.setWidthXYRelativeToParent(ae.getValue());
+						break;
+					case AnimationEvent.ANIMATION_ENDED:
+//						t.setWidthXYRelativeToParent(width);
+						
+						break;	
+					default:
+						break;
+					}//switch
+				}
+			});
+			
+			animReverseScale = new Animation("Idee erscheinen lassen", reverseScaleAnimation, t);
+			animReverseScale.addAnimationListener(new IAnimationListener() {
+				
+				@Override
+				public void processAnimationEvent(AnimationEvent ae) {
+					switch (ae.getId()) {
+					case AnimationEvent.ANIMATION_STARTED:
+						
+					case AnimationEvent.ANIMATION_UPDATED:
+						t.setWidthXYRelativeToParent(ae.getValue());
+						break;
+					case AnimationEvent.ANIMATION_ENDED:
+						
+						break;	
+					default:
+						break;
+					}//switch
+				}
+			});
+			
+			animLeft = new Animation("Idee nach links", leftAnimation, t);
+			animLeft.addAnimationListener(new IAnimationListener() {
+				
+				@Override
+				public void processAnimationEvent(AnimationEvent ae) {
+					if (ae.getId() == AnimationEvent.ANIMATION_UPDATED) {
+						t.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
+					}
+					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
+						t.setPositionRelativeToParent(getCenterPointLocal());
+						fillIdeaArea(1);
+						t.setVisible(true);
+						t.destroy();
+					}
+				}
+			});
+			
+			animRight = new Animation("Idee nacht rechts", rightAnimation, t);
+			animRight.addAnimationListener(new IAnimationListener() {
+				
+				@Override
+				public void processAnimationEvent(AnimationEvent ae) {
+					if (ae.getId() == AnimationEvent.ANIMATION_UPDATED) {
+						t.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
+					}
+					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
+						t.setPositionRelativeToParent(getCenterPointLocal());
+						fillIdeaArea(-1);
+						t.setVisible(true);
+						t.destroy();
+					}
+				}
+			});
+			
+			
+			
+		}
+		
+		
 	}
-	
-	
-	
 }
