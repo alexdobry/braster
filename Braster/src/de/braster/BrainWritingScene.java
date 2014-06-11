@@ -351,10 +351,14 @@ public class BrainWritingScene extends AbstractScene{
 		private LinkedList<Idea> ideas = Idea.getAllIdeas();
 		
 		private int iterator = 0;
-		private MultiPurposeInterpolator leftAnimation = null, rightAnimation = null, scaleAnimation = null;
-		private Animation animLeft, animRight, animScale, animReverseScale;
+		private MultiPurposeInterpolator leftAnimation = null, 
+				rightAnimation = null, 
+				scaleAnimation = null,
+				leftReverseAnimation = null,
+				rightReverseAnimation = null;
+		private Animation animLeft, animReverseLeft, animRight, animReverseRight, animScale, animReverseScale;
 		Vector3D trans = new Vector3D(), rot = new Vector3D(), scale = new Vector3D();
-
+		private MTTextArea currentShown = null;
 		private PApplet pApplet;
 		
 		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
@@ -471,6 +475,11 @@ public class BrainWritingScene extends AbstractScene{
 		
 		private void showIdea(String s, int direction) {
 			//Ideenanzeige
+			
+			if (currentShown != null) {
+				currentShown.destroy();
+			}
+			
 			MTTextArea ideaArea = new MTTextArea(pApplet);
 			
 			ideaArea.setFillColor(MTColor.GREEN);
@@ -479,13 +488,25 @@ public class BrainWritingScene extends AbstractScene{
 			ideaArea.removeAllGestureEventListeners();
 			ideaArea.setPickable(false);
 			ideaArea.setText(s);
-			ideaArea.setPositionRelativeToParent(getCenterPointLocal());
-			this.addChild(ideaArea);
+			
 			setAnimations(ideaArea, ideaArea.getWidthXY(TransformSpace.LOCAL));
-			ideaArea.setWidthXYRelativeToParent(0);
-			animReverseScale.start();
+			ideaArea.setWidthXYRelativeToParent(1);
+
+			this.addChild(ideaArea);
+			if (direction == -1) {
+				ideaArea.setPositionRelativeToParent(new Vector3D(0,getCenterPointLocal().y));
+				animReverseLeft.start();
+			}
+			
+			if (direction == 1) {
+				ideaArea.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent(), getCenterPointLocal().y));
+				animReverseRight.start();
+			}
+			animReverseScale.start();	
+			currentShown = ideaArea;
 			
 		}
+		
 		
 		
 		
@@ -497,8 +518,10 @@ public class BrainWritingScene extends AbstractScene{
 		private void setAnimations (final MTTextArea t, final float width) {
 			scaleAnimation = new MultiPurposeInterpolator(width, 0, 300, 0, 1, 1);
 			leftAnimation = new MultiPurposeInterpolator(getWidthXYRelativeToParent()/2, getCenterPointLocal().x-getWidthXYRelativeToParent()/2, 300, 0.1f, 0.8f, 1);
-			rightAnimation = new MultiPurposeInterpolator( getWidthXYRelativeToParent()/2, getWidthXYRelativeToParent(), 300, 0.1f, 0.8f, 1);
-			MultiPurposeInterpolator reverseScaleAnimation = new MultiPurposeInterpolator(0, width, 300, 1, 0, 1);
+			leftReverseAnimation = new MultiPurposeInterpolator(getCenterPointLocal().x-getWidthXYRelativeToParent()/2,getWidthXYRelativeToParent()/2 , 300, 0.1f, 0.8f, 1);
+			rightAnimation = new MultiPurposeInterpolator(getWidthXYRelativeToParent()/2, getWidthXYRelativeToParent(), 300, 0.1f, 0.8f, 1);
+			rightReverseAnimation =new MultiPurposeInterpolator(getWidthXYRelativeToParent(), getWidthXYRelativeToParent()/2, 300, 0.1f, 0.8f, 1);
+			MultiPurposeInterpolator reverseScaleAnimation = new MultiPurposeInterpolator(0, width, 300, 0, 1, 1);
 			
 			animScale = new Animation("Idee verschwinden lassen", scaleAnimation, t);
 			animScale.addAnimationListener(new IAnimationListener() {
@@ -551,10 +574,24 @@ public class BrainWritingScene extends AbstractScene{
 						t.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
 					}
 					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
-						t.setPositionRelativeToParent(getCenterPointLocal());
 						fillIdeaArea(1);
 						t.setVisible(true);
 						t.destroy();
+					}
+				}
+			});
+			
+			
+			animReverseLeft = new Animation("Idee von links in die Mitte", leftReverseAnimation, t);
+			animReverseLeft.addAnimationListener(new IAnimationListener() {
+				
+				@Override
+				public void processAnimationEvent(AnimationEvent ae) {
+					if (ae.getId() == AnimationEvent.ANIMATION_UPDATED) {
+						t.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
+					}
+					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
+					
 					}
 				}
 			});
@@ -568,7 +605,7 @@ public class BrainWritingScene extends AbstractScene{
 						t.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
 					}
 					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
-						t.setPositionRelativeToParent(getCenterPointLocal());
+//						t.setPositionRelativeToParent(getCenterPointLocal());
 						fillIdeaArea(-1);
 						t.setVisible(true);
 						t.destroy();
@@ -576,7 +613,18 @@ public class BrainWritingScene extends AbstractScene{
 				}
 			});
 			
-			
+			animReverseRight = new Animation("Idee von rechts in die mitte", rightReverseAnimation, t);
+			animReverseRight.addAnimationListener(new IAnimationListener() {
+				
+				@Override
+				public void processAnimationEvent(AnimationEvent ae) {
+					if (ae.getId() == AnimationEvent.ANIMATION_UPDATED) {
+						t.setPositionRelativeToParent(new Vector3D(ae.getValue(), getCenterPointLocal().y));	
+					}
+					if(ae.getId() == AnimationEvent.ANIMATION_ENDED){
+					}
+				}
+			});
 			
 		}
 		

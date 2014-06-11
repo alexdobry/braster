@@ -162,8 +162,6 @@ public class ClusteringScene extends AbstractScene{
 							//Do the scene change
 							mtApp.changeScene(evaluationScene);
 							
-							
-							
 						}
 						
 						mtRoundRectangle.setFillColor(MTColor.GREY);  	
