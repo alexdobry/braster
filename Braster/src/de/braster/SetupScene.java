@@ -33,7 +33,9 @@ import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MT4jSettings;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
+import org.mt4jx.components.visibleComponents.widgets.MTCheckbox;
 
+import processing.core.PImage;
 import de.braster.Keyboard.KeyInfo;
 
 public class SetupScene  extends AbstractScene{
@@ -53,17 +55,8 @@ public class SetupScene  extends AbstractScene{
 		this.canv = getCanvas();
 		this.playerButtons = new ArrayList<Positioncomponent>();
 		
-		//TextField fŸr Titel
-		MTTextField textFieldTitle = new MTTextField(mtApplication, 0, 100, mtApplication.width/4, mtApplication.height/7, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		100, new MTColor(255, 255, 255, 255)));
-		textFieldTitle.setPositionGlobal(new Vector3D(mtApplication.width/2,100));
-		textFieldTitle.setNoFill(true);
-		textFieldTitle.setNoStroke(true);
-		textFieldTitle.setText("Braster");
-		canv.addChild(textFieldTitle);
 		problemDefinition = "Problem eingeben...";
-		
-						
+							
 		//fungiert als mehrzeilige textarea für die Problembeschreibung
 		final MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
@@ -73,7 +66,7 @@ public class SetupScene  extends AbstractScene{
 		textArea.setText("Problem eingeben...");
 		textArea.setHeightLocal(100);
 		textArea.setWidthLocal(500);
-		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height/3));
+		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height/4));
 		textArea.unregisterAllInputProcessors();
 		textArea.registerInputProcessor(new TapProcessor(this.mtApp));
 		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener(){
@@ -157,7 +150,10 @@ public class SetupScene  extends AbstractScene{
 		
 		
 		//erzeugt 4 Buttons für die Spieleranzahl
-		createPlayerButtons();				
+		createPlayerButtons();	
+		Checkbox c = new Checkbox(mtApplication, 0,0, 0, 200, 30, 0, 0, "Hilfe");
+		c.setPositionGlobal(new Vector3D(this.mtApp.width/2, this.mtApp.height/6*4));
+		canv.addChild(c);
 	}
 
 	
@@ -166,25 +162,25 @@ public class SetupScene  extends AbstractScene{
 		//new Playerbuttons
 		Positioncomponent p1 = new Positioncomponent(this.mtApp,1);
 		MTRectangle parent1 = p1.getRectangle();
-		parent1.setPositionGlobal(new Vector3D(this.mtApp.width/5,mtApp.height/3*2));		
+		parent1.setPositionGlobal(new Vector3D(this.mtApp.width/5,mtApp.height/2));		
 		this.canv.addChild(parent1);
 		this.playerButtons.add(p1);
 		
 		Positioncomponent p2 = new Positioncomponent(this.mtApp,2);
 		MTRectangle parent2 = p2.getRectangle();		
-		parent2.setPositionGlobal(new Vector3D((this.mtApp.width/5)*2,mtApp.height/3*2));		
+		parent2.setPositionGlobal(new Vector3D((this.mtApp.width/5)*2,mtApp.height/2));		
 		this.canv.addChild(parent2);
 		this.playerButtons.add(p2);
 		
 		Positioncomponent p3 = new Positioncomponent(this.mtApp,3);
 		MTRectangle parent3 = p3.getRectangle();		
-		parent3.setPositionGlobal(new Vector3D((this.mtApp.width/5)*3,mtApp.height/3*2));		
+		parent3.setPositionGlobal(new Vector3D((this.mtApp.width/5)*3,mtApp.height/2));		
 		this.canv.addChild(parent3);
 		this.playerButtons.add(p3);
 		
 		Positioncomponent p4 = new Positioncomponent(this.mtApp,4);
 		MTRectangle parent4 = p4.getRectangle();		
-		parent4.setPositionGlobal(new Vector3D((this.mtApp.width/5)*4,mtApp.height/3*2));		
+		parent4.setPositionGlobal(new Vector3D((this.mtApp.width/5)*4,mtApp.height/2));		
 		this.canv.addChild(parent4);
 		this.playerButtons.add(p4);
 	
