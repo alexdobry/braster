@@ -45,6 +45,7 @@ public class SetupScene  extends AbstractScene{
 	private Iscene brainWritingScene;
 	private ArrayList<Positioncomponent> playerButtons;
 	private static String problemDefinition = "";
+	private static boolean needHelp;
 	
 	
 	public SetupScene( final MTApplication mtApplication, String name)
@@ -56,7 +57,8 @@ public class SetupScene  extends AbstractScene{
 		this.playerButtons = new ArrayList<Positioncomponent>();
 		
 		problemDefinition = "Problem eingeben...";
-							
+		needHelp= false;					
+
 		//fungiert als mehrzeilige textarea für die Problembeschreibung
 		final MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
@@ -151,9 +153,22 @@ public class SetupScene  extends AbstractScene{
 		
 		//erzeugt 4 Buttons für die Spieleranzahl
 		createPlayerButtons();	
-		Checkbox c = new Checkbox(mtApplication, 0,0, 0, 200, 30, 0, 0, "Hilfe");
-		c.setPositionGlobal(new Vector3D(this.mtApp.width/2, this.mtApp.height/6*4));
-		canv.addChild(c);
+		
+		Checkbox checkboxHelp = new Checkbox(mtApplication, 0,0, 0, 200, 30, 0, 0, "Hilfe");
+		checkboxHelp.setPositionGlobal(new Vector3D(this.mtApp.width/2, this.mtApp.height/6*4));
+		canv.addChild(checkboxHelp);
+		checkboxHelp.unregisterAllInputProcessors();
+		checkboxHelp.registerInputProcessor(new TapProcessor(getMTApplication()));
+		checkboxHelp.addGestureListener(TapProcessor.class, new IGestureEventListener(){
+			public boolean processGestureEvent(MTGestureEvent ge){
+				TapEvent te = (TapEvent) ge;
+				   if (te.isTapped())
+				   { 	
+					   needHelp = checkboxHelp.isEnabled();
+				   }
+				   return false;
+			}
+		});
 	}
 
 	

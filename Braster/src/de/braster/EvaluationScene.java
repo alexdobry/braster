@@ -64,6 +64,8 @@ public class EvaluationScene extends AbstractScene{
 	
 	private ArrayList<Note> showedNotes;
 	
+	private float einheitX;
+	
 	
 	/*
      * die anzeige auf MTTextArea ändern, dann brauch nicht extra textfeld in rectangle basteln und anklickbar sind die auch
@@ -122,17 +124,18 @@ public class EvaluationScene extends AbstractScene{
 		
 		createArea();			
 			
-		//Listen erzeugen
-		listMiddle = new MTList(mtApp,  area.getCenterPointLocal().x-220, 80,  440, 250);		 
 		
-		listLeft = new MTList(mtApp, area.getCenterPointLocal().x-420, 80, 130 , 200);	 
+		einheitX = area.getRadiusX()*2/7;
+		//Listen erzeugen
+		listMiddle = new MTList(mtApp,  2*einheitX+10, 80,  3*einheitX-20, 250);		 
+		
+		listLeft = new MTList(mtApp, einheitX-10, 80, einheitX , 200);	 
 				
-		listRight = new MTList(mtApp,area.getCenterPointLocal().x+320, 80, 130 , 200);	 
+		listRight = new MTList(mtApp,5*einheitX+10, 80, einheitX , 200);		 
 		
 		//dort passiert das liste füllen, was bereits implementiert habe
 		//zunächst nur mittlere liste füllen
 		//nach jedem drag&drop vorgang die neue liste updaten
-		//updateMiddleList(listMiddle,ideas);		
 		updateMiddleList();	
 		
 		//Problembeschreibung
@@ -169,12 +172,13 @@ public class EvaluationScene extends AbstractScene{
 		//Bereich erzeugen
 		createArea();
 		
+		einheitX = area.getRadiusX()*2/7;
 		//Listen erzeugen
-		listMiddle = new MTList(mtApp,  area.getCenterPointLocal().x-220, 80,  440, 250);		 
+		listMiddle = new MTList(mtApp,  2*einheitX+10, 80,  3*einheitX-20, 250);		 
 		
-		listLeft = new MTList(mtApp, area.getCenterPointLocal().x-420, 80, 130 , 200);	 
+		listLeft = new MTList(mtApp, einheitX-10, 80, einheitX , 200);	 
 				
-		listRight = new MTList(mtApp,area.getCenterPointLocal().x+320, 80, 130 , 200);		 
+		listRight = new MTList(mtApp,5*einheitX+10, 80, einheitX , 200);		 
 		
 		//dort passiert das liste füllen, was bereits implementiert habe
 		//zunächst nur mittlere liste füllen
@@ -205,18 +209,38 @@ public class EvaluationScene extends AbstractScene{
 		allIdeas = new ArrayList<ArrayList<Note>>();
 		for(Idea idea : allParents)
 		{
-			ArrayList<Note> listOfNotes = new ArrayList<Note>();
-			listOfNotes.add(new Note(idea.getText()));
-			for(MTComponent childIdea : idea.getChildren())
+			if(ideaInList(idea.getText()) == false)
 			{
-				MTTextArea textArea = (MTTextArea) childIdea;
-				listOfNotes.add(new Note(textArea.getText()));
-			}
-			allIdeas.add(listOfNotes);
+				ArrayList<Note> listOfNotes = new ArrayList<Note>();
+				listOfNotes.add(new Note(idea.getText()));
+				
+				for(MTComponent childIdea : idea.getChildren())
+				{
+					MTTextArea textArea = (MTTextArea) childIdea;
+					listOfNotes.add(new Note(textArea.getText()));
+				}
+				allIdeas.add(listOfNotes);
+			}			
 		}		
 	}
 	
 	
+	//überprüfen ob ein text bereits in der liste ist, um
+	//redundante ideen zu vermeiden
+	 private boolean ideaInList(String text)
+	 {
+		 for(ArrayList<Note> actualList : allIdeas)
+		 {
+			 for(Note note :actualList)
+			 {
+				 if(note.getName().equals(text))
+				 {
+					 return true;					 
+				 }
+			 }
+		 }
+		 return false;
+	 }
 	
 	//updatet den Papierkorb und die besseren Ideen aufgrund der Einträge in der Arraylist
 	private void updateSideList(MTList listComponent, ArrayList<Note> actualList)
@@ -263,20 +287,18 @@ public class EvaluationScene extends AbstractScene{
 		area.addChild(listMiddle);
 		
 		int x = 10;
-		int y = 15;
-		
+		int y = 15;		
 		
 		MTListCell cell = createListCell();
 		listMiddle.addChild(cell);
 		//Cell erstellen, wo die idee angezeigt wird
-		
-		
+				
 		//arraylist durchgehen
 		//für jede arraylist das erste element anzeigen als ein symbol
 		for(ArrayList<Note> actualList : allIdeas)
 		{
 			Note actualNote = actualList.get(0);
-			if(x > 320) 
+			if(x > einheitX*3-40) 
 			{				 
 				x = 10;
 				cell = createListCell();
@@ -297,8 +319,7 @@ public class EvaluationScene extends AbstractScene{
 			listMiddle.addListElement(cell); 
 			 			
 			x += 120;		  
-		}			
-				
+		}				
 	}
 	
 	 
@@ -450,20 +471,20 @@ public class EvaluationScene extends AbstractScene{
 	 private void createArea()
 	 {
 		//Bereich zum Bewerten
-			area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),mtApp.width/2-100, mtApp.height/10*7);
+			area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),mtApp.width/2-75, mtApp.height/10*8);
 			area.setFillColor(new MTColor(listColor));
 			area.setPickable(false);
 			this.canv.addChild(area);
 					
 			//Trennlinie zum Papierkorb
-		 	MTLine line1 = new MTLine(this.mtApp, area.getCenterPointLocal().x-240, 0,  area.getCenterPointLocal().x-240, 500);	 
+		 	MTLine line1 = new MTLine(this.mtApp, (area.getRadiusX()*2)/7*2, 0,  (area.getRadiusX()*2)/7*2, area.getRadiusY());	 
 			line1.setFillColor(MTColor.BLACK);
 			line1.setStrokeWeight(5);
 			line1.setPickable(false);
 			area.addChild(line1);
 					
 			//Trennlinie zu den besseren Ideen
-			MTLine line2 = new MTLine(this.mtApp, area.getCenterPointLocal().x+240, 0,area.getCenterPointLocal().x+240, 500);  
+			MTLine line2 = new MTLine(this.mtApp, (area.getRadiusX()*2)/7*4, 0 , (area.getRadiusX()*2)/7*4, area.getRadiusY());  
 			line2.setFillColor(MTColor.BLACK);
 			line2.setStrokeWeight(5);
 			line2.setPickable(false);
@@ -484,7 +505,7 @@ public class EvaluationScene extends AbstractScene{
 			textareaPapierkorb.setNoStroke(true);
 			textareaPapierkorb.setText("verworfen");
 			textareaPapierkorb.setSizeLocal(200, 40);
-			textareaPapierkorb.setPositionGlobal(new Vector3D(area.getCenterPointGlobal().x-400,40));
+			textareaPapierkorb.setPositionGlobal(new Vector3D(area.getRadiusX()/7,40));
 			area.addChild(textareaPapierkorb);
 			
 			
@@ -509,7 +530,7 @@ public class EvaluationScene extends AbstractScene{
 			textareaBestIdeas.setNoStroke(true);
 			textareaBestIdeas.setText("weiter");
 			textareaBestIdeas.setSizeLocal(200, 40);
-			textareaBestIdeas.setPositionGlobal(new Vector3D(area.getCenterPointGlobal().x+400,40));
+			textareaBestIdeas.setPositionGlobal(new Vector3D(area.getRadiusX()/7*6,40));
 			area.addChild(textareaBestIdeas);
 	 }
 	 
@@ -525,7 +546,8 @@ public class EvaluationScene extends AbstractScene{
 			for(Note note : selectedCluster)
 			{
 				@SuppressWarnings("deprecation")
-				MTTextArea rText = new MTTextArea(this.mtApp.width/2-200,y,400,55,  FontManager.getInstance().createFont(mtApp, "arial.ttf", 
+				//breite und höhe an den text anpassen
+				MTTextArea rText = new MTTextArea(einheitX*2+30,y,einheitX*3-60,55,  FontManager.getInstance().createFont(mtApp, "arial.ttf", 
 		        		20, MTColor.BLACK, false),this.mtApp);			
 				rText.unregisterAllInputProcessors();
 				rText.setPickable(true);
@@ -533,7 +555,6 @@ public class EvaluationScene extends AbstractScene{
 				rText.setStrokeColor(MTColor.LIME);
 				String text = formatString(note.getName(),40);
 				rText.setText(text);		 
-
 				rText.registerInputProcessor(new DragProcessor(getMTApplication()));
 				rText.addGestureListener(DragProcessor.class, new DefaultDragAction() {
 					public boolean processGestureEvent(MTGestureEvent g) {
@@ -647,5 +668,5 @@ public class EvaluationScene extends AbstractScene{
 		 }
 	 }
 			 
-			
+		
 }
