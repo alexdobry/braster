@@ -105,7 +105,7 @@ public class SetupScene  extends AbstractScene{
 				if (te.isTapped()){
 					
 					//Problem auslesen
-					MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(1);					 
+					MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(0);					 
 					problemDefinition = textAreaProblem.getText();
 					int number = 0;
 					//herausfinden, wieviel Spieler ausgewählt sind
@@ -164,7 +164,7 @@ public class SetupScene  extends AbstractScene{
 				TapEvent te = (TapEvent) ge;
 				   if (te.isTapped())
 				   { 	
-					   needHelp = checkboxHelp.isEnabled();
+					   //needHelp = checkboxHelp.isEnabled();
 				   }
 				   return false;
 			}
