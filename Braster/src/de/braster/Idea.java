@@ -23,8 +23,12 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
+
+
 
 
 
@@ -64,8 +68,10 @@ public class Idea extends MTTextArea {
 				
 				switch (de.getId()) {
 				case DragEvent.GESTURE_STARTED:
+					
 					break;
 				case DragEvent.GESTURE_UPDATED:
+					self.setFillColor(new MTColor(220,220,220,255));
 					break;
 				case DragEvent.GESTURE_ENDED:
 					
@@ -84,7 +90,7 @@ public class Idea extends MTTextArea {
 							parents.remove(i); //als parent von der liste entfernen
 						}
 					}
-					
+					self.setFillColor(MTColor.GREEN);	
 					System.out.println(parents);
 					break;
 				default:
@@ -94,43 +100,31 @@ public class Idea extends MTTextArea {
 			}
 		});
 		
-//		registerInputProcessor(new TapAndHoldProcessor((AbstractMTApplication) app, 1500));
-//		setGestureAllowance(TapAndHoldProcessor.class, false);
-//		//TODO: bei erneuten ausführen wird der processor erneut hinzugefügt
-//		//WARN - Warning: The same type of input processor (tap and hold processor) is already registered at component:
-//		addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
-//			public boolean processGestureEvent(MTGestureEvent ge) {
-//				TapAndHoldEvent th = (TapAndHoldEvent)ge;
-//				switch (th.getId()) {
-//				case TapAndHoldEvent.GESTURE_STARTED:
-//					break;
-//				case TapAndHoldEvent.GESTURE_UPDATED:
-//					break;
-//				case TapAndHoldEvent.GESTURE_ENDED:
-//					if (th.isHoldComplete()){
-//						MTComponent parent = getParent();
-//						if (parent instanceof Idea) {
-//							
-//							removeFromParent();
-//							canvas.addChild(self);
-//							setPositionGlobal(th.getLocationOnScreen());
-//							
-//							//TODO: logik für parent implementieren
-//							setGestureAllowance(DragProcessor.class, true);
-//							setGestureAllowance(ScaleProcessor.class, false);
-//							setGestureAllowance(RotateProcessor.class, false);
-//							((Idea)parent).repositionChildren();
-//						}
-//					}
-//					break;
-//				default:
-//					break;
-//				}
-//				return false;
-//			}
-//		});
-		
-		
+		registerInputProcessor(new TapProcessor(pApplet));
+		addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent)ge;
+				switch (te.getId()) {
+					case MTGestureEvent.GESTURE_STARTED:
+						self.setFillColor(new MTColor(220,220,220,255));
+						break;
+					case MTGestureEvent.GESTURE_UPDATED:
+						break;
+					case MTGestureEvent.GESTURE_ENDED:
+						if (te.isTapped() || te.isTapCanceled()) {
+							self.setFillColor(MTColor.GREEN);	
+						}
+						
+						
+						break;
+					}
+				
+				return false;
+			}
+		});
+				
 	}
 
 	public static LinkedList<Idea> getAllIdeas() {
@@ -142,6 +136,12 @@ public class Idea extends MTTextArea {
 		this.canvas = canv;
 	}
 	
+	
+	/**
+	 * Fügt die Idee und alle ihre Kinder an die übergebene Idee als kinder.
+	 * 
+	 * @param idea
+	 */
 	public void snapToIdea(final Idea idea) {
 		
 		if (idea.getChildren().length >= 1) {
@@ -153,15 +153,12 @@ public class Idea extends MTTextArea {
 					this.snapToIdea(i);
 				}
 			}
-			
 		}
 		
-		
-		
+		//die position der idee berechnen
 		List<MTComponent> list = getChildList();
 		float height = 0f;
-		
-		for (MTComponent mtComponent : list) {
+				for (MTComponent mtComponent : list) {
 			if (mtComponent instanceof Idea) {
 				height += ((Idea) mtComponent).getHeightXY(TransformSpace.LOCAL);
 			}
@@ -169,11 +166,18 @@ public class Idea extends MTTextArea {
 		
 		
 		this.addChild(idea);
+		//positionieren
 		idea.setPositionRelativeToParent(new Vector3D(idea.getWidthXY(TransformSpace.LOCAL)/2f, getHeightXY(TransformSpace.LOCAL)*1.5f+height));
-//		idea.removeAllGestureEventListeners();
-		idea.setGestureAllowance(DragProcessor.class, false);
+		
+		//setzt das neue kind auf die größe und ausrichtung der parent idee
+//		idea.setLocalMatrix(getLocalMatrix());
+		
+		//das neue kind passiv stellen
+//		idea.setGestureAllowance(DragProcessor.class, false);
 		idea.setGestureAllowance(ScaleProcessor.class, false);
 		idea.setGestureAllowance(RotateProcessor.class, false);
+		
+		
 //		setGestureAllowance(TapAndHoldProcessor.class, true); //das todo unten
 		
 		idea.registerInputProcessor(new TapAndHoldProcessor(app, 1500));
@@ -181,6 +185,8 @@ public class Idea extends MTTextArea {
 		//TODO: bei erneuten ausführen wird der processor erneut hinzugefügt
 		//WARN - Warning: The same type of input processor (tap and hold processor) is already registered at component:
 		idea.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
+			
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapAndHoldEvent th = (TapAndHoldEvent)ge;
 				switch (th.getId()) {
@@ -231,7 +237,6 @@ public class Idea extends MTTextArea {
 			if (mtComponent instanceof Idea) {
 				i.add((Idea)mtComponent);
 			}
-			
 		}
 		
 		for (Idea idea : i) {

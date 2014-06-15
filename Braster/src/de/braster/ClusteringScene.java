@@ -26,8 +26,7 @@ public class ClusteringScene extends AbstractScene{
 	private LinkedList<Idea> ideas;
 	private MTRoundRectangle mtRoundRectangle;
 	
-	public ClusteringScene( MTApplication mtApplication, String name) 
-	{
+	public ClusteringScene( MTApplication mtApplication, String name) {
 		super(mtApplication, name);
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
@@ -43,9 +42,6 @@ public class ClusteringScene extends AbstractScene{
 		for (Idea idea : ideas) {
 			idea.setVisible(false);
 			canv.addChild(idea);
-			//			posy = rng.nextFloat() * (mtApp.height-padding*2);
-//			posx = rng.nextFloat() * (mtApp.width-padding*2);
-			
 			idea.setPositionGlobal(ideapos);
 			idea.updateCanvas(canv);
 		}

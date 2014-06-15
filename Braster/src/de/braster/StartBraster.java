@@ -13,7 +13,7 @@ public class StartBraster extends MTApplication {
  
 	@Override
 	public void startUp() {
-		addScene(new SetupScene(this, "Hello World Scene"));
+		addScene(new WelcomeScene(this, "Hello World Scene"));
 		//addScene(new BrainWritingScene(this, "Hello World Scene"));
 	}
 }
