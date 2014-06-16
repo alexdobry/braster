@@ -22,18 +22,17 @@ public class Checkbox extends  MTRoundRectangle {
 			float height, float arcWidth, float arcHeight, String text) {
 		super(pApplet, x, y, z, width, height, arcWidth, arcHeight);
 		 
-		 
+		needHelp = false; 
 		final MTCheckbox checkBox = new MTCheckbox(pApplet, 50);
         checkBox.setFillColor(MTColor.NAVY);
         checkBox.setBooleanValue(false);       
         checkBox.addGestureListener(TapProcessor.class, new IGestureEventListener() {
             
             @Override
-            public boolean processGestureEvent(MTGestureEvent ge) {
-                
+            public boolean processGestureEvent(MTGestureEvent ge)
+            {                      
                  needHelp = checkBox.getBooleanValue();
-                
-                return false;
+                 return false;
             }
         });
 

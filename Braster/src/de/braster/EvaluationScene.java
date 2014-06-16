@@ -87,21 +87,21 @@ public class EvaluationScene extends AbstractScene{
 		
 		//muss noch die ganzen ideen aus dem clustern übergeben bekommen
 		//solange templiste mit ideen
-		createStructureForIdeas(Idea.getAllIdeas());
+		//createStructureForIdeas(Idea.getAllIdeas());
 		 
 		//temporär
-		/*
+		
 	 	allIdeas = new ArrayList<ArrayList<Note>>();
 		for(int i=1;i<4;i++)
 		{
 			ArrayList<Note> bla = new ArrayList<Note>();
-			for(int j=0;j<1;j++)
+			for(int j=0;j<3;j++)
 			{
-				bla.add(new Note("Idee " +i));
+				bla.add(new Note(i +"Idee " +j));
 			}
 			allIdeas.add(bla);
 		} 
-		*/
+		
 		//für die parents die listen mit allen ideen erzeugen
 		//methodenaufruf
 		
@@ -292,7 +292,7 @@ public class EvaluationScene extends AbstractScene{
 		listMiddle.setStrokeColor(listColor);
 		area.addChild(listMiddle);
 		
-		int x = 0;
+		int x = 5;
 		int y = 15;		
 		
 		MTListCell cell = createListCell();
@@ -304,9 +304,9 @@ public class EvaluationScene extends AbstractScene{
 		for(ArrayList<Note> actualList : allIdeas)
 		{
 			Note actualNote = actualList.get(0);
-			if(x > 3*einheitX-140) 
+			if(x > 3*einheitX-135) 
 			{				 
-				x = 0;
+				x = 5;
 				cell = createListCell();
 				listMiddle.addChild(cell);
 			}
@@ -614,7 +614,7 @@ public class EvaluationScene extends AbstractScene{
 									}								
 								}
 								//Falls keine Elemente mehr drin sind
-								if(allIdeas.size()==0 && bestIdeas.size()==1)
+								if(allIdeas.size()==0 && bestIdeas.size()==1 && showedNotes.size()==0)
 								{
 									String result = bestIdeas.get(0).getName();
 									//FinalScene gehen
@@ -629,7 +629,7 @@ public class EvaluationScene extends AbstractScene{
 									//Do the scene change
 									mtApp.changeScene(finalScene);
 								}
-								if(allIdeas.size()==0 && bestIdeas.size()>1)
+								if(allIdeas.size()==0 && bestIdeas.size()>1 && showedNotes.size()==0)
 								{
 									//rechten ideen in die mitte
 									//alle restlichen in papierkorb
