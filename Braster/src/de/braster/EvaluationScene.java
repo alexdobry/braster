@@ -85,22 +85,32 @@ public class EvaluationScene extends AbstractScene{
 		
 		//muss noch die ganzen ideen aus dem clustern ï¿½bergeben bekommen
 		//solange templiste mit ideen
-		createStructureForIdeas(Idea.getAllIdeas());
+		//createStructureForIdeas(Idea.getAllParents());
 		 
+<<<<<<< HEAD
 		//temporï¿½r
 		/*
+=======
+		//temporär
+		
+>>>>>>> 2c2dd918d8d43b8500a5130a83066ae069340a8d
 	 	allIdeas = new ArrayList<ArrayList<Note>>();
-		for(int i=1;i<4;i++)
+		for(int i=1;i<9;i++)
 		{
 			ArrayList<Note> bla = new ArrayList<Note>();
-			for(int j=0;j<1;j++)
+			for(int j=0;j<3;j++)
 			{
-				bla.add(new Note("Idee " +i));
+				bla.add(new Note(i +"Idee " +j));
 			}
 			allIdeas.add(bla);
 		} 
+<<<<<<< HEAD
 		*/
 		//fï¿½r die parents die listen mit allen ideen erzeugen
+=======
+		
+		//für die parents die listen mit allen ideen erzeugen
+>>>>>>> 2c2dd918d8d43b8500a5130a83066ae069340a8d
 		//methodenaufruf
 		
 		ideas = new ArrayList<Note>();
@@ -213,6 +223,21 @@ public class EvaluationScene extends AbstractScene{
 		allIdeas = new ArrayList<ArrayList<Note>>();
 		for(Idea idea : allParents)
 		{
+			ArrayList<Note> listOfNotes = new ArrayList<Note>();
+			listOfNotes.add(new Note(idea.getText()));
+				
+			for(MTComponent childIdea : idea.getChildren())
+			{
+				MTTextArea textArea = (MTTextArea) childIdea;
+				listOfNotes.add(new Note(textArea.getText()));
+			}
+			allIdeas.add(listOfNotes);
+						
+		}
+		/*
+		allIdeas = new ArrayList<ArrayList<Note>>();
+		for(Idea idea : allParents)
+		{
 			if(ideaInList(idea.getText()) == false)
 			{
 				ArrayList<Note> listOfNotes = new ArrayList<Note>();
@@ -225,7 +250,7 @@ public class EvaluationScene extends AbstractScene{
 				}
 				allIdeas.add(listOfNotes);
 			}			
-		}		
+		}*/		
 	}
 	
 	
@@ -256,31 +281,126 @@ public class EvaluationScene extends AbstractScene{
 		listComponent.setStrokeColor(listColor);
 		area.addChild(listComponent);
 				
-		int x = 0;
-		int y = 15;				
+		int x = 5;
+		int y = 5;				
 	 
 					
 		//arraylist durchgehen
 		//fï¿½r jede note neue celle erzeugen und idee zupacken
 		for(Note actualNote : actualList)
 		{				 
-			MTListCell cell = createListCell();
+			MTListCell cell = createListCell(30);
 			listComponent.addChild(cell);			 
-					 
-			@SuppressWarnings("deprecation")
-			MTTextArea rText = new MTTextArea(x,y,130,30, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-			      		13, MTColor.WHITE, false),this.mtApp);
-					
-			cell.addChild(rText);
-			rText.unregisterAllInputProcessors();
-			rText.setPickable(true);
+			
+			MTTextArea rText = new MTTextArea(mtApp);
+			rText.setPositionRelativeToParent(new Vector3D(x,y+10));
 			rText.setFillColor(MTColor.GREEN);
 			rText.setStrokeColor(MTColor.LIME);
-			rText.setText(formatString(actualNote.getName(),40));								
-			listComponent.addListElement(cell); 	  
+			rText.unregisterAllInputProcessors();
+			rText.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
+			rText.removeAllGestureEventListeners();
+			rText.setPickable(true);
+			rText.setText(formatString(actualNote.getName(),30));				
+			cell.addChild(rText);	
+			
+			//zurückschieben in die mitte soll möglich sein
+			//wenn über die Grenzlinien ist, wird zur Liste geaddet
+			//aus der aktuellen gelöscht
+			rText.registerInputProcessor(new DragProcessor(getMTApplication()));
+			rText.addGestureListener(DragProcessor.class, new DefaultDragAction() {
+				public boolean processGestureEvent(MTGestureEvent g) {
+					if (g instanceof DragEvent){
+						DragEvent dragEvent = (DragEvent)g;
+						lastEvent = dragEvent;
+						
+						if (!useCustomTarget)
+							dragTarget = dragEvent.getTarget(); 
+						
+						switch (dragEvent.getId()) {
+						case MTGestureEvent.GESTURE_RESUMED:
+							//Put target on top -> draw on top of others
+							if (dragTarget instanceof MTComponent){
+								MTComponent baseComp = (MTComponent)dragTarget;
+								
+								baseComp.sendToFront();						 
+							}
+							break;
+						case MTGestureEvent.GESTURE_ENDED:
+							//wenn Gesture zu Ende, wird die Position bestimmt
+							if (dragTarget instanceof MTTextArea){
+								MTTextArea baseComp = (MTTextArea)dragTarget;
+								
+								Vector3D centerPoint = baseComp.getCenterPointRelativeToParent();
+								
+								if(centerPoint.x >  2*einheitX+75 && centerPoint.x < 5*einheitX+75)
+								{			
+									ArrayList<Note> newIdealist = new ArrayList<Note>();
+									newIdealist.add(new Note(baseComp.getText()));
+									allIdeas.add(newIdealist);
+									//todo.vom rubbish entfernen
+									baseComp.destroy();					
+									updateMiddleList();													
+								}
+								else if(centerPoint.x>  5*einheitX+75)
+								{							 
+									ArrayList<Note> newIdealist = new ArrayList<Note>();
+									newIdealist.add(new Note(baseComp.getText()));
+									allIdeas.add(newIdealist);
+									//todo.vom rubbish entfernen
+									baseComp.destroy();					
+									updateMiddleList();	
+								}
+																
+							}
+							//Falls keine Elemente mehr drin sind
+							if(allIdeas.size()==0 && bestIdeas.size()==1 && showedNotes.size()==0)
+							{
+								String result = bestIdeas.get(0).getName();
+								//FinalScene gehen
+								mtApp.pushScene();							
+								if (finalScene == null){
+									finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), result);
+									//Konstruktor erweitern um Anzahl Spieler, da genau soviele
+									//Tastaturen geladen werden
+								//Add the scene to the mt application
+								mtApp.addScene(finalScene);
+								}
+								//Do the scene change
+								mtApp.changeScene(finalScene);
+							}
+							if(allIdeas.size()==0 && bestIdeas.size()>1 && showedNotes.size()==0)
+							{
+								//rechten ideen in die mitte
+								//alle restlichen in papierkorb
+								//FinalScene gehen
+								mtApp.pushScene();
+								if (finalScene == null)
+								{				
+									//Im konstruktor müssen die ideen als 2 listen übergeben werden
+									finalScene = new EvaluationScene(mtApp, "Evaluation Again", bestIdeas, rubbish);
+									mtApp.addScene(finalScene);
+								}
+								//Do the scene change
+								mtApp.changeScene(finalScene);
+						
+							}
+							break;
+						default:
+							break;
+						}
+					}
+					return false;
+				}
+			});
+	
 		}			
 	}
 	
+	
+	private void updateCellHeight(MTListCell cell, int newHeight)
+	{
+		cell.setHeightLocal(newHeight);
+	}
 	
 	private void updateMiddleList()
 	{
@@ -290,47 +410,63 @@ public class EvaluationScene extends AbstractScene{
 		listMiddle.setStrokeColor(listColor);
 		area.addChild(listMiddle);
 		
-		int x = 0;
-		int y = 15;		
+		int x = 5;
+		int y = 5;		
 		
-		MTListCell cell = createListCell();
+		//brauch updatemethode, sodass die zellenlänge vergrößert wird
+		//Größe einer Zelle (standardhöhe)
+		MTListCell cell = createListCell(30);
 		listMiddle.addChild(cell);
-		//Cell erstellen, wo die idee angezeigt wird
-				
+						
 		//arraylist durchgehen
 		//fï¿½r jede arraylist das erste element anzeigen als ein symbol
 		for(ArrayList<Note> actualList : allIdeas)
 		{
-			Note actualNote = actualList.get(0);
-			if(x > 3*einheitX-140) 
+			//cluster adden in die zelle
+			//komplette cluster soll abgebildet werden
+			//aber untereinander direkt
+			//die folgende zelle wird dann weiter unter gezeichnet, also wird ein y gemerkt für abstand
+			//Höhe anpassen an die elemente
+			if(cell.getHeightXYVectLocal().y<actualList.size()*30+10)
+			{
+				updateCellHeight(cell,actualList.size()*30+10);
+			}
+			//nacheinander adden
+		
+			//wenn element nicht mehr in aktuellen passt
+			if(x > 3*einheitX-135) 
 			{				 
-				x = 0;
-				cell = createListCell();
+				x = 5;
+				cell = createListCell(0);
 				listMiddle.addChild(cell);
 			}
-			 
-			@SuppressWarnings("deprecation")
-			MTTextArea rText = new MTTextArea(x,y,100,30, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		13, MTColor.WHITE, false),this.mtApp);
-			
-			cell.addChild(rText);
-			rText.unregisterAllInputProcessors();
-			rText.setPickable(true);
-			rText.setFillColor(MTColor.GREEN);
-			rText.setStrokeColor(MTColor.LIME);
-			rText.setText(formatString(actualNote.getName(),30));		
-						
-			listMiddle.addListElement(cell); 
 			 			
-			x += 120;		  
+			for(Note actualNote : actualList)
+			{
+				MTTextArea rText = new MTTextArea(mtApp);
+				rText.setPositionRelativeToParent(new Vector3D(x,y+10));
+				rText.setFillColor(MTColor.GREEN);
+				rText.setStrokeColor(MTColor.LIME);
+				rText.unregisterAllInputProcessors();
+				rText.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
+				rText.removeAllGestureEventListeners();
+				rText.setPickable(true);
+				rText.setText(formatString(actualNote.getName(),30));				
+				cell.addChild(rText);						
+				listMiddle.addListElement(cell); 		
+				y+=30;
+			}
+			y=5;
+			x += 120;
+			
 		}				
 	}
 	
 	 
 	
-	private MTListCell createListCell()
+	private MTListCell createListCell(int height)
 	{
-		MTListCell cell = new MTListCell(this.mtApp,420, 60);
+		MTListCell cell = new MTListCell(this.mtApp,3*einheitX-20, height);
 		cell.setPickable(true);
 		cell.setStrokeColor(listColor);
 		cell.setFillColor(listColor);
@@ -551,16 +687,26 @@ public class EvaluationScene extends AbstractScene{
 			int y=350;
 			for(Note note : selectedCluster)
 			{
+<<<<<<< HEAD
 				@SuppressWarnings("deprecation")
 				//breite und hï¿½he an den text anpassen
 				MTTextArea rText = new MTTextArea(einheitX*2+105,y,einheitX*3-60,55,  FontManager.getInstance().createFont(mtApp, "arial.ttf", 
 		        		20, MTColor.BLACK, false),this.mtApp);			
 				rText.unregisterAllInputProcessors();
 				rText.setPickable(true);
+=======
+				//breite und höhe an den text anpassen
+				MTTextArea rText = new MTTextArea(mtApp);
+>>>>>>> 2c2dd918d8d43b8500a5130a83066ae069340a8d
 				rText.setFillColor(MTColor.GREEN);
 				rText.setStrokeColor(MTColor.LIME);
-				String text = formatString(note.getName(),40);
-				rText.setText(text);		 
+				rText.unregisterAllInputProcessors();
+				rText.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 25, MTColor.WHITE, true));
+				//rText.removeAllGestureEventListeners();
+				rText.setPickable(true);
+				rText.setText(formatString(note.getName(),80));				
+				rText.setPositionGlobal(new Vector3D((mtApp.width/2)-(rText.getWidthXYVectLocal().x/2),y));
+					 
 				rText.registerInputProcessor(new DragProcessor(getMTApplication()));
 				rText.addGestureListener(DragProcessor.class, new DefaultDragAction() {
 					public boolean processGestureEvent(MTGestureEvent g) {
@@ -590,21 +736,21 @@ public class EvaluationScene extends AbstractScene{
 									//element verschwindet
 									//liste updaten
 									//rechts dasselbe
-									if(centerPoint.x <  area.getCenterPointLocal().x-240)
+									if(centerPoint.x <  2*einheitX+75)
 									{								 
 										rubbish.add(new Note(baseComp.getText()));
 										updateShowedNotes(baseComp);
 										baseComp.destroy();					
 										updateSideList(listLeft,rubbish);													
 									}
-									else if(centerPoint.x>  area.getCenterPointLocal().x+240)
+									else if(centerPoint.x>  5*einheitX+75)
 									{							 
 										bestIdeas.add(new Note(baseComp.getText()));
 										updateShowedNotes(baseComp);										
 										baseComp.destroy();
 										updateSideList(listRight, bestIdeas);
 									}
-									else if(centerPoint.x >  area.getCenterPointLocal().x-240 && centerPoint.x < area.getCenterPointLocal().x+240 && centerPoint.y < 300 )
+									else if(centerPoint.x >  2*einheitX+75 && centerPoint.x < 5*einheitX+75 && centerPoint.y < 300 )
 									{											
 										moveBottomIdeasToTop();
 										updateMiddleList();
@@ -612,7 +758,7 @@ public class EvaluationScene extends AbstractScene{
 									}								
 								}
 								//Falls keine Elemente mehr drin sind
-								if(allIdeas.size()==0 && bestIdeas.size()==1)
+								if(allIdeas.size()==0 && bestIdeas.size()==1 && showedNotes.size()==0)
 								{
 									String result = bestIdeas.get(0).getName();
 									//FinalScene gehen
@@ -627,7 +773,7 @@ public class EvaluationScene extends AbstractScene{
 									//Do the scene change
 									mtApp.changeScene(finalScene);
 								}
-								if(allIdeas.size()==0 && bestIdeas.size()>1)
+								if(allIdeas.size()==0 && bestIdeas.size()>1 && showedNotes.size()==0)
 								{
 									//rechten ideen in die mitte
 									//alle restlichen in papierkorb

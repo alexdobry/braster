@@ -18,6 +18,7 @@ import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
 
+
 import processing.core.PImage;
 
 public class EvaluationHelp extends AbstractScene {
@@ -32,7 +33,11 @@ public class EvaluationHelp extends AbstractScene {
 		mtApp = mtApplication;
 		//geblurrte Bild als Hintergrund einstellen
 		
+		//temporär
 		PImage image = mtApp.loadImage("C:\\Users\\Stefan\\Dropbox\\SGMCI\\Icons und Bilder\\EV_blur.png");
+		//String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
+		//PImage img = getMTApplication().loadImage(path + "EV_blur.png");
+	//	PImage image = mtApp.loadImage("data.images\\EV_blur.png");
 		MTBackgroundImage backgroundImage = new MTBackgroundImage(mtApp, image, false);
 		canv.addChild(backgroundImage); 
 		

@@ -334,7 +334,7 @@ public class BrainWritingScene extends AbstractScene{
 		
 		getCanvas().addChild(keyboard);
 		
-		keyboard.scale(0.8f, 0.8f, 1, new Vector3D(0, 0, 0));
+		keyboard.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
 		keyboard.removeAllGestureEventListeners(DragProcessor.class);
 		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
 		keyboard.removeAllGestureEventListeners(RotateProcessor.class);
@@ -343,6 +343,7 @@ public class BrainWritingScene extends AbstractScene{
 		return keyboard;
 	}
 	
+<<<<<<< HEAD
 	public class BWIdeaView extends MTRectangle{
 
 		
@@ -633,4 +634,7 @@ public class BrainWritingScene extends AbstractScene{
 		
 		
 	}
+=======
+	
+>>>>>>> 2c2dd918d8d43b8500a5130a83066ae069340a8d
 }
