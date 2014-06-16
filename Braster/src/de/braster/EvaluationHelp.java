@@ -108,8 +108,8 @@ public class EvaluationHelp extends AbstractScene {
 	private void createHelpArea()
 	{ 	 
 		
-		 final MTTextField textfieldContinue = new MTTextField(mtApp, mtApp.width/2, mtApp.height-200, 250, 40, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		20, MTColor.BLACK, false));
+		 final MTTextField textfieldContinue = new MTTextField(mtApp, mtApp.width/2-120, mtApp.height-200, 240, 40, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		30, MTColor.BLACK, false));
 		 textfieldContinue.unregisterAllInputProcessors();
 		 textfieldContinue.setPickable(false);
 		 textfieldContinue.setNoFill(true);
@@ -118,25 +118,9 @@ public class EvaluationHelp extends AbstractScene {
 		 canv.addChild(textfieldContinue);
 	
 		 
-		 
-		/* 
-		 new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				textfieldContinue.setFillColor(MTColor.AQUA);
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				textfieldContinue.setFillColor(MTColor.GREEN);
-				
-			}
-		}).start();
-		
-	      */  
+		 HelpSteps steps = new HelpSteps(mtApp, 0, 0, 0, 0, 0, 6, 6, 8);
+		 steps.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height/20*19));
+		 canv.addChild(steps);
 		 
 	}
 
