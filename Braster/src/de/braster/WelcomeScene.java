@@ -33,31 +33,35 @@ public class WelcomeScene extends AbstractScene {
 	    background.setFillColor(new MTColor(255,255,255,255));
 		background.setPickable(false);
 	    canv.addChild(background);
+	    String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
 	    
-	    //Braster Logo
-		String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
-		PImage img = getMTApplication().loadImage(path + "braster.png");
-		
-		MTRectangle logo = new MTRectangle(mtApplication, img);
-		logo.scale(0.5f, 0.5f, 0, logo.getCenterPointLocal());
-		logo.setPositionGlobal(new Vector3D(mtApplication.width/2, logo.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
-		
-		canv.addChild(logo);
-		
 		//FH Logo
 		PImage fh = getMTApplication().loadImage(path + "fhkoeln.jpg");
 		MTRectangle fhlogo = new MTRectangle(mtApplication, fh);
 		fhlogo.scale(0.5f, 0.5f, 0, new Vector3D(0,0,0));
 		canv.addChild(fhlogo);
+	    
+	    //Braster Logo
+		
+		PImage img = getMTApplication().loadImage(path + "braster.png");
+		
+		MTRectangle logo = new MTRectangle(mtApplication, img);
+		logo.scale(0.5f, 0.5f, 0, logo.getCenterPointLocal());
+		//unterkante oberkante anordnung fh logo und braster logo
+		logo.setPositionGlobal(new Vector3D(mtApplication.width/2, fhlogo.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)+logo.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+		
+		canv.addChild(logo);
+		
+
 		
 		
 		
 		//text abstract
 		MTTextArea abstrct = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-                		42, //fontzize 
+                		32, //fontzize 
                 		MTColor.BLACK)); //Font color
-		abstrct.setText("Abstract ... \n asdjfasdf ");
+		abstrct.setText("Abstract ... \nasdjfasdfasdfasdfasdfasf ");
 		abstrct.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height/2f));
 		abstrct.setPickable(false);
 		canv.addChild(abstrct);
@@ -69,23 +73,43 @@ public class WelcomeScene extends AbstractScene {
 		//text tippen zum starten
 		MTTextArea tippen = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-                		50, //fontzize 
+                		42, //fontzize 
                 		MTColor.BLACK)); //Font color
 		tippen.setText("Tippen zum starten");
-		tippen.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height*0.9f));
+		tippen.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height*0.8f));
 		tippen.setPickable(false);
 		canv.addChild(tippen);
 		
 		
-		//text tippen zum starten
-		MTTextArea footer = new MTTextArea(mtApplication,                                
+		//text footer
+		int footerFontSize = 18;
+		
+		MTTextArea footerSGMCI = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-                		24, //fontzize 
+                		footerFontSize, //fontzize 
                 		MTColor.BLACK)); //Font color
-		footer.setText("SGMCI                  Patrick Englert, Stefan Heruth, Alex Dobrynin                  Prof. Dr. Heiner Klocke");
-		footer.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height-footer.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
-		footer.setPickable(false);
-		canv.addChild(footer);
+		footerSGMCI.setText("SGMCI");
+		footerSGMCI.setPositionRelativeToParent(new Vector3D(footerSGMCI.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2, mtApplication.height-footerSGMCI.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+		footerSGMCI.setPickable(false);
+		canv.addChild(footerSGMCI);
+		
+		MTTextArea footerTeam = new MTTextArea(mtApplication,                                
+                FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+                		footerFontSize, //fontzize 
+                		MTColor.BLACK)); //Font color
+		footerTeam.setText("Patrick Englert, Stefan Heruth, Alex Dobrynin");
+		footerTeam.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height-footerTeam.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+		footerTeam.setPickable(false);
+		canv.addChild(footerTeam);
+		
+		MTTextArea footerProf = new MTTextArea(mtApplication,                                
+                FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+                		footerFontSize, //fontzize 
+                		MTColor.BLACK)); //Font color
+		footerProf.setText("Prof. Dr. Heiner Klocke");
+		footerProf.setPositionRelativeToParent(new Vector3D(mtApplication.width-footerProf.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2, mtApplication.height-footerProf.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+		footerProf.setPickable(false);
+		canv.addChild(footerProf);
 		
 		
 		

@@ -60,7 +60,6 @@ import org.mt4j.util.animation.MultiPurposeInterpolator;
 import org.mt4j.util.math.Vector3D;
 import org.mt4j.util.math.Vertex;
 
-import de.braster.BrainWritingScene.BWIdeaView;
 import processing.core.PApplet;
 
 /**

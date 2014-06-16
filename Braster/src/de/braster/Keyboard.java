@@ -31,7 +31,6 @@ import org.mt4j.components.visibleComponents.font.VectorFontCharacter;
 import org.mt4j.components.visibleComponents.shapes.AbstractShape;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
-import org.mt4j.components.visibleComponents.widgets.buttons.MTSvgButton;
 import org.mt4j.components.visibleComponents.widgets.keyboard.ITextInputListener;
 import org.mt4j.components.visibleComponents.widgets.keyboard.MTKey;
 import org.mt4j.input.gestureAction.DefaultDragAction;
@@ -56,7 +55,6 @@ import org.mt4j.util.math.Vector3D;
 import org.mt4j.util.math.Vertex;
 
 import de.braster.BWKeyboard.KeyInfo;
-import de.braster.BrainWritingScene.BWIdeaView;
 import processing.core.PApplet;
 
 /**
