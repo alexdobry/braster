@@ -45,6 +45,15 @@ public class Idea extends MTTextArea {
 	private static final LinkedList<Idea> ideas = new LinkedList<Idea>();
 	private static LinkedList<Idea> parents = new LinkedList<Idea>();
 	private LinkedList<Idea> children = new LinkedList<Idea>();
+	private MTColor ideaFillColor = MTColor.GREEN;
+	private MTColor ideaStrokeColor = MTColor.LIME;
+	private MTColor ideaTextColor = MTColor.WHITE;
+	/**
+	 * Farbänderung bei Berührung
+	 */
+	private MTColor ideaFlashColor = new MTColor(220,220,220,255); 
+	private MTColor ideaHoverOverColor = MTColor.BLUE;
+	
 	
 	public Idea(MTApplication pApplet, MTCanvas canv) {
 		super(pApplet);
@@ -54,9 +63,9 @@ public class Idea extends MTTextArea {
 		ideas.add(this);
 		parents.add(this);
 		
-		setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.WHITE, true));
-		setStrokeColor(MTColor.LIME);
-		setFillColor(MTColor.GREEN);
+		setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, ideaTextColor, true));
+		setStrokeColor(ideaStrokeColor);
+		setFillColor(ideaFillColor);
 		setGestureAllowance(ScaleProcessor.class, false);
 		setGestureAllowance(RotateProcessor.class, false);
 		
@@ -71,12 +80,12 @@ public class Idea extends MTTextArea {
 					
 					break;
 				case DragEvent.GESTURE_UPDATED:
-					self.setFillColor(new MTColor(220,220,220,255));
+					self.setFillColor(ideaFlashColor);
 					
 					
 					for (Idea i : ideas) {
 						if (i != self) {
-							i.setFillColor(MTColor.GREEN);	
+							i.setFillColor(ideaFillColor);	
 						}
 					}
 					
@@ -88,7 +97,7 @@ public class Idea extends MTTextArea {
 						Object obj = pe2.get(1).hitObj;
 						if (obj instanceof Idea) {
 							Idea id = (Idea)obj;
-							id.setFillColor(MTColor.BLUE);
+							id.setFillColor(ideaHoverOverColor);
 						}
 					} 
 					
@@ -114,7 +123,7 @@ public class Idea extends MTTextArea {
 					}
 
 					for (Idea i : ideas) {
-						i.setFillColor(MTColor.GREEN);	
+						i.setFillColor(ideaFillColor);	
 					}
 					
 					System.out.println(parents);
@@ -134,13 +143,13 @@ public class Idea extends MTTextArea {
 				TapEvent te = (TapEvent)ge;
 				switch (te.getId()) {
 					case MTGestureEvent.GESTURE_STARTED:
-						self.setFillColor(new MTColor(220,220,220,255));
+						self.setFillColor(ideaFlashColor);
 						break;
 					case MTGestureEvent.GESTURE_UPDATED:
 						break;
 					case MTGestureEvent.GESTURE_ENDED:
 						if (te.isTapped() || te.isTapCanceled()) {
-							self.setFillColor(MTColor.GREEN);	
+							self.setFillColor(ideaFillColor);	
 						}
 						
 						
