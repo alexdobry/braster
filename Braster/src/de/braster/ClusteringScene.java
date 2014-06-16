@@ -31,7 +31,7 @@ public class ClusteringScene extends AbstractScene{
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
 		//setzt Hintergrundfarbe
-		this.setClearColor(MTColor.WHITE);
+		this.setClearColor(new MTColor(208, 224, 235, 255));
 		
 		mtRoundRectangle = new MTRoundRectangle(this.mtApp, 30, 60, 0, 200, 60, 12, 12);
 		
@@ -70,7 +70,7 @@ public class ClusteringScene extends AbstractScene{
 		rText.setPickable(false);
 		rText.setNoFill(true);
 		rText.setNoStroke(true);
-		rText.setText(ideas.size() + " Ideen übrig");
+		rText.setText(ideas.size() + " Ideen ï¿½brig");
 		
 		
 		mtRoundRectangle.unregisterAllInputProcessors();
@@ -96,7 +96,7 @@ public class ClusteringScene extends AbstractScene{
 							
 							if (count < ideas.size()) {
 								ideas.get(count++).setVisible(true);
-								rText.setText(ideas.size()-count + " Ideen übrig");
+								rText.setText(ideas.size()-count + " Ideen ï¿½brig");
 							}
 							
 						}
@@ -177,7 +177,7 @@ public class ClusteringScene extends AbstractScene{
 		rText.setPickable(false);
 		rText.setNoFill(true);
 		rText.setNoStroke(true);
-		rText.setText("             Go to \n Evaluation Scene");
+		rText.setText("Ideen bewerten");
 		
 		mtRoundRectangle.scale(1.2f, 1.2f, 1, mtRoundRectangle.getCenterPointRelativeToParent());
 		mtRoundRectangle.addChild(rText);

@@ -1,7 +1,6 @@
 package de.braster;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -29,8 +28,6 @@ import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
-import org.mt4jx.components.visibleComponents.widgets.MTCheckbox;
-
  
 import de.braster.Keyboard.KeyInfo;
 
@@ -41,7 +38,7 @@ public class SetupScene  extends AbstractScene{
 	private Iscene brainWritingScene;
 	private ArrayList<Positioncomponent> playerButtons;
 	private static String problemDefinition = "";
-	
+	private boolean problemEdit = false;
 	
 	
 	public SetupScene( final MTApplication mtApplication, String name)
@@ -53,9 +50,9 @@ public class SetupScene  extends AbstractScene{
 		this.playerButtons = new ArrayList<Positioncomponent>();
 		
 		problemDefinition = "Problem eingeben...";
-		 					
-
-		//fungiert als mehrzeilige textarea für die Problembeschreibung
+		this.setClearColor(new MTColor(73, 112, 138, 255));
+		
+		//fungiert als mehrzeilige textarea fï¿½r die Problembeschreibung
 		final MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
@@ -72,7 +69,10 @@ public class SetupScene  extends AbstractScene{
 				TapEvent te = (TapEvent) ge;
 				   if (te.isTapped())
 				   { 		
-					   textArea.setText("");
+					   if (!problemEdit) {
+						   textArea.setText("");
+						   problemEdit = true;
+					   }
 				       Keyboard keyboard = makeKB(mtApplication, textArea);
                        keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f)));                    
 				   }
@@ -80,7 +80,7 @@ public class SetupScene  extends AbstractScene{
 			}
 		});
 		
-		//wenn angeklickt wird, muss sich Tastatur öffnen
+		//wenn angeklickt wird, muss sich Tastatur ï¿½ffnen
 		//eingegebener Text dann im Feld erscheinen		
 		
 				
@@ -109,7 +109,7 @@ public class SetupScene  extends AbstractScene{
 							MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(0);					 
 							problemDefinition = textAreaProblem.getText();
 							int number = 0;
-							//herausfinden, wieviel Spieler ausgewählt sind
+							//herausfinden, wieviel Spieler ausgewï¿½hlt sind
 							for (Positioncomponent item: temp)
 							{ 				
 								MTRectangle r2 = item.getRectangle();
@@ -120,7 +120,7 @@ public class SetupScene  extends AbstractScene{
 								}
 							}
 							//Save the current scene on the scene stack before changing
-							//wenn beides eingegeben wurde, wird in die nächste szene geleitet
+							//wenn beides eingegeben wurde, wird in die nï¿½chste szene geleitet
 							if(number>0 && problemDefinition.length()>0)
 							{
 								//Save the current scene on the scene stack before changing
@@ -156,7 +156,7 @@ public class SetupScene  extends AbstractScene{
 		canv.addChild(r);
 		
 		
-		//erzeugt 4 Buttons für die Spieleranzahl
+		//erzeugt 4 Buttons fï¿½r die Spieleranzahl
 		createPlayerButtons();	
 		
 		Checkbox c = new Checkbox(mtApplication,0,0, 0, 0, 0, 0, 0, "Help");
@@ -202,8 +202,8 @@ public class SetupScene  extends AbstractScene{
 					TapEvent te = (TapEvent)ge;
 					if (te.isTapped())
 					{
-						//wenn angeklickt wird, werden alle Buttons in die Standardfarbe zurückgeführt
-						//und der angeklickte wird grün markiert						
+						//wenn angeklickt wird, werden alle Buttons in die Standardfarbe zurï¿½ckgefï¿½hrt
+						//und der angeklickte wird grï¿½n markiert						
 						for (Positioncomponent item: temp  ) 
 						{
 							MTRectangle r2 = item.getRectangle();
@@ -260,7 +260,7 @@ public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
 		//enter
 		KeyInfo enter = keyboard.new KeyInfo("f", "\n", "\n", 		new Vector3D(615, 105),KeyInfo.NORMAL_KEY);
 		
-		//Event listener für den enter key
+		//Event listener fï¿½r den enter key
 		IGestureEventListener tp = new IGestureEventListener() {
 			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {

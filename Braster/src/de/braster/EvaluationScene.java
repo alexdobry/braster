@@ -32,8 +32,6 @@ public class EvaluationScene extends AbstractScene{
 	private MTCanvas canv;
 	private MTApplication mtApp;
 	private MTColor listColor;
- 
- 
 
 	/** The last event. */
 	private MTGestureEvent lastEvent;
@@ -62,13 +60,13 @@ public class EvaluationScene extends AbstractScene{
 	
 	
 	/*
-     * die anzeige auf MTTextArea ändern, dann brauch nicht extra textfeld in rectangle basteln und anklickbar sind die auch
+     * die anzeige auf MTTextArea ï¿½ndern, dann brauch nicht extra textfeld in rectangle basteln und anklickbar sind die auch
      * 
      * wenn bereits idee selektiert ist und unten angezeigt wird
      * dann aber eine andere idee selektiert wird
      * wird die unten, wieder nach oben verschoben
      * 
-     * dazu nach selektierung vorm verschieben, prüfen ob bereits was in der liste drin ist
+     * dazu nach selektierung vorm verschieben, prï¿½fen ob bereits was in der liste drin ist
      * wenn nicht, normal nach unten 
      * 
      * sonst
@@ -85,11 +83,11 @@ public class EvaluationScene extends AbstractScene{
 	{		
 		super(mtApplication, name);		
 		
-		//muss noch die ganzen ideen aus dem clustern übergeben bekommen
+		//muss noch die ganzen ideen aus dem clustern ï¿½bergeben bekommen
 		//solange templiste mit ideen
 		createStructureForIdeas(Idea.getAllIdeas());
 		 
-		//temporär
+		//temporï¿½r
 		/*
 	 	allIdeas = new ArrayList<ArrayList<Note>>();
 		for(int i=1;i<4;i++)
@@ -102,7 +100,7 @@ public class EvaluationScene extends AbstractScene{
 			allIdeas.add(bla);
 		} 
 		*/
-		//für die parents die listen mit allen ideen erzeugen
+		//fï¿½r die parents die listen mit allen ideen erzeugen
 		//methodenaufruf
 		
 		ideas = new ArrayList<Note>();
@@ -114,7 +112,7 @@ public class EvaluationScene extends AbstractScene{
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
 		this.listColor = new MTColor(211,211,211);
-		this.setClearColor(MTColor.WHITE);		
+		this.setClearColor(new MTColor(235, 247, 248, 255));		
 		
 		createArea();			
 			
@@ -127,8 +125,8 @@ public class EvaluationScene extends AbstractScene{
 				
 		listRight = new MTList(mtApp,5*einheitX+115, 80, einheitX , 200);	 
 		
-		//dort passiert das liste füllen, was bereits implementiert habe
-		//zunächst nur mittlere liste füllen
+		//dort passiert das liste fï¿½llen, was bereits implementiert habe
+		//zunï¿½chst nur mittlere liste fï¿½llen
 		//nach jedem drag&drop vorgang die neue liste updaten
 		updateMiddleList();	
 		
@@ -147,12 +145,12 @@ public class EvaluationScene extends AbstractScene{
 
 	
 	
-	//constructor für weitere Bewertungsrunde, wenn bereits alle Ideen einmal zugeordnet worden sind
+	//constructor fï¿½r weitere Bewertungsrunde, wenn bereits alle Ideen einmal zugeordnet worden sind
 	public EvaluationScene( MTApplication mtApplication, String name, ArrayList<Note> tideas, ArrayList<Note> trubbish)
 	{		
 		super(mtApplication, name);		
 		
-		//muss noch die ganzen ideen aus dem clustern übergeben bekommen
+		//muss noch die ganzen ideen aus dem clustern ï¿½bergeben bekommen
 		//solange templiste mit ideen
 		ideas = tideas;
 		rubbish = trubbish;
@@ -177,8 +175,8 @@ public class EvaluationScene extends AbstractScene{
 				
 		listRight = new MTList(mtApp,5*einheitX+115, 80, einheitX , 200);		 
 		
-		//dort passiert das liste füllen, was bereits implementiert habe
-		//zunächst nur mittlere liste füllen
+		//dort passiert das liste fï¿½llen, was bereits implementiert habe
+		//zunï¿½chst nur mittlere liste fï¿½llen
 		//nach jedem drag&drop vorgang die neue liste updaten
 		updateMiddleList();
 		updateSideList(listLeft,rubbish);
@@ -209,7 +207,7 @@ public class EvaluationScene extends AbstractScene{
 	}
 	
 	//Aus dem Datenmodell von Patrick eine angepasste Version machen
-	//in allIdeas gibst für jeden CLuster eine Liste der Ideen
+	//in allIdeas gibst fï¿½r jeden CLuster eine Liste der Ideen
 	private void createStructureForIdeas(LinkedList<Idea> allParents)
 	{
 		allIdeas = new ArrayList<ArrayList<Note>>();
@@ -231,7 +229,7 @@ public class EvaluationScene extends AbstractScene{
 	}
 	
 	
-	//überprüfen ob ein text bereits in der liste ist, um
+	//ï¿½berprï¿½fen ob ein text bereits in der liste ist, um
 	//redundante ideen zu vermeiden
 	 private boolean ideaInList(String text)
 	 {
@@ -248,7 +246,7 @@ public class EvaluationScene extends AbstractScene{
 		 return false;
 	 }
 	
-	//updatet den Papierkorb und die besseren Ideen aufgrund der Einträge in der Arraylist
+	//updatet den Papierkorb und die besseren Ideen aufgrund der Eintrï¿½ge in der Arraylist
 	private void updateSideList(MTList listComponent, ArrayList<Note> actualList)
 	{	
 		
@@ -263,7 +261,7 @@ public class EvaluationScene extends AbstractScene{
 	 
 					
 		//arraylist durchgehen
-		//für jede note neue celle erzeugen und idee zupacken
+		//fï¿½r jede note neue celle erzeugen und idee zupacken
 		for(Note actualNote : actualList)
 		{				 
 			MTListCell cell = createListCell();
@@ -300,7 +298,7 @@ public class EvaluationScene extends AbstractScene{
 		//Cell erstellen, wo die idee angezeigt wird
 				
 		//arraylist durchgehen
-		//für jede arraylist das erste element anzeigen als ein symbol
+		//fï¿½r jede arraylist das erste element anzeigen als ein symbol
 		for(ArrayList<Note> actualList : allIdeas)
 		{
 			Note actualNote = actualList.get(0);
@@ -349,7 +347,7 @@ public class EvaluationScene extends AbstractScene{
 					for(MTComponent selectedComponent : clickedCell.getChildren())
 					{
 						MTTextArea childTextarea = (MTTextArea) selectedComponent;
-						//wenn in x-Richtung zwischen die maximalen Ausmaße geklickt wurde
+						//wenn in x-Richtung zwischen die maximalen Ausmaï¿½e geklickt wurde
 						if(childTextarea.getCenterPointGlobal().x - 50 < clickedPosition.x && childTextarea.getCenterPointGlobal().x + 50 > clickedPosition.x)
 						{
 							//falls unten eine drin ist, die wieder nach oben schieben als cluster
@@ -357,10 +355,10 @@ public class EvaluationScene extends AbstractScene{
 							{
 								moveBottomIdeasToTop(); 
 							}						 
-							//selektierte aus der liste löschen
+							//selektierte aus der liste lï¿½schen
 							 
 							ArrayList<Note> selectedCluster = removeSelectedIdeaFromIdeas(childTextarea);
-							//element löschen
+							//element lï¿½schen
 							childTextarea.destroy();
 							//die selektierte unten erstellen
 							if(selectedCluster!=null)
@@ -386,7 +384,7 @@ public class EvaluationScene extends AbstractScene{
 	private ArrayList<Note> removeSelectedIdeaFromIdeas(MTTextArea clickedTextArea)
 	{
 		ArrayList<Note> result = null;
-		//rausbekommen zu welchem cluster die gehört
+		//rausbekommen zu welchem cluster die gehï¿½rt
 		for(ArrayList<Note> actualList : allIdeas)
 		{
 			for(Note note : actualList)
@@ -407,7 +405,7 @@ public class EvaluationScene extends AbstractScene{
 				}
 			}
 		}
-		//cluster dann rauslöschen
+		//cluster dann rauslï¿½schen
 			 
 		return null;
 	}
@@ -422,13 +420,13 @@ public class EvaluationScene extends AbstractScene{
 		}
 		allIdeas.add(temp);
 		showedNotes.clear();
-		//alle kinder der area löschen die typ mttextarea sind
+		//alle kinder der area lï¿½schen die typ mttextarea sind
 		for(MTComponent comp : area.getChildren())
 		{
 			try
 			{
 				MTTextArea text = (MTTextArea)comp;
-				//Ausnahme einfügen für die Textareas im tabellenkopf
+				//Ausnahme einfï¿½gen fï¿½r die Textareas im tabellenkopf
 				if(text.getText().equals("verworfen") || text.getText().equals("verbleibend") || text.getText().equals("weiter"))
 				{
 					continue;
@@ -442,7 +440,7 @@ public class EvaluationScene extends AbstractScene{
 		}
 	}
 	
-	//eingegeben String nach der vorgegeben Länge formatieren wegen den Zeilenumbrüchen
+	//eingegeben String nach der vorgegeben Lï¿½nge formatieren wegen den Zeilenumbrï¿½chen
 	 private static String formatString(String str, int length)
 	    {
 	        String result ="";
@@ -452,7 +450,7 @@ public class EvaluationScene extends AbstractScene{
 	        String [] splitText = str.split(" ");
 	          
 	        //textzusammenbauen
-	        //wenn text + neues wort über 50 ist, dann neue zeile beginnen mit \n
+	        //wenn text + neues wort ï¿½ber 50 ist, dann neue zeile beginnen mit \n
 	        String aktuelleZeile = "";
 	        for(int i=0;i<splitText.length;i++)
 	        {
@@ -549,12 +547,12 @@ public class EvaluationScene extends AbstractScene{
 	 private void createSelectedIdea(ArrayList<Note> selectedCluster)
 		{	
 			//bereich von 400 -540 platz
-			//mit mtlist bearbeiten, weil es auch sehr viele ideen sein können?
+			//mit mtlist bearbeiten, weil es auch sehr viele ideen sein kï¿½nnen?
 			int y=350;
 			for(Note note : selectedCluster)
 			{
 				@SuppressWarnings("deprecation")
-				//breite und höhe an den text anpassen
+				//breite und hï¿½he an den text anpassen
 				MTTextArea rText = new MTTextArea(einheitX*2+105,y,einheitX*3-60,55,  FontManager.getInstance().createFont(mtApp, "arial.ttf", 
 		        		20, MTColor.BLACK, false),this.mtApp);			
 				rText.unregisterAllInputProcessors();
@@ -637,7 +635,7 @@ public class EvaluationScene extends AbstractScene{
 									mtApp.pushScene();
 									if (finalScene == null)
 									{				
-										//Im konstruktor müssen die ideen als 2 listen übergeben werden
+										//Im konstruktor mï¿½ssen die ideen als 2 listen ï¿½bergeben werden
 										finalScene = new EvaluationScene(mtApp, "Evaluation Again", bestIdeas, rubbish);
 										mtApp.addScene(finalScene);
 									}
@@ -663,7 +661,7 @@ public class EvaluationScene extends AbstractScene{
 	 
 	 private void updateShowedNotes(MTTextArea draggedTextarea)
 	 {
-		 //muss aus der liste showedNotes gelöscht werden
+		 //muss aus der liste showedNotes gelï¿½scht werden
 		 for(Note note :showedNotes)
 		 {
 			 String s1 = formatString(note.getName(),40);

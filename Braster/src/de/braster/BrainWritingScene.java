@@ -1,11 +1,9 @@
 package de.braster;
-import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
-import org.mt4j.components.MTComponent;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.AbstractShape;
@@ -18,8 +16,8 @@ import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent.FlickDirection;
+import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
@@ -62,7 +60,7 @@ public class BrainWritingScene extends AbstractScene{
 		this.mtApp = mtApplication;
 		this.players = players;
 		canv = getCanvas();
-		this.setClearColor(MTColor.BLACK);
+		this.setClearColor(new MTColor(136, 171, 194, 255));
 		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		
 		MTTextArea textArea = new MTTextArea(mtApplication,                                
@@ -247,7 +245,7 @@ public class BrainWritingScene extends AbstractScene{
 		// eigener enter button
 		KeyInfo ki = keyboard.new KeyInfo("f", "\n", "\n", 		new Vector3D(615, 105),KeyInfo.NORMAL_KEY);
 			
-		//Event listener für den enter key
+		//Event listener fï¿½r den enter key
 		IGestureEventListener tp = new IGestureEventListener() {
 				@Override
 				public boolean processGestureEvent(MTGestureEvent ge) {
@@ -287,7 +285,7 @@ public class BrainWritingScene extends AbstractScene{
 		circle.setFillColor(MTColor.WHITE);
 		circle.setGestureAllowance(DragProcessor.class, false);
 		circle.setGestureAllowance(ScaleProcessor.class, false);
-		readyButtons.add(circle); //für das überprüfen aller farben
+		readyButtons.add(circle); //fï¿½r das ï¿½berprï¿½fen aller farben
 		
 		circle.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
 		circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -373,7 +371,7 @@ public class BrainWritingScene extends AbstractScene{
 					+ "keybClose.svg");
 
 			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
-			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0)); //2x ist notwendig aufgrund wie die tastatur auf ihre gräße kommt
+			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0)); //2x ist notwendig aufgrund wie die tastatur auf ihre grï¿½ï¿½e kommt
 			
 			keybCloseSvg.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-25, 25,0));
 			keybCloseSvg.setBoundsPickingBehaviour(AbstractShape.BOUNDS_ONLY_CHECK);
@@ -398,7 +396,7 @@ public class BrainWritingScene extends AbstractScene{
 					FlickEvent e = (FlickEvent)ge;
 					getLocalMatrix().decompose(trans, rot, scale); //versuch die aktuelle Rotation zu bestimmen
 					if (e.getId() == MTGestureEvent.GESTURE_ENDED)  {
-						//flick Gesten abhängig der tastatur orientation
+						//flick Gesten abhï¿½ngig der tastatur orientation
 						//nord orientation
 						if (e.getDirection() == FlickDirection.WEST && rot.z == 0) {
 							animLeft.start();
@@ -444,7 +442,7 @@ public class BrainWritingScene extends AbstractScene{
 		/**
 		 * Wechselt durch die Liste der Ideen in der angegebenen Richtung.
 		 * 
-		 * @param direction -1 = zurück; 1 = vorwärts
+		 * @param direction -1 = zurï¿½ck; 1 = vorwï¿½rts
 		 */
 		public void fillIdeaArea(int direction) {
 			Idea i = null;
@@ -452,14 +450,14 @@ public class BrainWritingScene extends AbstractScene{
 					
 				i = ideas.get(iterator);
 				
-				//flick nach links = vorwärts
+				//flick nach links = vorwï¿½rts
 				if (ideas.get(iterator) == ideas.getLast() && direction == 1) {
 					iterator = 0;
 				} else if (direction == 1) {
 					iterator++;
 				}
 				
-				//flick nach rechts = zurück 
+				//flick nach rechts = zurï¿½ck 
 				if (ideas.get(iterator) == ideas.getFirst() && direction == -1) {
 					iterator = ideas.size()-1;
 				} else if (direction == -1) {
@@ -516,7 +514,7 @@ public class BrainWritingScene extends AbstractScene{
 		
 		
 		/**
-		 * Setzt Animation für eine Textarea.
+		 * Setzt Animation fï¿½r eine Textarea.
 		 * @param t
 		 * @param width
 		 */
