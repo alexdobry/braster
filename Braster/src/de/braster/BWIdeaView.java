@@ -45,6 +45,7 @@ public class BWIdeaView extends MTRectangle{
 		Vector3D trans = new Vector3D(), rot = new Vector3D(), scale = new Vector3D();
 		private MTTextArea currentShown = null;
 		private PApplet pApplet;
+		private MTRectangle swipeleft;
 		
 		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
 			super(pApplet, width, height);
@@ -55,7 +56,7 @@ public class BWIdeaView extends MTRectangle{
 			setGestureAllowance(ScaleProcessor.class, false);
 			setGestureAllowance(RotateProcessor.class, false);
 			
-			setupHelp();
+			makeHelp();
 			
 			//Zur tastatur welchseln
 			MTSvgButton keybCloseSvg = new MTSvgButton(pApplet, MT4jSettings.getInstance().getDefaultSVGPath()
@@ -73,6 +74,7 @@ public class BWIdeaView extends MTRectangle{
 					if (te.isTapped()){
 						kb.setVisible(true);
 						setVisible(false);
+						showHelp();
 					}
 					return false;
 				}
@@ -118,6 +120,9 @@ public class BWIdeaView extends MTRectangle{
 							animRight.start();
 							animScale.start();
 						}
+						if (e.isFlick()) {
+							hideHelp();	
+						}
 						
 						System.out.println(rot.toString());
 					}
@@ -130,13 +135,13 @@ public class BWIdeaView extends MTRectangle{
 			
 		}
 
-		private void setupHelp() {
+		private void makeHelp() {
 			
 			String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
 		    
 			//swipe left hilfe
 			PImage swl = pApplet.loadImage(path + "swipe_left.png");
-			MTRectangle swipeleft = new MTRectangle(pApplet, swl);
+			swipeleft = new MTRectangle(pApplet, swl);
 			swipeleft.scale(0.1f, 0.1f, 0, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)*0.7f
 					, this.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)*0.2f));
 			swipeleft.setNoStroke(true);
@@ -152,9 +157,16 @@ public class BWIdeaView extends MTRectangle{
 //			swiperight.setNoStroke(true);
 //			this.addChild(swiperight);
 			
-			
-			
 		}
+		
+		private void hideHelp() {
+			swipeleft.setVisible(false);
+		}
+		
+		private void showHelp() {
+			swipeleft.setVisible(true);
+		}
+		
 
 		/**
 		 * Wechselt durch die Liste der Ideen in der angegebenen Richtung.
