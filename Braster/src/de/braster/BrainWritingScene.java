@@ -232,10 +232,12 @@ public class BrainWritingScene extends AbstractScene{
 		
 		BWKeyboard keyboard = new BWKeyboard(mtApp);
 		
-        final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 50, MTColor.BLACK)); 
+        final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 50, MTColor.WHITE)); 
         t.setExpandDirection(ExpandDirection.UP);
-		t.setStrokeColor(new MTColor(0,0 , 0, 255));
-		t.setFillColor(new MTColor(205,200,177, 255));
+//		t.setStrokeColor(new MTColor(0,0 , 0, 255));
+//		t.setFillColor(new MTColor(205,200,177, 255));
+        t.setStrokeColor(MTColor.LIME);
+        t.setFillColor(MTColor.GREEN);
 		t.unregisterAllInputProcessors();
 		t.setEnableCaret(true);
 //		t.snapToKeyboard(keyb);
@@ -275,6 +277,11 @@ public class BrainWritingScene extends AbstractScene{
 		keyboard.addKeyFromOutside(ki, tp);
 
 		//ready button
+		final MTTextArea bereit = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 20, MTColor.BLACK)); 
+		bereit.setText("Bereit");
+		bereit.setNoFill(true);
+		bereit.setNoStroke(true);
+		
 		
 		float radius = 35;
 		final MTEllipse circle = new MTEllipse(mtApp, 
@@ -287,6 +294,9 @@ public class BrainWritingScene extends AbstractScene{
 		circle.setGestureAllowance(ScaleProcessor.class, false);
 		readyButtons.add(circle); //f�r das �berpr�fen aller farben
 		
+		
+		
+		
 		circle.registerInputProcessor(new TapProcessor(mtApp, 25, true, 350));
 		circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			
@@ -295,9 +305,12 @@ public class BrainWritingScene extends AbstractScene{
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
 					if (circle.getFillColor().equals(MTColor.WHITE)) {
-						circle.setFillColor(MTColor.GREEN);
+						circle.setFillColor(MTColor.GREEN); //bereit
+						bereit.setFontColor(MTColor.WHITE);
+						
 					} else {
 						circle.setFillColor(MTColor.WHITE);
+						bereit.setFontColor(MTColor.BLACK);
 					}
 					
 					if (checkReady(players)) {
@@ -321,10 +334,7 @@ public class BrainWritingScene extends AbstractScene{
 		});
 		
 		
-		MTTextArea bereit = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 20, MTColor.BLACK)); 
-		bereit.setText("Bereit");
-		bereit.setNoFill(true);
-		bereit.setNoStroke(true);
+
 		
 		circle.addChild(bereit);
 		bereit.setPositionRelativeToParent(circle.getCenterPointLocal());

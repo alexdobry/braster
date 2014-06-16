@@ -138,7 +138,7 @@ public class BWIdeaView extends MTRectangle{
 			PImage swl = pApplet.loadImage(path + "swipe_left.png");
 			MTRectangle swipeleft = new MTRectangle(pApplet, swl);
 			swipeleft.scale(0.1f, 0.1f, 0, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)*0.7f
-					, swipeleft.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+					, this.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)*0.2f));
 			swipeleft.setNoStroke(true);
 			this.addChild(swipeleft);
 			
@@ -204,7 +204,7 @@ public class BWIdeaView extends MTRectangle{
 			
 			ideaArea.setFillColor(MTColor.GREEN);
 			ideaArea.setStrokeColor(MTColor.LIME);
-			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.BLACK, true));
+			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.WHITE, true));
 			ideaArea.removeAllGestureEventListeners();
 			ideaArea.setPickable(false);
 			ideaArea.setText(s);
