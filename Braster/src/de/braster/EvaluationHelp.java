@@ -6,9 +6,7 @@ import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
-import org.mt4j.components.visibleComponents.shapes.MTStencilPolygon;
 import org.mt4j.components.visibleComponents.widgets.MTBackgroundImage;
-import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextField;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -18,6 +16,7 @@ import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
+
 
 import processing.core.PImage;
 
@@ -33,7 +32,7 @@ public class EvaluationHelp extends AbstractScene {
 		mtApp = mtApplication;
 		//geblurrte Bild als Hintergrund einstellen
 		
-		PImage image = mtApp.loadImage("EB blur.png");
+		PImage image = mtApp.loadImage("C:\\Users\\Stefan\\Dropbox\\SGMCI\\Icons und Bilder\\EV_blur.png");
 		MTBackgroundImage backgroundImage = new MTBackgroundImage(mtApp, image, false);
 		canv.addChild(backgroundImage); 
 		
@@ -56,7 +55,7 @@ public class EvaluationHelp extends AbstractScene {
 		textareaPapierkorb.setNoStroke(true);
 		textareaPapierkorb.setText("verworfen");
 		textareaPapierkorb.setSizeLocal(200, 40);
-		textareaPapierkorb.setPositionGlobal(new Vector3D(mtApp.width/2-400,40));
+		textareaPapierkorb.setPositionGlobal(new Vector3D(mtApp.width/2-400,30));
 		canv.addChild(textareaPapierkorb);
 	
 		MTTextField textareaIdeas = new MTTextField(this.mtApp, 0, 0, 0, 0, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
@@ -67,7 +66,7 @@ public class EvaluationHelp extends AbstractScene {
 		textareaIdeas.setNoStroke(true);
 		textareaIdeas.setText("verbleibend");
 		textareaIdeas.setSizeLocal(200, 40);
-		textareaIdeas.setPositionGlobal(new Vector3D(mtApp.width/2,40));
+		textareaIdeas.setPositionGlobal(new Vector3D(mtApp.width/2,30));
 		canv.addChild(textareaIdeas);
 		
 		MTTextField textareaBestIdeas = new MTTextField(this.mtApp, 0, 0, 0, 0, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
@@ -78,7 +77,7 @@ public class EvaluationHelp extends AbstractScene {
 		textareaBestIdeas.setNoStroke(true);
 		textareaBestIdeas.setText("weiter");
 		textareaBestIdeas.setSizeLocal(200, 40);
-		textareaBestIdeas.setPositionGlobal(new Vector3D(mtApp.width/2+400,40));
+		textareaBestIdeas.setPositionGlobal(new Vector3D(mtApp.width/2+400,30));
 		canv.addChild(textareaBestIdeas);
 	}
 	
@@ -87,10 +86,9 @@ public class EvaluationHelp extends AbstractScene {
 	
 	private void createHelpArea()
 	{
-		 MTStencilPolygon area = new MTStencilPolygon(mtApp, null);
-		 area.setPositionGlobal(new Vector3D(mtApp.width/2,mtApp.height/2));
-		 area.setSizeXYGlobal(mtApp.width/2, mtApp.height/2);
+		 MTRoundRectangle area = new MTRoundRectangle(mtApp, mtApp.width/4,mtApp.height/4, 0, mtApp.width/2,  mtApp.height/2, 30, 30);
 		 area.setPickable(false);
+		 area.setFillColor(MTColor.BLUE);
 		 area.unregisterAllInputProcessors();
 		 area.registerInputProcessor(new TapProcessor(this.mtApp));
 		 area.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -123,7 +121,7 @@ public class EvaluationHelp extends AbstractScene {
 		 
 		 ArrayList<String> picturePaths = loadAnimationImages();
 		 
-		 for(String picturePath :picturePaths)
+		 /*for(String picturePath :picturePaths)
 		 {
 			 //screenshots machen von dem selektieren etc.
 		 	 //hintergrund alle paar sekunden ändern
@@ -132,7 +130,7 @@ public class EvaluationHelp extends AbstractScene {
 		 	 area.addChild(backgroundImage);
 		 	 //timer einfügen,sodass erst wartet bevor das nächste bild ladet
 		 	
-		 }
+		 }*/
 		 
 		 
 	}

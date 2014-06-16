@@ -10,16 +10,13 @@ import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.font.IFont;
-import org.mt4j.components.visibleComponents.shapes.AbstractShape;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
-import org.mt4j.components.visibleComponents.widgets.MTList;
-import org.mt4j.components.visibleComponents.widgets.MTListCell;
+
+
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
-import org.mt4j.components.visibleComponents.widgets.MTTextField;
+
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
-import org.mt4j.components.visibleComponents.widgets.buttons.MTSvgButton;
-import org.mt4j.components.visibleComponents.widgets.keyboard.MTKeyboard;
 import org.mt4j.input.gestureAction.DefaultButtonClickAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -30,12 +27,11 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
-import org.mt4j.util.MT4jSettings;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 import org.mt4jx.components.visibleComponents.widgets.MTCheckbox;
 
-import processing.core.PImage;
+ 
 import de.braster.Keyboard.KeyInfo;
 
 public class SetupScene  extends AbstractScene{
@@ -45,7 +41,7 @@ public class SetupScene  extends AbstractScene{
 	private Iscene brainWritingScene;
 	private ArrayList<Positioncomponent> playerButtons;
 	private static String problemDefinition = "";
-	private static boolean needHelp;
+	
 	
 	
 	public SetupScene( final MTApplication mtApplication, String name)
@@ -57,7 +53,7 @@ public class SetupScene  extends AbstractScene{
 		this.playerButtons = new ArrayList<Positioncomponent>();
 		
 		problemDefinition = "Problem eingeben...";
-		needHelp= false;					
+		 					
 
 		//fungiert als mehrzeilige textarea für die Problembeschreibung
 		final MTTextArea textArea = new MTTextArea(mtApplication,                                
@@ -93,7 +89,7 @@ public class SetupScene  extends AbstractScene{
 		IFont font = FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		50, MTColor.BLACK, false);
 		
-		MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Brainwriting starten", font, MTColor.SILVER);
+		final MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Brainwriting starten", font, MTColor.GREY);
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -103,48 +99,57 @@ public class SetupScene  extends AbstractScene{
 				
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
-					
-					//Problem auslesen
-					MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(0);					 
-					problemDefinition = textAreaProblem.getText();
-					int number = 0;
-					//herausfinden, wieviel Spieler ausgewählt sind
- 					for (Positioncomponent item: temp)
-					{ 				
- 						MTRectangle r2 = item.getRectangle();
- 						System.out.println(r2.getStrokeColor());
-						if(r2.getStrokeColor().toString().equals("Color{255.0,0.0,0.0_255.0}"))
-						{							 
-							number = item.getPersonenanzahl();
-						}
-					}
-					//Save the current scene on the scene stack before changing
- 					//wenn beides eingegeben wurde, wird in die nächste szene geleitet
- 					if(number>0 && problemDefinition.length()>0)
- 					{
- 						//Save the current scene on the scene stack before changing
- 						mtApp.pushScene();
- 						if (brainWritingScene == null){
- 							brainWritingScene = new BrainWritingScene(mtApp, "Brain Writing", problemDefinition, number);
- 							//Konstruktor erweitern um Anzahl Spieler, da genau soviele
- 							//Tastaturen geladen werden
- 							//Add the scene to the mt application
- 							mtApp.addScene(brainWritingScene);
- 						}
- 						//Do the scene change
- 						mtApp.changeScene(brainWritingScene);
- 					}
+					switch (te.getId()) {
+						case MTGestureEvent.GESTURE_STARTED:
+							r.setFillColor(new MTColor(220,220,220,255));
+							break;
+						case MTGestureEvent.GESTURE_ENDED:
+					 
+							//Problem auslesen
+							MTTextArea textAreaProblem = (MTTextArea) canv.getChildByIndex(0);					 
+							problemDefinition = textAreaProblem.getText();
+							int number = 0;
+							//herausfinden, wieviel Spieler ausgewählt sind
+							for (Positioncomponent item: temp)
+							{ 				
+								MTRectangle r2 = item.getRectangle();
+								System.out.println(r2.getStrokeColor());
+								if(r2.getStrokeColor().toString().equals("Color{255.0,0.0,0.0_255.0}"))
+								{							 
+									number = item.getPersonenanzahl();
+								}
+							}
+							//Save the current scene on the scene stack before changing
+							//wenn beides eingegeben wurde, wird in die nächste szene geleitet
+							if(number>0 && problemDefinition.length()>0)
+							{
+								//Save the current scene on the scene stack before changing
+								mtApp.pushScene();
+								if (brainWritingScene == null){
+									brainWritingScene = new BrainWritingScene(mtApp, "Brain Writing", problemDefinition, number);
+									//Konstruktor erweitern um Anzahl Spieler, da genau soviele
+									//Tastaturen geladen werden
+									//Add the scene to the mt application
+									mtApp.addScene(brainWritingScene);
+								}
+								//Do the scene change
+								mtApp.changeScene(brainWritingScene);
+							}
  					
- 					//andernfalls kleinen popup, was fehlt
- 					else if(problemDefinition.length()==0 || problemDefinition.equals("Problem eingeben..."))
- 					{
- 						JOptionPane.showMessageDialog(null, "Bitte das Problem definieren.");
- 					}
- 					else if(number==0)
- 					{
- 						JOptionPane.showMessageDialog(null, "Bitte die Personenanzahl eingeben.");
- 					}
-			}
+							//andernfalls kleinen popup, was fehlt
+							else if(problemDefinition.length()==0 || problemDefinition.equals("Problem eingeben..."))
+							{
+								JOptionPane.showMessageDialog(null, "Bitte das Problem definieren.");
+								r.setFillColor(MTColor.GREY);
+								
+							}
+							else if(number==0)
+							{
+								JOptionPane.showMessageDialog(null, "Bitte die Personenanzahl eingeben.");
+								r.setFillColor(MTColor.GREY);
+							}
+						}
+				}
 				return false;
 			}
 		});
@@ -154,21 +159,9 @@ public class SetupScene  extends AbstractScene{
 		//erzeugt 4 Buttons für die Spieleranzahl
 		createPlayerButtons();	
 		
-		Checkbox checkboxHelp = new Checkbox(mtApplication, 0,0, 0, 200, 30, 0, 0, "Hilfe");
-		checkboxHelp.setPositionGlobal(new Vector3D(this.mtApp.width/2, this.mtApp.height/6*4));
-		canv.addChild(checkboxHelp);
-		checkboxHelp.unregisterAllInputProcessors();
-		checkboxHelp.registerInputProcessor(new TapProcessor(getMTApplication()));
-		checkboxHelp.addGestureListener(TapProcessor.class, new IGestureEventListener(){
-			public boolean processGestureEvent(MTGestureEvent ge){
-				TapEvent te = (TapEvent) ge;
-				   if (te.isTapped())
-				   { 	
-					   //needHelp = checkboxHelp.isEnabled();
-				   }
-				   return false;
-			}
-		});
+		Checkbox c = new Checkbox(mtApplication,0,0, 0, 0, 0, 0, 0, "Help");
+		c.setPositionRelativeToParent(new Vector3D( mtApp.width/2,mtApp.height/6*4));        
+		canv.addChild(c);
 	}
 
 	

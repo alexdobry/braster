@@ -1,5 +1,6 @@
 package de.braster;
 
+import org.mt4j.components.MTCanvas;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextField;
@@ -14,25 +15,34 @@ import processing.core.PApplet;
 
 public class Checkbox extends  MTRoundRectangle {
 
+	private static boolean needHelp;
+ 
+	
 	public Checkbox(PApplet pApplet, float x, float y, float z, float width,
 			float height, float arcWidth, float arcHeight, String text) {
 		super(pApplet, x, y, z, width, height, arcWidth, arcHeight);
 		 
-		MTCheckbox checkBox = new MTCheckbox(pApplet, 15);
-		checkBox.setSizeLocal(20, 20);
-		checkBox.setPositionGlobal(new Vector3D(0,15));
-		checkBox.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-			@Override
-			public boolean processGestureEvent(MTGestureEvent ge) {
-			//event code here
-			return false;
-			}
-		});
-	 
-		this.addChild(checkBox);
+		 
+		final MTCheckbox checkBox = new MTCheckbox(pApplet, 50);
+        checkBox.setFillColor(MTColor.NAVY);
+        checkBox.setBooleanValue(false);       
+        checkBox.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+            
+            @Override
+            public boolean processGestureEvent(MTGestureEvent ge) {
+                
+                 needHelp = checkBox.getBooleanValue();
+                
+                return false;
+            }
+        });
+
+              
+        this.addChild(checkBox);
+		 
 		
-		MTTextField textField = new MTTextField(pApplet, 40,0, 70, 30, FontManager.getInstance().createFont(pApplet, "arial.ttf", 
-        		20, //fontzize 
+		MTTextField textField = new MTTextField(pApplet, 80,0, 100, 60, FontManager.getInstance().createFont(pApplet, "arial.ttf", 
+        		40, //fontzize 
         		MTColor.WHITE));
 		textField.setText(text);
 		textField.setFillColor(MTColor.BLACK);
