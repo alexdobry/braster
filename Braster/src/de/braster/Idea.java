@@ -72,10 +72,32 @@ public class Idea extends MTTextArea {
 					break;
 				case DragEvent.GESTURE_UPDATED:
 					self.setFillColor(new MTColor(220,220,220,255));
+					
+					
+					for (Idea i : ideas) {
+						if (i != self) {
+							i.setFillColor(MTColor.GREEN);	
+						}
+					}
+					
+					
+					PickResult pr2 = self.getParent().pick(de.getDragCursor().getCurrentEvtPosX(), de.getDragCursor().getCurrentEvtPosY());
+					List<PickEntry> pe2 = pr2.getPickList();
+					
+					if (pe2.size() >= 2) {
+						Object obj = pe2.get(1).hitObj;
+						if (obj instanceof Idea) {
+							Idea id = (Idea)obj;
+							id.setFillColor(MTColor.BLUE);
+						}
+					} 
+					
+
+					
 					break;
 				case DragEvent.GESTURE_ENDED:
 					
-					PickResult pr = self.getParent().pick(de.getDragCursor().getCurrentEvtPosX(),de.getDragCursor().getCurrentEvtPosY());
+					PickResult pr = self.getParent().pick(de.getDragCursor().getCurrentEvtPosX(), de.getDragCursor().getCurrentEvtPosY());
 					
 					List<PickEntry> pe = pr.getPickList();
 					if (pe.size() >= 2) {
@@ -90,7 +112,11 @@ public class Idea extends MTTextArea {
 							parents.remove(i); //als parent von der liste entfernen
 						}
 					}
-					self.setFillColor(MTColor.GREEN);	
+
+					for (Idea i : ideas) {
+						i.setFillColor(MTColor.GREEN);	
+					}
+					
 					System.out.println(parents);
 					break;
 				default:
@@ -177,13 +203,14 @@ public class Idea extends MTTextArea {
 		idea.setGestureAllowance(ScaleProcessor.class, false);
 		idea.setGestureAllowance(RotateProcessor.class, false);
 		
-		Vector3D trans = new Vector3D();
-		Vector3D rot = new Vector3D();
-		Vector3D scale = new Vector3D();
-		
-		getLocalMatrix().decompose(trans, rot, scale);
-		idea.getLocalMatrix().scale(scale);
-		idea.getLocalMatrix().rotateVect(rot);
+		//TODO: implementieren der matrizenübertragung
+//		Vector3D trans = new Vector3D();
+//		Vector3D rot = new Vector3D();
+//		Vector3D scale = new Vector3D();
+//		
+//		getLocalMatrix().decompose(trans, rot, scale);
+//		idea.getLocalMatrix().scale(scale);
+//		idea.getLocalMatrix().rotateVect(rot);
 		
 //		setGestureAllowance(TapAndHoldProcessor.class, true); //das todo unten
 		
@@ -212,8 +239,8 @@ public class Idea extends MTTextArea {
 							
 							//TODO: logik für parent implementieren
 							idea.setGestureAllowance(DragProcessor.class, true);
-							idea.setGestureAllowance(ScaleProcessor.class, true);
-							idea.setGestureAllowance(RotateProcessor.class, true);
+							idea.setGestureAllowance(ScaleProcessor.class, false);
+							idea.setGestureAllowance(RotateProcessor.class, false);
 							idea.setGestureAllowance(TapAndHoldProcessor.class, false);
 							i.repositionChildren();
 							parents.add(idea); //wird zu einem neuen parent
