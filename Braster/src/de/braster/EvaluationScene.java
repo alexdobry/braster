@@ -87,13 +87,7 @@ public class EvaluationScene extends AbstractScene{
 		//solange templiste mit ideen
 		//createStructureForIdeas(Idea.getAllParents());
 		 
-<<<<<<< HEAD
-		//temporï¿½r
-		/*
-=======
-		//temporär
-		
->>>>>>> 2c2dd918d8d43b8500a5130a83066ae069340a8d
+
 	 	allIdeas = new ArrayList<ArrayList<Note>>();
 		for(int i=1;i<9;i++)
 		{
@@ -104,13 +98,7 @@ public class EvaluationScene extends AbstractScene{
 			}
 			allIdeas.add(bla);
 		} 
-<<<<<<< HEAD
-		*/
-		//fï¿½r die parents die listen mit allen ideen erzeugen
-=======
-		
-		//für die parents die listen mit allen ideen erzeugen
->>>>>>> 2c2dd918d8d43b8500a5130a83066ae069340a8d
+
 		//methodenaufruf
 		
 		ideas = new ArrayList<Note>();
@@ -687,17 +675,10 @@ public class EvaluationScene extends AbstractScene{
 			int y=350;
 			for(Note note : selectedCluster)
 			{
-<<<<<<< HEAD
-				@SuppressWarnings("deprecation")
-				//breite und hï¿½he an den text anpassen
-				MTTextArea rText = new MTTextArea(einheitX*2+105,y,einheitX*3-60,55,  FontManager.getInstance().createFont(mtApp, "arial.ttf", 
-		        		20, MTColor.BLACK, false),this.mtApp);			
-				rText.unregisterAllInputProcessors();
-				rText.setPickable(true);
-=======
+
 				//breite und höhe an den text anpassen
 				MTTextArea rText = new MTTextArea(mtApp);
->>>>>>> 2c2dd918d8d43b8500a5130a83066ae069340a8d
+
 				rText.setFillColor(MTColor.GREEN);
 				rText.setStrokeColor(MTColor.LIME);
 				rText.unregisterAllInputProcessors();
