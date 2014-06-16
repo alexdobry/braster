@@ -468,6 +468,11 @@ public class BrainWritingScene extends AbstractScene{
 				
 //				ideaArea.setText(i.getText());
 //				setAnimations(ideaArea, ideaArea.getWidthXY(TransformSpace.LOCAL));
+				
+				// direction == 0 ist der fall wenn nur von der tastatur zur ideaview gewechselt wird
+				if (direction == 0) {
+					direction = 1;
+				}
 				showIdea(i.getText(), direction);
 			}
 		}

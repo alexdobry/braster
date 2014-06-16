@@ -173,10 +173,17 @@ public class Idea extends MTTextArea {
 //		idea.setLocalMatrix(getLocalMatrix());
 		
 		//das neue kind passiv stellen
-//		idea.setGestureAllowance(DragProcessor.class, false);
+		idea.setGestureAllowance(DragProcessor.class, false);
 		idea.setGestureAllowance(ScaleProcessor.class, false);
 		idea.setGestureAllowance(RotateProcessor.class, false);
 		
+		Vector3D trans = new Vector3D();
+		Vector3D rot = new Vector3D();
+		Vector3D scale = new Vector3D();
+		
+		getLocalMatrix().decompose(trans, rot, scale);
+		idea.getLocalMatrix().scale(scale);
+		idea.getLocalMatrix().rotateVect(rot);
 		
 //		setGestureAllowance(TapAndHoldProcessor.class, true); //das todo unten
 		
@@ -197,7 +204,7 @@ public class Idea extends MTTextArea {
 				case TapAndHoldEvent.GESTURE_ENDED:
 					if (th.isHoldComplete()){
 						MTComponent parent = idea.getParent();
-						if (parent instanceof Idea) {
+						if (parent instanceof Idea) { //wenn der parent eine idee ist <> wenn die aktuelle idee ein kind von einer idee ist
 							Idea i = (Idea)parent;
 							idea.removeFromParent();
 							canvas.addChild(idea);
