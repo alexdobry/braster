@@ -2,6 +2,7 @@ package de.braster;
 
 import java.util.LinkedList;
 
+import org.mt4j.MTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.AbstractShape;
@@ -27,6 +28,7 @@ import org.mt4j.util.animation.MultiPurposeInterpolator;
 import org.mt4j.util.math.Vector3D;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 
 
@@ -52,6 +54,8 @@ public class BWIdeaView extends MTRectangle{
 			setGestureAllowance(DragProcessor.class, false);
 			setGestureAllowance(ScaleProcessor.class, false);
 			setGestureAllowance(RotateProcessor.class, false);
+			
+			setupHelp();
 			
 			//Zur tastatur welchseln
 			MTSvgButton keybCloseSvg = new MTSvgButton(pApplet, MT4jSettings.getInstance().getDefaultSVGPath()
@@ -123,6 +127,32 @@ public class BWIdeaView extends MTRectangle{
 			});
 			
 
+			
+		}
+
+		private void setupHelp() {
+			
+			String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
+		    
+			//swipe left hilfe
+			PImage swl = pApplet.loadImage(path + "swipe_left.png");
+			MTRectangle swipeleft = new MTRectangle(pApplet, swl);
+			swipeleft.scale(0.1f, 0.1f, 0, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)*0.7f
+					, swipeleft.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+			swipeleft.setNoStroke(true);
+			this.addChild(swipeleft);
+			
+			//swipe right hilfe
+//			PImage swr = pApplet.loadImage(path + "swipe_right.png");
+//			MTRectangle swiperight = new MTRectangle(pApplet, swr);
+//			swiperight.scale(0.2f, 0.2f, 0, new Vector3D(0,0,0));
+//			swiperight.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)
+//																-swiperight.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2
+//																	, swiperight.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+//			swiperight.setNoStroke(true);
+//			this.addChild(swiperight);
+			
+			
 			
 		}
 
