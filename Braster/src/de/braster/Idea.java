@@ -212,8 +212,8 @@ public class Idea extends MTTextArea {
 							
 							//TODO: logik für parent implementieren
 							idea.setGestureAllowance(DragProcessor.class, true);
-							idea.setGestureAllowance(ScaleProcessor.class, false);
-							idea.setGestureAllowance(RotateProcessor.class, false);
+							idea.setGestureAllowance(ScaleProcessor.class, true);
+							idea.setGestureAllowance(RotateProcessor.class, true);
 							idea.setGestureAllowance(TapAndHoldProcessor.class, false);
 							i.repositionChildren();
 							parents.add(idea); //wird zu einem neuen parent
