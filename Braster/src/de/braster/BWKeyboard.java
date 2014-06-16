@@ -27,6 +27,7 @@ import java.util.Locale;
 
 
 
+
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.bounds.BoundsArbitraryPlanarPolygon;
 import org.mt4j.components.interfaces.IMTComponent3D;
@@ -261,8 +262,8 @@ public class BWKeyboard extends MTRoundRectangle {
 	}
 	
 	
-	public void setBWIV (BWIdeaView iv) {
-		this.iv = iv;
+	public void setBWIV (BWIdeaView iv1) {
+		this.iv = iv1;
 	}
  	
 	public void addKeyFromOutside(KeyInfo keyInfo, IGestureEventListener tapP) {
