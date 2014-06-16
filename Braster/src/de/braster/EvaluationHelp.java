@@ -2,11 +2,17 @@ package de.braster;
 
 import java.util.ArrayList;
 
+import javax.swing.Timer;
+
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
+import org.mt4j.components.MTComponent;
+import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTBackgroundImage;
+import org.mt4j.components.visibleComponents.widgets.MTListCell;
+import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextField;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -15,7 +21,17 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
+import org.mt4j.util.animation.Animation;
+import org.mt4j.util.animation.AnimationEvent;
+import org.mt4j.util.animation.IAnimationListener;
+import org.mt4j.util.animation.MultiPurposeInterpolator;
 import org.mt4j.util.math.Vector3D;
+
+
+
+
+
+
 
 
 
@@ -90,53 +106,37 @@ public class EvaluationHelp extends AbstractScene {
 	
 	
 	private void createHelpArea()
-	{
-		 MTRoundRectangle area = new MTRoundRectangle(mtApp, mtApp.width/4,mtApp.height/4, 0, mtApp.width/2,  mtApp.height/2, 30, 30);
-		 area.setPickable(false);
-		 area.setFillColor(MTColor.BLUE);
-		 area.unregisterAllInputProcessors();
-		 area.registerInputProcessor(new TapProcessor(this.mtApp));
-		 area.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-				public boolean processGestureEvent(MTGestureEvent ge) {
-					TapEvent te = (TapEvent)ge;
-					//FinalScene gehen
-					mtApp.pushScene();
-					if (evaluationScene == null)
-					{				
-						//Im konstruktor müssen die ideen als 2 listen übergeben werden
-						evaluationScene = new EvaluationScene(mtApp, "Evaluation Scene");
-						mtApp.addScene(evaluationScene);
-					}
-					//Do the scene change
-					mtApp.changeScene(evaluationScene);
-					return false;
-				}
-		 });
-			
-		 canv.addChild(area);
-		 
-		 MTTextField textfieldContinue = new MTTextField(this.mtApp, mtApp.width/2, mtApp.height-(area.getHeightXYVectLocal().y/2), 100, 35, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-		    		30, MTColor.BLACK, false));
+	{ 	 
+		
+		 final MTTextField textfieldContinue = new MTTextField(mtApp, mtApp.width/2, mtApp.height-200, 250, 40, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		20, MTColor.BLACK, false));
 		 textfieldContinue.unregisterAllInputProcessors();
 		 textfieldContinue.setPickable(false);
 		 textfieldContinue.setNoFill(true);
 		 textfieldContinue.setNoStroke(true);
 		 textfieldContinue.setText("bei Tippen weiter");
-		 area.addChild(textfieldContinue);
+		 canv.addChild(textfieldContinue);
+	
 		 
-		 ArrayList<String> picturePaths = loadAnimationImages();
 		 
-		 /*for(String picturePath :picturePaths)
-		 {
-			 //screenshots machen von dem selektieren etc.
-		 	 //hintergrund alle paar sekunden ändern
-		 	 PImage image = mtApp.loadImage(picturePath);
-		 	 MTBackgroundImage backgroundImage = new MTBackgroundImage(mtApp, image, false);
-		 	 area.addChild(backgroundImage);
-		 	 //timer einfügen,sodass erst wartet bevor das nächste bild ladet
-		 	
-		 }*/
-		 
+		/* 
+		 new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				textfieldContinue.setFillColor(MTColor.AQUA);
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				textfieldContinue.setFillColor(MTColor.GREEN);
+				
+			}
+		}).start();
+		
+	      */  
 		 
 	}
 

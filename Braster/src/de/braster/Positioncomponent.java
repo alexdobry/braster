@@ -20,7 +20,8 @@ public class Positioncomponent extends MTRoundRectangle{
 		parent = new MTRectangle(mtApplication, 160, 100);
 		parent.unregisterAllInputProcessors();
 		parent.setFillColor(MTColor.WHITE);
-		parent.setStrokeColor(MTColor.BLACK);
+		
+		parent.setStrokeColor(new MTColor(73, 112, 138, 255));
 		
 		this.personenanzahl = anzahl;
 		MTRectangle child1;
@@ -31,7 +32,7 @@ public class Positioncomponent extends MTRoundRectangle{
 		{			
 			case 1: //1 Kasten(unten)
 				child1 = new MTRectangle(this.mtApp,50,25);
-				child1.setPositionRelativeToOther(parent, new Vector3D(80,87.5f));
+				child1.setPositionRelativeToOther(parent, new Vector3D(80,87f));
 				child1.unregisterAllInputProcessors();
 				child1.setPickable(false);
 				child1.setFillColor(MTColor.SILVER);
@@ -41,7 +42,7 @@ public class Positioncomponent extends MTRoundRectangle{
 			case 2: //2 kästen (links und rechts)
 
 				child1 = new MTRectangle(this.mtApp,25,50);
-				child1.setPositionRelativeToOther(parent, new Vector3D(12.5f,60));
+				child1.setPositionRelativeToOther(parent, new Vector3D(12f,60));
 				child1.unregisterAllInputProcessors();
 				child1.setPickable(false);
 				child1.setFillColor(MTColor.SILVER);
@@ -49,7 +50,7 @@ public class Positioncomponent extends MTRoundRectangle{
 				parent.addChild(child1);
 
 				child2 = new MTRectangle(this.mtApp,25,50);
-				child2.setPositionRelativeToOther(parent, new Vector3D(147.5f,60));
+				child2.setPositionRelativeToOther(parent, new Vector3D(147f,60));
 				child2.unregisterAllInputProcessors();
 				child2.setPickable(false);
 				child2.setFillColor(MTColor.SILVER);

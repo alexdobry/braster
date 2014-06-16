@@ -14,8 +14,8 @@ import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 
 
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
-
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
+import org.mt4j.components.visibleComponents.widgets.MTTextField;
 import org.mt4j.input.gestureAction.DefaultButtonClickAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -29,6 +29,7 @@ import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
  
+
 import de.braster.Keyboard.KeyInfo;
 
 public class SetupScene  extends AbstractScene{
@@ -52,17 +53,20 @@ public class SetupScene  extends AbstractScene{
 		problemDefinition = "Problem eingeben...";
 		this.setClearColor(new MTColor(73, 112, 138, 255));
 		
+		
+		
 		//fungiert als mehrzeilige textarea f�r die Problembeschreibung
 		final MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
                 		MTColor.BLACK)); //Font color
 		
-		textArea.setText("Problem eingeben...");
+		//textArea.setText("Problem eingeben...");
 		textArea.setHeightLocal(100);
 		textArea.setWidthLocal(500);
 		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height/4));
 		textArea.unregisterAllInputProcessors();
+	
 		textArea.registerInputProcessor(new TapProcessor(this.mtApp));
 		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener(){
 			public boolean processGestureEvent(MTGestureEvent ge){
@@ -83,11 +87,24 @@ public class SetupScene  extends AbstractScene{
 		//wenn angeklickt wird, muss sich Tastatur �ffnen
 		//eingegebener Text dann im Feld erscheinen		
 		
-				
+		
+		
 		canv.addChild(textArea);			
-					
+		
 		IFont font = FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		50, MTColor.BLACK, false);
+		
+		 
+		
+		MTTextField f1 = new MTTextField(mtApp, mtApp.width/2-200,50, 400, 50, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+        		40, MTColor.WHITE, false));
+		f1.setFillColor(new MTColor(73, 112, 138, 255));
+	f1.setStrokeColor(new MTColor(73, 112, 138, 255));
+		f1.setText("Problem definieren");
+		canv.addChild(f1);
+		
+		
+		 
 		
 		final MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Brainwriting starten", font, MTColor.GREY);
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
@@ -159,8 +176,8 @@ public class SetupScene  extends AbstractScene{
 		//erzeugt 4 Buttons f�r die Spieleranzahl
 		createPlayerButtons();	
 		
-		Checkbox c = new Checkbox(mtApplication,0,0, 0, 0, 0, 0, 0, "Help");
-		c.setPositionRelativeToParent(new Vector3D( mtApp.width/2,mtApp.height/6*4));        
+		Checkbox c = new Checkbox(mtApplication,0,0, 0, 0, 0, 0, 0, "Hilfe notwendig?");
+		c.setPositionRelativeToParent(new Vector3D( mtApp.width/2-210 ,mtApp.height/6*4));        
 		canv.addChild(c);
 	}
 
@@ -187,7 +204,7 @@ public class SetupScene  extends AbstractScene{
 		this.playerButtons.add(p3);
 		
 		Positioncomponent p4 = new Positioncomponent(this.mtApp,4);
-		MTRectangle parent4 = p4.getRectangle();		
+		MTRectangle parent4 = p4.getRectangle();
 		parent4.setPositionGlobal(new Vector3D((this.mtApp.width/5)*4,mtApp.height/2));		
 		this.canv.addChild(parent4);
 		this.playerButtons.add(p4);
@@ -207,7 +224,7 @@ public class SetupScene  extends AbstractScene{
 						for (Positioncomponent item: temp  ) 
 						{
 							MTRectangle r2 = item.getRectangle();
-							r2.setStrokeColor(MTColor.BLACK);
+							r2.setStrokeColor(new MTColor(73, 112, 138, 255));
 						}
 						r.setStrokeColor(MTColor.RED);
 						r.setStrokeWeight(8);
@@ -237,21 +254,34 @@ public class SetupScene  extends AbstractScene{
 	
 
 	
-public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
+public Keyboard makeKB(MTApplication mtApplication, final MTTextArea t1) {
 		
+	
+	
 		final Keyboard keyboard = new Keyboard(mtApplication);
-				
-        t.setExpandDirection(ExpandDirection.DOWN);
-        t.setFontColor(MTColor.BLACK);		 
-		t.setFillColor(MTColor.WHITE);
-		t.setEnableCaret(true); 
-		t.setWidthLocal(500);
-		t.setHeightLocal(100);
-		keyboard.addTextInputListener(t);				
+	
+		  final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 50, MTColor.BLACK)); 
+	        t.setExpandDirection(ExpandDirection.UP);
+			t.setStrokeColor(new MTColor(0,0 , 0, 255));
+			t.setFillColor(new MTColor(205,200,177, 255));
+			t.unregisterAllInputProcessors();
+			t.setEnableCaret(true);
+//			t.snapToKeyboard(keyb);
+			keyboard.snapToKeyboard(t);
+			keyboard.addTextInputListener(t);
+			
+			
+        //t.setExpandDirection(ExpandDirection.DOWN);
+        //t.setFontColor(MTColor.BLACK);		 
+		//t.setFillColor(MTColor.WHITE);
+		//t.setEnableCaret(true); 
+		//t.setWidthLocal(500);
+		//t.setHeightLocal(100);
+		//keyboard.addTextInputListener(t);				
 				
 		getCanvas().addChild(keyboard);
 		
-		keyboard.scale(1.5f, 1.5f, 1, new Vector3D(0, 0, 0));
+		keyboard.scale(0.7f, 0.7f, 0, keyboard.getCenterPointRelativeToParent());
 	//	keyboard.setPositionGlobal(new Vector3D(mtApp.width/2,mtApp.height-(keyboard.getHeightXYVectLocal().y/2)));
 		keyboard.removeAllGestureEventListeners(DragProcessor.class);
 		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
@@ -267,7 +297,8 @@ public Keyboard makeKB(MTApplication mtApplication, MTTextArea t) {
 			TapEvent te = (TapEvent)ge;
 			if (te.isTapped() )
 			{				
-				keyboard.onCloseButtonClicked();				
+				keyboard.onCloseButtonClicked();
+				t.setEnabled(false);
 			}
 			return false;
 			}

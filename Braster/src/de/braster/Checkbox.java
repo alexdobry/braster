@@ -22,15 +22,31 @@ public class Checkbox extends  MTRoundRectangle {
 			float height, float arcWidth, float arcHeight, String text) {
 		super(pApplet, x, y, z, width, height, arcWidth, arcHeight);
 		 
-		needHelp = false; 
-		final MTCheckbox checkBox = new MTCheckbox(pApplet, 50);
-        checkBox.setFillColor(MTColor.NAVY);
+		
+		MTTextField textField = new MTTextField(pApplet, 0,0, 360, 60, FontManager.getInstance().createFont(pApplet, "arial.ttf", 
+        		40, //fontzize 
+        		MTColor.WHITE));
+		textField.setText(text);
+		textField.setFillColor(new MTColor(73, 112, 138, 255));
+		textField.setStrokeColor(new MTColor(73, 112, 138, 255));
+		this.addChild(textField);
+		
+		needHelp = false;
+		
+		final MTCheckbox checkBox = new MTCheckbox(pApplet, 40);
+         
+        checkBox.setPositionRelativeToOther(textField, new Vector3D(380,30));
         checkBox.setBooleanValue(false);       
         checkBox.addGestureListener(TapProcessor.class, new IGestureEventListener() {
             
             @Override
             public boolean processGestureEvent(MTGestureEvent ge)
-            {                      
+            {           
+            	if(checkBox.getBooleanValue())
+            	{
+            		checkBox.setFillColor(MTColor.GREEN);
+            	}
+            	
                  needHelp = checkBox.getBooleanValue();
                  return false;
             }
@@ -40,13 +56,7 @@ public class Checkbox extends  MTRoundRectangle {
         this.addChild(checkBox);
 		 
 		
-		MTTextField textField = new MTTextField(pApplet, 80,0, 100, 60, FontManager.getInstance().createFont(pApplet, "arial.ttf", 
-        		40, //fontzize 
-        		MTColor.WHITE));
-		textField.setText(text);
-		textField.setFillColor(MTColor.BLACK);
-		textField.setStrokeColor(MTColor.BLACK);
-		this.addChild(textField);
+		
 	}
 
 }
