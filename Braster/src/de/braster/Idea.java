@@ -45,14 +45,14 @@ public class Idea extends MTTextArea {
 	private static final LinkedList<Idea> ideas = new LinkedList<Idea>();
 	private static LinkedList<Idea> parents = new LinkedList<Idea>();
 	private LinkedList<Idea> children = new LinkedList<Idea>();
-	private MTColor ideaFillColor = MTColor.GREEN;
-	private MTColor ideaStrokeColor = MTColor.LIME;
+	private MTColor ideaFillColor = new MTColor(0, 100, 0, 255);;
+	private MTColor ideaStrokeColor = new MTColor(34, 139, 34, 255);;
 	private MTColor ideaTextColor = MTColor.WHITE;
 	/**
 	 * Farbänderung bei Berührung durch touch Geste
 	 */
 	private MTColor ideaFlashColor = new MTColor(220,220,220,255); 
-	private MTColor ideaHoverOverColor = MTColor.BLUE;
+	private MTColor ideaHoverOverColor = new MTColor(30,144,255, 255);
 	
 	
 	public Idea(MTApplication pApplet, MTCanvas canv) {

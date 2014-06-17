@@ -54,6 +54,8 @@ public class BrainWritingScene extends AbstractScene{
 	private Vector3D keyboardPositionMiddle;
 	private int players;
 	private List<MTEllipse> readyButtons = new LinkedList<MTEllipse>();
+	private MTColor green1= new MTColor(0,100,0, 255);
+	private MTColor green2 = new MTColor(34, 139, 34, 255);
 	
 	public BrainWritingScene(MTApplication mtApplication, String name, String problem, final int players) {
 		super(mtApplication, name);
@@ -219,7 +221,7 @@ public class BrainWritingScene extends AbstractScene{
 	private boolean checkReady(int players) {
 		int count = 0;
 		for (MTEllipse ellipse : readyButtons) {
-			if (ellipse.getFillColor().equals(MTColor.GREEN)) {
+			if (ellipse.getFillColor().equals(green1)) {
 				count++;
 				System.out.println(count);
 			}
@@ -235,9 +237,9 @@ public class BrainWritingScene extends AbstractScene{
         final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 50, MTColor.WHITE)); 
         t.setExpandDirection(ExpandDirection.UP);
 //		t.setStrokeColor(new MTColor(0,0 , 0, 255));
-//		t.setFillColor(new MTColor(205,200,177, 255));
-        t.setStrokeColor(MTColor.LIME);
-        t.setFillColor(MTColor.GREEN);
+		t.setFillColor(green1);
+        t.setStrokeColor(green2);
+//        t.setFillColor(MTColor.GREEN);
 		t.unregisterAllInputProcessors();
 		t.setEnableCaret(true);
 //		t.snapToKeyboard(keyb);
@@ -305,7 +307,7 @@ public class BrainWritingScene extends AbstractScene{
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
 					if (circle.getFillColor().equals(MTColor.WHITE)) {
-						circle.setFillColor(MTColor.GREEN); //bereit
+						circle.setFillColor(green1); //bereit
 						bereit.setFontColor(MTColor.WHITE);
 						
 					} else {

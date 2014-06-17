@@ -46,6 +46,8 @@ public class BWIdeaView extends MTRectangle{
 		private MTTextArea currentShown = null;
 		private PApplet pApplet;
 		private MTRectangle swipeleft;
+		private MTColor green1 = new MTColor(0, 100, 0, 255);
+		private MTColor green2 = new MTColor(34, 139, 34, 255);
 		
 		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
 			super(pApplet, width, height);
@@ -216,8 +218,8 @@ public class BWIdeaView extends MTRectangle{
 			
 			MTTextArea ideaArea = new MTTextArea(pApplet);
 			
-			ideaArea.setFillColor(MTColor.GREEN);
-			ideaArea.setStrokeColor(MTColor.LIME);
+			ideaArea.setFillColor(green1);
+			ideaArea.setStrokeColor(green2);
 			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.WHITE, true));
 			ideaArea.removeAllGestureEventListeners();
 			ideaArea.setPickable(false);
