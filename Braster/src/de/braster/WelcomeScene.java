@@ -151,14 +151,7 @@ public class WelcomeScene extends AbstractScene {
 //		canv.addChild(test);
 		
 		
-		PImage bg = mtApplication.loadImage(path + "BW_blur_1.png");
-		
-		PImage[] steps = null;
-		
-		HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), bg, steps);
-		canv.addChild(help);
-		
-		
+
 	}
 
 }

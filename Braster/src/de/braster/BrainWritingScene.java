@@ -32,8 +32,10 @@ import org.mt4j.util.animation.AnimationEvent;
 import org.mt4j.util.animation.IAnimationListener;
 import org.mt4j.util.animation.MultiPurposeInterpolator;
 import org.mt4j.util.math.Vector3D;
+import org.mt4j.util.opengl.GLTexture;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import de.braster.BWKeyboard.KeyInfo;
 
 
@@ -215,6 +217,14 @@ public class BrainWritingScene extends AbstractScene{
 			break;
 		}
 		
+//		String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
+//		PImage bg = mtApplication.loadImage(path + "BW_blur_1.png");
+//
+//		PImage[] steps = null;
+//		
+//		HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), bg, steps);
+//		canv.addChild(help);
+//		
 		
 	}
 
