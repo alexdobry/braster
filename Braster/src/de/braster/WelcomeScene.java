@@ -15,6 +15,8 @@ import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
+import org.mt4j.util.opengl.GLTexture;
+import org.mt4j.util.opengl.GLTextureSettings;
 
 import processing.core.PImage;
 
@@ -137,6 +139,25 @@ public class WelcomeScene extends AbstractScene {
 				return false;
 			}
 		});
+		
+		
+		
+		//farbfilter über alles
+		
+//		MTRectangle test = new MTRectangle(mtApplication, mtApplication.getWidth(), mtApplication.getHeight());
+//		
+//		test.setFillColor(new MTColor(30,144,255, 100));
+//		test.setPickable(false);
+//		canv.addChild(test);
+		
+		
+		PImage bg = mtApplication.loadImage(path + "BW_blur_1.png");
+		
+		PImage[] steps = null;
+		
+		HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), bg, steps);
+		canv.addChild(help);
+		
 		
 	}
 

@@ -45,7 +45,7 @@ public class BWIdeaView extends MTRectangle{
 		Vector3D trans = new Vector3D(), rot = new Vector3D(), scale = new Vector3D();
 		private MTTextArea currentShown = null;
 		private PApplet pApplet;
-		private MTRectangle swipeleft;
+		private MTRectangle swipeleft, swiperight;
 		private MTColor green1 = new MTColor(0, 100, 0, 255);
 		private MTColor green2 = new MTColor(34, 139, 34, 255);
 		
@@ -65,7 +65,7 @@ public class BWIdeaView extends MTRectangle{
 					+ "keybClose.svg");
 
 			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
-			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0)); //2x ist notwendig aufgrund wie die tastatur auf ihre gr‰ﬂe kommt
+			keybCloseSvg.scale(0.7f, 0.7f, 1, new Vector3D(0,0,0)); //2x ist notwendig aufgrund wie die tastatur auf ihre gr‰ﬂe kommt
 			
 			keybCloseSvg.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-25, 25,0));
 			keybCloseSvg.setBoundsPickingBehaviour(AbstractShape.BOUNDS_ONLY_CHECK);
@@ -144,29 +144,29 @@ public class BWIdeaView extends MTRectangle{
 			//swipe left hilfe
 			PImage swl = pApplet.loadImage(path + "swipe_left.png");
 			swipeleft = new MTRectangle(pApplet, swl);
-			swipeleft.scale(0.1f, 0.1f, 0, new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)*0.7f
-					, this.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)*0.2f));
+			swipeleft.scale(0.1f, 0.1f, 0, swipeleft.getCenterPointLocal());
+			swipeleft.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.7f, getHeightXYRelativeToParent()*0.3f));
 			swipeleft.setNoStroke(true);
 			this.addChild(swipeleft);
 			
 			//swipe right hilfe
-//			PImage swr = pApplet.loadImage(path + "swipe_right.png");
-//			MTRectangle swiperight = new MTRectangle(pApplet, swr);
-//			swiperight.scale(0.2f, 0.2f, 0, new Vector3D(0,0,0));
-//			swiperight.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)
-//																-swiperight.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2
-//																	, swiperight.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
-//			swiperight.setNoStroke(true);
-//			this.addChild(swiperight);
+			PImage swr = pApplet.loadImage(path + "swipe_right.png");
+			swiperight = new MTRectangle(pApplet, swr);
+			swiperight.scale(0.1f, 0.1f, 0, swiperight.getCenterPointLocal());
+			swiperight.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.3f, getHeightXYRelativeToParent()*0.3f));
+			swiperight.setNoStroke(true);
+			this.addChild(swiperight);
 			
 		}
 		
 		private void hideHelp() {
 			swipeleft.setVisible(false);
+			swiperight.setVisible(false);;
 		}
 		
 		private void showHelp() {
 			swipeleft.setVisible(true);
+			swiperight.setVisible(true);
 		}
 		
 
