@@ -177,7 +177,7 @@ public class BWIdeaView extends MTRectangle{
 			Idea i = null;
 			if (ideas.size() > 0) {
 					
-				i = ideas.get(iterator);
+				
 				
 				//flick nach links = vorwärts
 				if (ideas.get(iterator) == ideas.getLast() && direction == 1) {
@@ -200,6 +200,8 @@ public class BWIdeaView extends MTRectangle{
 				if (direction == 0) {
 					direction = 1;
 				}
+				
+				i = ideas.get(iterator);
 				showIdea(i.getText(), direction);
 			}
 		}

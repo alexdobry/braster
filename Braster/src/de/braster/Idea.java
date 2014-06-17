@@ -49,7 +49,7 @@ public class Idea extends MTTextArea {
 	private MTColor ideaStrokeColor = MTColor.LIME;
 	private MTColor ideaTextColor = MTColor.WHITE;
 	/**
-	 * Farbänderung bei Berührung
+	 * Farbänderung bei Berührung durch touch Geste
 	 */
 	private MTColor ideaFlashColor = new MTColor(220,220,220,255); 
 	private MTColor ideaHoverOverColor = MTColor.BLUE;
