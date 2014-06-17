@@ -219,13 +219,69 @@ public class BrainWritingScene extends AbstractScene{
 		
 //		String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
 //		PImage bg = mtApplication.loadImage(path + "BW_blur_1.png");
+//		final MTRectangle help = new MTRectangle(mtApplication, bg);
 //
-//		PImage[] steps = null;
+//		MTColor ideaFillColor = new MTColor(0, 100, 0, 255);
+//		MTColor ideaStrokeColor = new MTColor(34, 139, 34, 255);
+//		MTColor ideaTextColor = MTColor.WHITE;
+//		MTColor ideaFlashColor = new MTColor(220,220,220,255); 
+//		MTColor ideaHoverOverColor = new MTColor(30,144,255, 255);
 //		
-//		HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), bg, steps);
+//		MTTextArea h1 = new MTTextArea(mtApplication);
+//		h1.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 24, ideaTextColor, true));
+//		h1.setText("Idee 1");
+//		h1.setStrokeColor(ideaStrokeColor);
+//		h1.setFillColor(ideaFillColor);
+//		h1.setPickable(false);
+//		h1.setPositionRelativeToParent(new Vector3D(help.getCenterPointLocal().x-200,help.getCenterPointLocal().y));
+//		help.addChild(h1);
+//		
+//		final MTTextArea h2 = new MTTextArea(mtApplication);
+//		h2.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 24, ideaTextColor, true));
+//		h2.setText("Idee 2");
+//		h2.setStrokeColor(ideaStrokeColor);
+//		h2.setFillColor(ideaFillColor);
+//		h2.setPickable(false);
+//		h2.setPositionRelativeToParent(help.getCenterPointLocal());
+//		help.addChild(h2);
+//		
+//		MultiPurposeInterpolator moveOver = new MultiPurposeInterpolator(0, 200, 2000, 0, 1, -1);
+//		
+//		Animation anim1 = new Animation("Idee verschwinden lassen", moveOver, h2);
+//		anim1.addAnimationListener(new IAnimationListener() {
+//			
+//			@Override
+//			public void processAnimationEvent(AnimationEvent ae) {
+//				
+//				switch (ae.getId()) {
+//				case AnimationEvent.ANIMATION_STARTED:
+//					
+//				case AnimationEvent.ANIMATION_UPDATED:
+//					h2.setPositionRelativeToParent(new Vector3D(help.getCenterPointRelativeToParent().x-ae.getValue(), help.getCenterPointRelativeToParent().y));
+//					break;
+//				case AnimationEvent.ANIMATION_ENDED:
+////					t.setWidthXYRelativeToParent(width);
+//					h2.setPositionRelativeToParent(help.getCenterPointLocal());
+//					break;	
+//				default:
+//					break;
+//				}//switch
+//			}
+//		});
+//		anim1.start();
+//		//hilfe verschwinden lassen
+//		help.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+//			
+//			@Override
+//			public boolean processGestureEvent(MTGestureEvent ge) {
+//				TapEvent te = (TapEvent)ge;
+//				if (te.isTapped()) {
+//					help.setVisible(false);
+//				}
+//				return false;
+//			}
+//		});
 //		canv.addChild(help);
-//		
-		
 	}
 
 	private boolean checkReady(int players) {
