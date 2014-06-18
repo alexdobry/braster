@@ -118,7 +118,7 @@ public class Idea extends MTTextArea {
 							} else {
 								(i).snapToIdea(self);
 							}
-							parents.remove(i); //als parent von der liste entfernen
+							
 						}
 					}
 
@@ -173,11 +173,13 @@ public class Idea extends MTTextArea {
 	
 	
 	/**
-	 * Fügt die Idee und alle ihre Kinder an die übergebene Idee als kinder.
+	 * Fügt sich selbst und alle ihre Kinder an die übergebene Idee als kinder.
 	 * 
 	 * @param idea
 	 */
 	public void snapToIdea(final Idea idea) {
+		
+		parents.remove(this); //als parent von der liste entfernen
 		
 		if (idea.getChildren().length >= 1) {
 			MTComponent[] newIdeas = idea.getChildren();
@@ -241,7 +243,7 @@ public class Idea extends MTTextArea {
 					if (th.isHoldComplete()){
 						MTComponent parent = idea.getParent();
 						if (parent instanceof Idea) { //wenn der parent eine idee ist <> wenn die aktuelle idee ein kind von einer idee ist
-							Idea i = (Idea)parent;
+							Idea p = (Idea)parent;
 							idea.removeFromParent();
 							canvas.addChild(idea);
 							idea.setPositionGlobal(th.getLocationOnScreen());
@@ -251,7 +253,7 @@ public class Idea extends MTTextArea {
 							idea.setGestureAllowance(ScaleProcessor.class, false);
 							idea.setGestureAllowance(RotateProcessor.class, false);
 							idea.setGestureAllowance(TapAndHoldProcessor.class, false);
-							i.repositionChildren();
+							p.repositionChildren();
 							parents.add(idea); //wird zu einem neuen parent
 						}
 					}
@@ -265,8 +267,22 @@ public class Idea extends MTTextArea {
 	}
 	
 	
-	public LinkedList<Idea> getAllParents() {
-		return parents;
+	public static LinkedList<Idea> getAllParents() {
+		LinkedList<Idea> p = new LinkedList<Idea>();
+		for (Idea i : ideas) {
+			Object obj = i.getParent();
+			if (obj instanceof Idea) {
+				if (!p.contains((Idea)obj)){
+					p.add((Idea)obj);
+				}
+					
+			}
+			
+			if (i.getChildCount() == 0 && !(obj instanceof Idea)) {
+				p.add(i);
+			}
+		}
+		return p;
 	}
 	
 	

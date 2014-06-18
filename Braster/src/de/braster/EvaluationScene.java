@@ -85,19 +85,19 @@ public class EvaluationScene extends AbstractScene{
 		
 		//muss noch die ganzen ideen aus dem clustern �bergeben bekommen
 		//solange templiste mit ideen
-		//createStructureForIdeas(Idea.getAllParents());
+		createStructureForIdeas(Idea.getAllParents());
 		 
-
-	 	allIdeas = new ArrayList<ArrayList<Note>>();
-		for(int i=1;i<9;i++)
-		{
-			ArrayList<Note> bla = new ArrayList<Note>();
-			for(int j=0;j<3;j++)
-			{
-				bla.add(new Note(i +"Idee " +j));
-			}
-			allIdeas.add(bla);
-		} 
+		System.out.println("Parents: " + Idea.getAllParents());
+//	 	allIdeas = new ArrayList<ArrayList<Note>>();
+//		for(int i=1;i<9;i++)
+//		{
+//			ArrayList<Note> bla = new ArrayList<Note>();
+//			for(int j=0;j<3;j++)
+//			{
+//				bla.add(new Note(i +"Idee " +j));
+//			}
+//			allIdeas.add(bla);
+//		} 
 
 		//methodenaufruf
 		
