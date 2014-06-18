@@ -298,9 +298,9 @@ public class BrainWritingScene extends AbstractScene{
 
 	public BWKeyboard makeKB() {
 		
-		BWKeyboard keyboard = new BWKeyboard(mtApp);
+		BWKeyboard keyboard = new BWKeyboard(mtApp, 40);
 		
-        final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 50, MTColor.WHITE)); 
+        final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 32, MTColor.WHITE)); 
         t.setExpandDirection(ExpandDirection.UP);
 //		t.setStrokeColor(new MTColor(0,0 , 0, 255));
 		t.setFillColor(green1);

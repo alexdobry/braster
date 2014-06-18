@@ -86,16 +86,22 @@ public class Keyboard extends MTRoundRectangle {
 	private List<ITextInputListener> textInputAcceptors;
 	
 	private boolean hardwareInput;
-	
+		
 	private BWIdeaView iv;
 
+	private int size = 0;
+	private int maxSize = 0;
 	/**
 	 * Creates a new keyboard without an text input acceptor.
 	 * 
 	 * @param pApplet the applet
+	 * @param size 
+	 * @param size 
 	 */
-	public Keyboard(PApplet pApplet) {
+	public Keyboard(PApplet pApplet, int size) {
 		super(pApplet,0,0, 0, 700, 245,30, 30);
+		this.size = size;
+		this.maxSize = size;
 		this.pa = pApplet;
 		//Set drawing mode
 		this.setDrawSmooth(true);
@@ -365,7 +371,7 @@ public class Keyboard extends MTRoundRectangle {
 		keyInfos.add(new KeyInfo("0", "0", "0", new Vector3D(startX+10*advanceMent,lineY), KeyInfo.KEY_ONLY_VISIBLE_WHEN_SHIFT_NOTPRESSED));
 		keyInfos.add(new KeyInfo("=", "=", "=", new Vector3D(startX+10*advanceMent,lineY), KeyInfo.KEY_ONLY_VISIBLE_WHEN_SHIFT_PRESSED));
 		
-		keyInfos.add(new KeyInfo("\\", "ß", "ß", new Vector3D(startX+11*advanceMent,lineY), KeyInfo.KEY_ONLY_VISIBLE_WHEN_SHIFT_NOTPRESSED));
+		keyInfos.add(new KeyInfo("\\", "ï¿½", "ï¿½", new Vector3D(startX+11*advanceMent,lineY), KeyInfo.KEY_ONLY_VISIBLE_WHEN_SHIFT_NOTPRESSED));
 		keyInfos.add(new KeyInfo("?", "?", "?", new Vector3D(startX+11*advanceMent,lineY), KeyInfo.KEY_ONLY_VISIBLE_WHEN_SHIFT_PRESSED));
 		
 		//////////////////
@@ -382,8 +388,8 @@ public class Keyboard extends MTRoundRectangle {
 		keyInfos.add(new KeyInfo("I", "i", "I", new Vector3D(startX+8*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
 		keyInfos.add(new KeyInfo("O", "o", "O", new Vector3D(startX+9*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
 		keyInfos.add(new KeyInfo("P", "p", "P", new Vector3D(startX+10*advanceMent,lineY), KeyInfo.NORMAL_KEY));
-		//Ü
-		keyInfos.add(new KeyInfo("111", "ü", "Ü", new Vector3D(startX+11*advanceMent,lineY), KeyInfo.NORMAL_KEY));
+		//ï¿½
+		keyInfos.add(new KeyInfo("111", "ï¿½", "ï¿½", new Vector3D(startX+11*advanceMent,lineY), KeyInfo.NORMAL_KEY));
 		
 //		keyInfos.add(new KeyInfo("+", "+", "+", new Vector3D(startX+12*advanceMent,lineY), KeyInfo.KEY_ONLY_VISIBLE_WHEN_SHIFT_NOTPRESSED));
 //		keyInfos.add(new KeyInfo("*", "*", "*", new Vector3D(startX+12*advanceMent,lineY), KeyInfo.KEY_ONLY_VISIBLE_WHEN_SHIFT_PRESSED));
@@ -399,10 +405,10 @@ public class Keyboard extends MTRoundRectangle {
 		keyInfos.add(new KeyInfo("J", "j", "J", new Vector3D(startX+6*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
 		keyInfos.add(new KeyInfo("K", "k", "K", new Vector3D(startX+7*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
 		keyInfos.add(new KeyInfo("L", "l", "L", new Vector3D(startX+8*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
-		//Ö
-		keyInfos.add(new KeyInfo("1111", "ö", "Ö", new Vector3D(startX+9*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
-		//Ä
-        keyInfos.add(new KeyInfo("11", "ä", "Ä", new Vector3D(startX+10*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
+		//ï¿½
+		keyInfos.add(new KeyInfo("1111", "ï¿½", "ï¿½", new Vector3D(startX+9*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
+		//ï¿½
+        keyInfos.add(new KeyInfo("11", "ï¿½", "ï¿½", new Vector3D(startX+10*advanceMent,lineY),  KeyInfo.NORMAL_KEY));
 		
 		////////////////////
 		lineY = 161;
@@ -888,11 +894,15 @@ public class Keyboard extends MTRoundRectangle {
 			if (e.getID()!= KeyEvent.KEY_PRESSED) return;
 
 			String keyCharString = String.valueOf(e.getKeyChar());
-			//System.out.println("Key input: " + keyCode);
+			//System.out.println("Key input: " + keyCharString);
 			ITextInputListener[] listeners = this.getTextInputListeners();
             for (ITextInputListener textInputListener : listeners) {
                 if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                    textInputListener.removeLastCharacter();
+                	textInputListener.removeLastCharacter();
+                	if (size != maxSize) {
+                		System.out.println(size);
+                		++size;
+                	}
                 } else if (e.getKeyCode() == KeyEvent.VK_SHIFT
                         || e.getKeyCode() == KeyEvent.VK_ALT
                         || e.getKeyCode() == KeyEvent.VK_ALT_GRAPH
@@ -900,9 +910,14 @@ public class Keyboard extends MTRoundRectangle {
                         ) {
                     //do nothing
                 } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                	size = maxSize;
                 	//TODO: ???
                 } else {
-                    textInputListener.appendCharByUnicode(keyCharString);
+                	if (size > 0) {
+                		System.out.println(size);
+                    	textInputListener.appendCharByUnicode(keyCharString);
+                    	--size;
+                	}
                 }
             }
 		}
@@ -937,6 +952,11 @@ public class Keyboard extends MTRoundRectangle {
 //		this.translate(new Vector3D(30, -(getFont().getFontAbsoluteHeight() * (getLineCount())) + getFont().getFontMaxDescent() - borderHeight, 0));
 		this.addChild(textArea);
 		textArea.setPositionRelativeToParent(new Vector3D(40, -textArea.getHeightXY(TransformSpace.LOCAL)*0.5f));
+	}
+
+
+	public void setSize(int length) {
+		this.size = length;
 	}
 
 }

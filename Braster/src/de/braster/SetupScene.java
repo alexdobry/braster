@@ -10,6 +10,7 @@ import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.font.IFont;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
+import org.mt4j.components.visibleComponents.shapes.MTRectangle.PositionAnchor;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 
 
@@ -29,6 +30,7 @@ import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
  
+
 
 import de.braster.Keyboard.KeyInfo;
 
@@ -252,23 +254,21 @@ public class SetupScene  extends AbstractScene{
 	
 public Keyboard makeKB(MTApplication mtApplication, final MTTextArea t) {
 		
-	final MTTextArea textAreaOfKeyboard = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 35, MTColor.WHITE)); 
+	final MTTextArea textAreaOfKeyboard = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 32, MTColor.WHITE)); 
     
-	final Keyboard keyboard = new Keyboard(mtApplication);
+	final Keyboard keyboard = new Keyboard(mtApplication, 40);
 		
 	textAreaOfKeyboard.unregisterAllInputProcessors();
 	textAreaOfKeyboard.setExpandDirection(ExpandDirection.UP);
-	textAreaOfKeyboard.setStrokeColor(MTColor.LIME);		 
-	textAreaOfKeyboard.setFillColor(MTColor.GREEN);
+	textAreaOfKeyboard.setFontColor(MTColor.BLACK);		 
 	textAreaOfKeyboard.setEnableCaret(true);
-	textAreaOfKeyboard.setText(t.getText());
-	keyboard.addTextInputListener(textAreaOfKeyboard);				
+	textAreaOfKeyboard.setFillColor(MTColor.SILVER);
+	keyboard.addTextInputListener(textAreaOfKeyboard);	
 	keyboard.snapToKeyboard(textAreaOfKeyboard);
-	keyboard.addTextInputListener(textAreaOfKeyboard);		
-	
+	textAreaOfKeyboard.setText(t.getText());
 	getCanvas().addChild(keyboard);
 	
-	keyboard.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+	keyboard.scale(0.9f, 0.9f, 1, new Vector3D(0, 0, 0));
  	keyboard.removeAllGestureEventListeners(DragProcessor.class);
 	keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
 	keyboard.removeAllGestureEventListeners(RotateProcessor.class);		

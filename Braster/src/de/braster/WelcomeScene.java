@@ -61,7 +61,7 @@ public class WelcomeScene extends AbstractScene {
                 		32, //fontzize 
                 		MTColor.BLACK)); //Font color
 		abstrct.setText("Durchlaufen Sie den kreativen Prozess und finden Sie mithilfe \nvon Brainwriting und Clustering die beste Lösung für Ihr Problem");
-		abstrct.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height/2f));
+		abstrct.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height/2f + 60));
 		abstrct.setPickable(false);
 		canv.addChild(abstrct);
 				
@@ -87,7 +87,7 @@ public class WelcomeScene extends AbstractScene {
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		footerFontSize, //fontzize 
                 		MTColor.BLACK)); //Font color
-		footerSGMCI.setText("SGMCI");
+		footerSGMCI.setText("SGMCI - SS14");
 		footerSGMCI.setPositionRelativeToParent(new Vector3D(footerSGMCI.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2, mtApplication.height-footerSGMCI.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
 		footerSGMCI.setPickable(false);
 		canv.addChild(footerSGMCI);
