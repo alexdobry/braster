@@ -86,19 +86,18 @@ public class EvaluationScene extends AbstractScene{
 		//muss noch die ganzen ideen aus dem clustern ï¿½bergeben bekommen
 		//solange templiste mit ideen
 		createStructureForIdeas(Idea.getAllParents());
-		 
-		System.out.println("Parents: " + Idea.getAllParents());
-//	 	allIdeas = new ArrayList<ArrayList<Note>>();
-//		for(int i=1;i<9;i++)
-//		{
-//			ArrayList<Note> bla = new ArrayList<Note>();
-//			for(int j=0;j<3;j++)
-//			{
-//				bla.add(new Note(i +"Idee " +j));
-//			}
-//			allIdeas.add(bla);
-//		} 
-
+		/* 
+	 	allIdeas = new ArrayList<ArrayList<Note>>();
+		for(int i=1;i<9;i++)
+		{
+			ArrayList<Note> bla = new ArrayList<Note>();
+			for(int j=0;j<3;j++)
+			{
+				bla.add(new Note(i +"Idejkfahuifhuiqkdjgoijgwsoigfe " +j));
+			}
+			allIdeas.add(bla);
+		} 
+*/
 		//methodenaufruf
 		
 		ideas = new ArrayList<Note>();
@@ -393,61 +392,80 @@ public class EvaluationScene extends AbstractScene{
 	private void updateMiddleList()
 	{
 		//liste leeren und erstellen
-		listMiddle.removeAllListElements();
-		listMiddle.setFillColor(listColor);
-		listMiddle.setStrokeColor(listColor);
-		area.addChild(listMiddle);
-		
-		int x = 5;
-		int y = 5;		
-		
-		//brauch updatemethode, sodass die zellenlï¿½nge vergrï¿½ï¿½ert wird
-		//Grï¿½ï¿½e einer Zelle (standardhï¿½he)
-		MTListCell cell = createListCell(30);
-		listMiddle.addChild(cell);
-						
-		//arraylist durchgehen
-		//fï¿½r jede arraylist das erste element anzeigen als ein symbol
-		for(ArrayList<Note> actualList : allIdeas)
-		{
-			//cluster adden in die zelle
-			//komplette cluster soll abgebildet werden
-			//aber untereinander direkt
-			//die folgende zelle wird dann weiter unter gezeichnet, also wird ein y gemerkt fï¿½r abstand
-			//Hï¿½he anpassen an die elemente
-			if(cell.getHeightXYVectLocal().y<actualList.size()*30+10)
-			{
-				updateCellHeight(cell,actualList.size()*30+10);
-			}
-			//nacheinander adden
-		
-			//wenn element nicht mehr in aktuellen passt
-			if(x > 3*einheitX-135) 
-			{				 
-				x = 5;
-				cell = createListCell(0);
+				listMiddle.removeAllListElements();
+				listMiddle.setFillColor(listColor);
+				listMiddle.setStrokeColor(listColor);
+				area.addChild(listMiddle);
+				
+				int x = 5;
+				int y = 5;		
+				
+				//brauch updatemethode, sodass die zellenlänge vergrößert wird
+				//Größe einer Zelle (standardhöhe)
+				MTListCell cell = createListCell(30);
 				listMiddle.addChild(cell);
-			}
-			 			
-			for(Note actualNote : actualList)
-			{
-				MTTextArea rText = new MTTextArea(mtApp);
-				rText.setPositionRelativeToParent(new Vector3D(x,y+10));
-				rText.setFillColor(MTColor.GREEN);
-				rText.setStrokeColor(MTColor.LIME);
-				rText.unregisterAllInputProcessors();
-				rText.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
-				rText.removeAllGestureEventListeners();
-				rText.setPickable(true);
-				rText.setText(formatString(actualNote.getName(),30));				
-				cell.addChild(rText);						
-				listMiddle.addListElement(cell); 		
-				y+=30;
-			}
-			y=5;
-			x += 120;
-			
-		}				
+								
+				//arraylist durchgehen
+				//für jede arraylist das erste element anzeigen als ein symbol
+				float laenstes =0;
+				for(ArrayList<Note> actualList : allIdeas)
+				{
+					//normal müsste erst die aktuelle liste längstes element rausgesucht werden
+					for(Note ttt :actualList)
+					{
+						MTTextArea ttt1 = new MTTextArea(mtApp);
+						ttt1.setText(formatString(ttt.getName(),40));	
+						if(ttt1.getWidthXYVectLocal().x>laenstes)
+						{
+							laenstes = ttt1.getWidthXYVectLocal().x;
+						}
+					}
+					//überprüfung ob das element reinpasst in die zeile noch
+					//wenn ja alle elemente des clusters adden
+					//wenn nicht nächste zeile beginnen
+					if(x +laenstes > 3*einheitX) 
+					{
+						x = 5;
+						cell = createListCell(0);
+						listMiddle.addChild(cell);
+					}
+				
+					
+					
+					//in höhe iterieren, um die höhe des vorherigen elements
+					
+					
+					
+					//cluster adden in die zelle
+					//komplette cluster soll abgebildet werden
+					//aber untereinander direkt
+					//die folgende zelle wird dann weiter unter gezeichnet, also wird ein y gemerkt für abstand
+					//Höhe anpassen an die elemente
+					if(cell.getHeightXYVectLocal().y<actualList.size()*30+10)
+					{
+						updateCellHeight(cell,actualList.size()*30+10);
+					}
+				
+					 			
+					for(Note actualNote : actualList)
+					{
+						MTTextArea rText = new MTTextArea(mtApp);
+						rText.setPositionRelativeToParent(new Vector3D(x,y+10));
+						rText.setFillColor(MTColor.GREEN);
+						rText.setStrokeColor(MTColor.LIME);
+						rText.unregisterAllInputProcessors();
+						rText.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
+						rText.removeAllGestureEventListeners();
+						rText.setPickable(true);
+						rText.setText(formatString(actualNote.getName(),30));				
+						cell.addChild(rText);						
+						listMiddle.addListElement(cell); 		
+						y+=30;
+					}
+					y=5;
+					x += laenstes +20;
+					
+				}				
 	}
 	
 	 
