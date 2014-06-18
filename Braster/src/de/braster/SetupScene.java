@@ -258,7 +258,7 @@ public Keyboard makeKB(MTApplication mtApplication, final MTTextArea t) {
 		
 	textAreaOfKeyboard.unregisterAllInputProcessors();
 	textAreaOfKeyboard.setExpandDirection(ExpandDirection.UP);
-	textAreaOfKeyboard.setFontColor(MTColor.LIME);		 
+	textAreaOfKeyboard.setStrokeColor(MTColor.LIME);		 
 	textAreaOfKeyboard.setFillColor(MTColor.GREEN);
 	textAreaOfKeyboard.setEnableCaret(true);
 	textAreaOfKeyboard.setText(t.getText());
