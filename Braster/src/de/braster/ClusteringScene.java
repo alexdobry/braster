@@ -96,7 +96,7 @@ public class ClusteringScene extends AbstractScene{
 							
 							if (count < ideas.size()) {
 								ideas.get(count++).setVisible(true);
-								rText.setText(ideas.size()-count + " Ideen �brig");
+								rText.setText(ideas.size()-count + " Ideen uebrig");
 							}
 							
 						}
