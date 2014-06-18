@@ -5,7 +5,6 @@ import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
-import org.mt4j.components.visibleComponents.widgets.MTSceneTexture;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -15,8 +14,6 @@ import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
-import org.mt4j.util.opengl.GLTexture;
-import org.mt4j.util.opengl.GLTextureSettings;
 
 import processing.core.PImage;
 
@@ -63,7 +60,7 @@ public class WelcomeScene extends AbstractScene {
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		32, //fontzize 
                 		MTColor.BLACK)); //Font color
-		abstrct.setText("Abstract ... \nasdjfasdfasdfasdfasdfasf ");
+		abstrct.setText("Durchlaufen Sie den kreativen Prozess und finden Sie mithilfe \n von Brainwriting und Clustering die beste Lösung für Ihr Problem");
 		abstrct.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height/2f));
 		abstrct.setPickable(false);
 		canv.addChild(abstrct);
@@ -142,7 +139,7 @@ public class WelcomeScene extends AbstractScene {
 		
 		
 		
-		//farbfilter �ber alles
+		//farbfilter �ber alles
 		
 //		MTRectangle test = new MTRectangle(mtApplication, mtApplication.getWidth(), mtApplication.getHeight());
 //		

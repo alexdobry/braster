@@ -56,7 +56,7 @@ public class ClusteringScene extends AbstractScene{
 		titel.setPickable(false);
 		titel.setNoFill(true);
 		titel.setNoStroke(true);
-		titel.setText("Clusterung der Ideen");
+		titel.setText("Clustering der Ideen");
 		canv.addChild(titel);
 		titel.setPositionRelativeToParent(new Vector3D(mtApp.width/2, 80));
 		
@@ -70,7 +70,7 @@ public class ClusteringScene extends AbstractScene{
 		rText.setPickable(false);
 		rText.setNoFill(true);
 		rText.setNoStroke(true);
-		rText.setText(ideas.size() + " Ideen �brig");
+		rText.setText(ideas.size() + " Ideen uebrig");
 		
 		
 		mtRoundRectangle.unregisterAllInputProcessors();

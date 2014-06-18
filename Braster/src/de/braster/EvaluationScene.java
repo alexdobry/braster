@@ -291,9 +291,9 @@ public class EvaluationScene extends AbstractScene{
 			rText.setText(formatString(actualNote.getName(),30));				
 			cell.addChild(rText);	
 			
-			//zurückschieben in die mitte soll möglich sein
-			//wenn über die Grenzlinien ist, wird zur Liste geaddet
-			//aus der aktuellen gelöscht
+			//zurï¿½ckschieben in die mitte soll mï¿½glich sein
+			//wenn ï¿½ber die Grenzlinien ist, wird zur Liste geaddet
+			//aus der aktuellen gelï¿½scht
 			rText.registerInputProcessor(new DragProcessor(getMTApplication()));
 			rText.addGestureListener(DragProcessor.class, new DefaultDragAction() {
 				public boolean processGestureEvent(MTGestureEvent g) {
@@ -364,7 +364,7 @@ public class EvaluationScene extends AbstractScene{
 								mtApp.pushScene();
 								if (finalScene == null)
 								{				
-									//Im konstruktor müssen die ideen als 2 listen übergeben werden
+									//Im konstruktor mï¿½ssen die ideen als 2 listen ï¿½bergeben werden
 									finalScene = new EvaluationScene(mtApp, "Evaluation Again", bestIdeas, rubbish);
 									mtApp.addScene(finalScene);
 								}
@@ -401,8 +401,8 @@ public class EvaluationScene extends AbstractScene{
 		int x = 5;
 		int y = 5;		
 		
-		//brauch updatemethode, sodass die zellenlänge vergrößert wird
-		//Größe einer Zelle (standardhöhe)
+		//brauch updatemethode, sodass die zellenlï¿½nge vergrï¿½ï¿½ert wird
+		//Grï¿½ï¿½e einer Zelle (standardhï¿½he)
 		MTListCell cell = createListCell(30);
 		listMiddle.addChild(cell);
 						
@@ -413,8 +413,8 @@ public class EvaluationScene extends AbstractScene{
 			//cluster adden in die zelle
 			//komplette cluster soll abgebildet werden
 			//aber untereinander direkt
-			//die folgende zelle wird dann weiter unter gezeichnet, also wird ein y gemerkt für abstand
-			//Höhe anpassen an die elemente
+			//die folgende zelle wird dann weiter unter gezeichnet, also wird ein y gemerkt fï¿½r abstand
+			//Hï¿½he anpassen an die elemente
 			if(cell.getHeightXYVectLocal().y<actualList.size()*30+10)
 			{
 				updateCellHeight(cell,actualList.size()*30+10);
@@ -633,7 +633,7 @@ public class EvaluationScene extends AbstractScene{
 			textareaPapierkorb.setPickable(false);
 			textareaPapierkorb.setNoFill(true);
 			textareaPapierkorb.setNoStroke(true);
-			textareaPapierkorb.setText("verworfen");
+			textareaPapierkorb.setText("Ideen verworfen");
 			textareaPapierkorb.setSizeLocal(200, 40);
 			textareaPapierkorb.setPositionGlobal(new Vector3D(mtApp.width/10*2,40));
 			area.addChild(textareaPapierkorb);
@@ -646,7 +646,7 @@ public class EvaluationScene extends AbstractScene{
 			textareaIdeas.setPickable(false);
 			textareaIdeas.setNoFill(true);
 			textareaIdeas.setNoStroke(true);
-			textareaIdeas.setText("verbleibend");
+			textareaIdeas.setText("Ideen verbleibend");
 			textareaIdeas.setSizeLocal(200, 40);			 
 			textareaIdeas.setPositionGlobal(new Vector3D(mtApp.width/2,40));
 			area.addChild(textareaIdeas);
@@ -658,7 +658,7 @@ public class EvaluationScene extends AbstractScene{
 			textareaBestIdeas.setPickable(false);
 			textareaBestIdeas.setNoFill(true);
 			textareaBestIdeas.setNoStroke(true);
-			textareaBestIdeas.setText("weiter");
+			textareaBestIdeas.setText("Ideen weiter");
 			textareaBestIdeas.setSizeLocal(200, 40);
 			textareaBestIdeas.setPositionGlobal(new Vector3D(mtApp.width/10*8,40));
 			area.addChild(textareaBestIdeas);
@@ -676,7 +676,7 @@ public class EvaluationScene extends AbstractScene{
 			for(Note note : selectedCluster)
 			{
 
-				//breite und höhe an den text anpassen
+				//breite und hï¿½he an den text anpassen
 				MTTextArea rText = new MTTextArea(mtApp);
 
 				rText.setFillColor(MTColor.GREEN);

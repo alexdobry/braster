@@ -99,7 +99,7 @@ public class SetupScene  extends AbstractScene{
         		40, MTColor.WHITE, false));
 		labelTeilnehmer.setFillColor(new MTColor(73, 112, 138, 255));
 		labelTeilnehmer.setStrokeColor(new MTColor(73, 112, 138, 255));
-		labelTeilnehmer.setText("Teilnehmer auswählen");
+		labelTeilnehmer.setText("Teilnehmer auswaehlen");
 		canv.addChild(labelTeilnehmer);
 		
 		//erzeugt 4 Buttons fï¿½r die Spieleranzahl
@@ -276,7 +276,7 @@ public Keyboard makeKB(MTApplication mtApplication, final MTTextArea t) {
 	//enter
 	KeyInfo enter = keyboard.new KeyInfo("f", "\n", "\n", 		new Vector3D(615, 105),KeyInfo.NORMAL_KEY);
 	
-	//Event listener für den enter key
+	//Event listener fï¿½r den enter key
 	IGestureEventListener tp = new IGestureEventListener() {
 		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
