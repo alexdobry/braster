@@ -136,8 +136,8 @@ public class EvaluationScene extends AbstractScene{
 		textProblem.setNoFill(true);
 		textProblem.setNoStroke(true);
 		textProblem.setSizeLocal(500, 100);
-		textProblem.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height-100));
 		textProblem.setText(SetupScene.getProblem());
+		textProblem.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height-100));
 		this.canv.addChild(textProblem);		
 	}
 

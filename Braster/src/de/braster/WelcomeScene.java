@@ -47,7 +47,7 @@ public class WelcomeScene extends AbstractScene {
 		MTRectangle logo = new MTRectangle(mtApplication, img);
 		logo.scale(0.5f, 0.5f, 0, logo.getCenterPointLocal());
 		//unterkante oberkante anordnung fh logo und braster logo
-		logo.setPositionGlobal(new Vector3D(mtApplication.width/2, fhlogo.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)+logo.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+		logo.setPositionGlobal(new Vector3D(mtApplication.width/2, 60+fhlogo.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)+logo.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
 		
 		canv.addChild(logo);
 		
@@ -60,7 +60,7 @@ public class WelcomeScene extends AbstractScene {
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		32, //fontzize 
                 		MTColor.BLACK)); //Font color
-		abstrct.setText("Durchlaufen Sie den kreativen Prozess und finden Sie mithilfe \n von Brainwriting und Clustering die beste Lösung für Ihr Problem");
+		abstrct.setText("Durchlaufen Sie den kreativen Prozess und finden Sie mithilfe \nvon Brainwriting und Clustering die beste Lösung für Ihr Problem");
 		abstrct.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height/2f));
 		abstrct.setPickable(false);
 		canv.addChild(abstrct);
