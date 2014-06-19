@@ -112,13 +112,13 @@ public class Idea extends MTTextArea {
 							
 							
 							if (i.getParent() instanceof Idea) {
-								if (self instanceof IdeaCategory) {
+								if (self.isCategory()) {
 									self.snapToIdea((Idea)i.getParent());
 								} else {
 									((Idea)i.getParent()).snapToIdea(self);
 								}
 							} else {
-								if (self instanceof IdeaCategory) {
+								if (self.isCategory()) {
 									self.snapToIdea(i);
 								} else {
 									(i).snapToIdea(self);
@@ -340,48 +340,7 @@ public class Idea extends MTTextArea {
 			self.snapToIdea(idea);
 		}	
 	}
-	
-	private void moveCategoryToTop() {
-		List<Idea> i = new LinkedList<Idea>(); //hilfliste zum anordnen
-		
-		//herausfinden ob diese idee der vater ist oder es sie einen vater hat und darauf die kindesliste beziehen
-		Idea id;
-		if (getParent() instanceof Idea) {
-			id = (Idea)getParent();
-		} else {
-			id = this;
-		}
-		List<MTComponent> cl = id.getChildList(); 
-		cl.add(id);
-		IdeaCategory ic;
-		for (MTComponent mtComponent : cl) {
-			if (mtComponent instanceof Idea) {
-				System.out.println("Level 1");
-				if (mtComponent instanceof IdeaCategory) {
-					id = (IdeaCategory)mtComponent;
-					System.out.println("Level 2");
-					i.add(0, (IdeaCategory)mtComponent);
-				} else {
-					System.out.println("Level 3");
-					i.add((Idea)mtComponent);
-				}
-			}
-		}
-		System.out.println("Level 4!");
-		for (Idea idea : i) {
-			
-			idea.removeFromParent();
-			
-		}
-		
-		for (Idea idea : i) {
-			System.out.println("SubLevel 1");
-			id.snapToIdea(idea);
-			System.out.println("SubLevel 2");
-		}	
-		
-		System.out.println("Level 5!!");
-	}
+
 
 	public void setDesignColors(MTColor fillColor, MTColor strokeColor, MTColor textColor, MTColor flashColor, MTColor hoverOverColor) {
 		ideaFillColor = fillColor;
@@ -391,7 +350,10 @@ public class Idea extends MTTextArea {
 		ideaHoverOverColor = hoverOverColor;
 	}
 	
-	
+	/**
+	 * ist eine Kategorie
+	 * @return
+	 */
 	public boolean isCategory(){
 		
 		return (self instanceof IdeaCategory);
