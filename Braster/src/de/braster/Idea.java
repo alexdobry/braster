@@ -61,7 +61,7 @@ public class Idea extends MTTextArea {
 		
 		setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, ideaTextColor, true));
 		setStrokeColor(ideaStrokeColor);
-		setFillColor(ideaFillColor);
+		setFillColor(IdeaColors.FILL);
 		setGestureAllowance(ScaleProcessor.class, false);
 		setGestureAllowance(RotateProcessor.class, false);
 		
@@ -76,12 +76,12 @@ public class Idea extends MTTextArea {
 					
 					break;
 				case DragEvent.GESTURE_UPDATED:
-					self.setFillColor(ideaFlashColor);
+					self.setFillColor(IdeaColors.FLASH);
 					
 					
 					for (Idea i : ideas) {
 						if (i != self) {
-							i.setFillColor(ideaFillColor);	
+							i.setFillColor(IdeaColors.FILL);	
 						}
 					}
 					
@@ -93,7 +93,7 @@ public class Idea extends MTTextArea {
 						Object obj = pe2.get(1).hitObj;
 						if (obj instanceof Idea) {
 							Idea id = (Idea)obj;
-							id.setFillColor(ideaHoverOverColor);
+							id.setFillColor(IdeaColors.HOVEROVER);
 						}
 					} 
 					
@@ -109,16 +109,27 @@ public class Idea extends MTTextArea {
 						Object obj = pe.get(1).hitObj;
 						if (obj instanceof Idea) {
 							Idea i = (Idea)obj;
+							
+							
 							if (i.getParent() instanceof Idea) {
-								((Idea)i.getParent()).snapToIdea(self);
+								if (self instanceof IdeaCategory) {
+									self.snapToIdea((Idea)i.getParent());
+								} else {
+									((Idea)i.getParent()).snapToIdea(self);
+								}
 							} else {
-								(i).snapToIdea(self);
+								if (self instanceof IdeaCategory) {
+									self.snapToIdea(i);
+								} else {
+									(i).snapToIdea(self);
+								}
 							}
+							
 						}
 					}
 
 					for (Idea i : ideas) {
-						i.setFillColor(ideaFillColor);	
+						i.setFillColor(IdeaColors.FILL);	
 					}
 					
 					System.out.println(parents);
@@ -138,13 +149,13 @@ public class Idea extends MTTextArea {
 				TapEvent te = (TapEvent)ge;
 				switch (te.getId()) {
 					case MTGestureEvent.GESTURE_STARTED:
-						self.setFillColor(ideaFlashColor);
+						self.setFillColor(IdeaColors.FLASH);
 						break;
 					case MTGestureEvent.GESTURE_UPDATED:
 						break;
 					case MTGestureEvent.GESTURE_ENDED:
 						if (te.isTapped() || te.isTapCanceled()) {
-							self.setFillColor(ideaFillColor);	
+							self.setFillColor(IdeaColors.FILL);	
 						}
 						
 						
@@ -176,7 +187,7 @@ public class Idea extends MTTextArea {
 		ideaFlashColor = flashColor;
 		ideaHoverOverColor = hoverOverColor;
 		
-		setFillColor(ideaFillColor);
+		setFillColor(IdeaColors.FILL);
 		setStrokeColor(ideaStrokeColor);
 		
 	}
@@ -194,14 +205,14 @@ public class Idea extends MTTextArea {
 	/**
 	 * Fügt sich selbst und alle ihre Kinder an die übergebene Idee als kinder.
 	 * 
-	 * @param idea
+	 * @param draggedIdea
 	 */
-	public void snapToIdea(final Idea idea) {
+	public void snapToIdea(final Idea draggedIdea) {
 		
 		parents.remove(this); //als parent von der liste entfernen
 		
-		if (idea.getChildren().length >= 1) {
-			MTComponent[] newIdeas = idea.getChildren();
+		if (draggedIdea.getChildren().length >= 1) {
+			MTComponent[] newIdeas = draggedIdea.getChildren();
 			for (MTComponent mtComponent : newIdeas) {
 				if (mtComponent instanceof Idea) {
 					Idea i = (Idea)mtComponent;
@@ -212,26 +223,30 @@ public class Idea extends MTTextArea {
 		}
 		
 		//die position der idee berechnen
-		List<MTComponent> list = getChildList();
+		List<MTComponent> list = getChildList(); //alle schon vorhanden kinder durchgehen und position errechnen
 		float height = 0f;
-				for (MTComponent mtComponent : list) {
+		for (MTComponent mtComponent : list) {
 			if (mtComponent instanceof Idea) {
 				height += ((Idea) mtComponent).getHeightXY(TransformSpace.LOCAL);
 			}
+			
 		}
 		
 		
-		this.addChild(idea);
+		this.addChild(draggedIdea);
 		//positionieren
-		idea.setPositionRelativeToParent(new Vector3D(idea.getWidthXY(TransformSpace.LOCAL)/2f, getHeightXY(TransformSpace.LOCAL)*1.5f+height));
+
+		draggedIdea.setPositionRelativeToParent(new Vector3D(draggedIdea.getWidthXY(TransformSpace.LOCAL)/2f, getHeightXY(TransformSpace.LOCAL)*1.5f+height));
+		
+
 		
 		//setzt das neue kind auf die größe und ausrichtung der parent idee
 //		idea.setLocalMatrix(getLocalMatrix());
 		
 		//das neue kind passiv stellen
-		idea.setGestureAllowance(DragProcessor.class, false);
-		idea.setGestureAllowance(ScaleProcessor.class, false);
-		idea.setGestureAllowance(RotateProcessor.class, false);
+		draggedIdea.setGestureAllowance(DragProcessor.class, false);
+		draggedIdea.setGestureAllowance(ScaleProcessor.class, false);
+		draggedIdea.setGestureAllowance(RotateProcessor.class, false);
 		
 		//TODO: implementieren der matrizenübertragung
 //		Vector3D trans = new Vector3D();
@@ -244,11 +259,11 @@ public class Idea extends MTTextArea {
 		
 //		setGestureAllowance(TapAndHoldProcessor.class, true); //das todo unten
 		
-		idea.registerInputProcessor(new TapAndHoldProcessor(app, 1500));
-		idea.addGestureListener(TapAndHoldProcessor.class, new TapAndHoldVisualizer(app, canvas));
+		draggedIdea.registerInputProcessor(new TapAndHoldProcessor(app, 1500));
+		draggedIdea.addGestureListener(TapAndHoldProcessor.class, new TapAndHoldVisualizer(app, canvas));
 		//TODO: bei erneuten ausführen wird der processor erneut hinzugefügt
 		//WARN - Warning: The same type of input processor (tap and hold processor) is already registered at component:
-		idea.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
+		draggedIdea.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
 			
 			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
@@ -260,20 +275,20 @@ public class Idea extends MTTextArea {
 					break;
 				case TapAndHoldEvent.GESTURE_ENDED:
 					if (th.isHoldComplete()){
-						MTComponent parent = idea.getParent();
+						MTComponent parent = draggedIdea.getParent();
 						if (parent instanceof Idea) { //wenn der parent eine idee ist <> wenn die aktuelle idee ein kind von einer idee ist
 							Idea p = (Idea)parent;
-							idea.removeFromParent();
-							canvas.addChild(idea);
-							idea.setPositionGlobal(th.getLocationOnScreen());
+							draggedIdea.removeFromParent();
+							canvas.addChild(draggedIdea);
+							draggedIdea.setPositionGlobal(th.getLocationOnScreen());
 							
 							//TODO: logik für parent implementieren
-							idea.setGestureAllowance(DragProcessor.class, true);
-							idea.setGestureAllowance(ScaleProcessor.class, false);
-							idea.setGestureAllowance(RotateProcessor.class, false);
-							idea.setGestureAllowance(TapAndHoldProcessor.class, false);
+							draggedIdea.setGestureAllowance(DragProcessor.class, true);
+							draggedIdea.setGestureAllowance(ScaleProcessor.class, false);
+							draggedIdea.setGestureAllowance(RotateProcessor.class, false);
+							draggedIdea.setGestureAllowance(TapAndHoldProcessor.class, false);
 							p.repositionChildren();
-							parents.add(idea); //wird zu einem neuen parent
+							parents.add(draggedIdea); //wird zu einem neuen parent
 						}
 					}
 					break;
@@ -323,9 +338,49 @@ public class Idea extends MTTextArea {
 		
 		for (Idea idea : i) {
 			self.snapToIdea(idea);
+		}	
+	}
+	
+	private void moveCategoryToTop() {
+		List<Idea> i = new LinkedList<Idea>(); //hilfliste zum anordnen
+		
+		//herausfinden ob diese idee der vater ist oder es sie einen vater hat und darauf die kindesliste beziehen
+		Idea id;
+		if (getParent() instanceof Idea) {
+			id = (Idea)getParent();
+		} else {
+			id = this;
+		}
+		List<MTComponent> cl = id.getChildList(); 
+		cl.add(id);
+		IdeaCategory ic;
+		for (MTComponent mtComponent : cl) {
+			if (mtComponent instanceof Idea) {
+				System.out.println("Level 1");
+				if (mtComponent instanceof IdeaCategory) {
+					id = (IdeaCategory)mtComponent;
+					System.out.println("Level 2");
+					i.add(0, (IdeaCategory)mtComponent);
+				} else {
+					System.out.println("Level 3");
+					i.add((Idea)mtComponent);
+				}
+			}
+		}
+		System.out.println("Level 4!");
+		for (Idea idea : i) {
+			
+			idea.removeFromParent();
+			
 		}
 		
+		for (Idea idea : i) {
+			System.out.println("SubLevel 1");
+			id.snapToIdea(idea);
+			System.out.println("SubLevel 2");
+		}	
 		
+		System.out.println("Level 5!!");
 	}
 
 	public void setDesignColors(MTColor fillColor, MTColor strokeColor, MTColor textColor, MTColor flashColor, MTColor hoverOverColor) {
@@ -334,5 +389,34 @@ public class Idea extends MTTextArea {
 		ideaTextColor = textColor;
 		ideaFlashColor = flashColor;
 		ideaHoverOverColor = hoverOverColor;
+	}
+	
+	
+	public boolean isCategory(){
+		
+		return (self instanceof IdeaCategory);
+	}
+
+	public void setFillColor(IdeaColors ic) {
+		
+		switch (ic) {
+		case FILL:
+			super.setFillColor(ideaFillColor);
+			break;
+		case FLASH:
+			super.setFillColor(ideaFlashColor);
+			break;
+		case HOVEROVER:
+			super.setFillColor(ideaHoverOverColor);
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+
+	private enum IdeaColors {
+		FILL,STROKE,TEXT,FLASH,HOVEROVER
 	}
 }
