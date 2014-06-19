@@ -1,21 +1,33 @@
 package de.braster;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
+import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.font.IFont;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
+import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
+import org.mt4j.components.visibleComponents.widgets.buttons.MTImageButton;
+import org.mt4j.components.visibleComponents.widgets.keyboard.MTKeyboard;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
+
+import processing.core.PImage;
+import de.braster.ClusterKeyboard.KeyInfo;
 
 public class ClusteringScene extends AbstractScene{
 
@@ -25,6 +37,7 @@ public class ClusteringScene extends AbstractScene{
 	private Iscene evaluationScene;
 	private LinkedList<Idea> ideas;
 	private MTRoundRectangle mtRoundRectangle;
+	private ClusterKeyboard keyboard;
 	
 	public ClusteringScene( MTApplication mtApplication, String name) {
 		super(mtApplication, name);
@@ -123,8 +136,86 @@ public class ClusteringScene extends AbstractScene{
 //		createItem();
 //		createLeftMenubar();
 		createRightMenubar();
+		makeKB();
+		makeKBButton();
 	}
+	
+	private void makeKBButton() {
+		PImage keyboardImg = mtApp.loadImage("advanced" + MTApplication.separator + "flickrMT"+ MTApplication.separator + "data"+ MTApplication.separator 
+				+ "keyb128.png");
+		final MTImageButton keyboardButton = new MTImageButton(mtApp, keyboardImg);
+		keyboardButton.setFillColor(new MTColor(255,255,255,200));
+		keyboardButton.setName("KeyboardButton");
+		keyboardButton.setNoStroke(true);
+		keyboardButton.translateGlobal(new Vector3D(-2,mtApp.height-keyboardButton.getWidthXY(TransformSpace.GLOBAL)+2,0));
+		canv.addChild(keyboardButton);
+//		keyboardButton.scale(0.8f, 0.8f, 0, keyboardButton.getCenterPointRelativeToParent());
+		
+		keyboardButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae) {
+				
+				switch (ae.getID()) {
+				case TapEvent.TAPPED:
+					keyboard.setVisible(true);
+					break;
 
+				default:
+					break;
+				}
+				
+			}
+		});
+		
+		
+	}
+	
+	private void makeKB() {
+		keyboard = new ClusterKeyboard(mtApp, 40);
+		
+		final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 32, MTColor.WHITE)); 
+        t.setExpandDirection(ExpandDirection.UP);
+        t.setFillColor(new MTColor(139,69,0,255));
+        t.setStrokeColor(new MTColor(205,133,0,255));
+		t.unregisterAllInputProcessors();
+		t.setEnableCaret(true);
+		
+		keyboard.addChild(t);
+		t.setPositionRelativeToParent(new Vector3D(40, -t.getHeightXY(TransformSpace.LOCAL)*0.5f));
+		keyboard.addTextInputListener(t);
+		
+		// eigener enter button
+		KeyInfo ki = keyboard.new KeyInfo("f", "\n", "\n", 		new Vector3D(615, 105),KeyInfo.NORMAL_KEY);
+			
+		//Event listener f�r den enter key
+		IGestureEventListener tp = new IGestureEventListener() {
+				@Override
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					TapEvent te = (TapEvent)ge;
+					if (te.isTapped() && t.getText().length() != 0){
+
+						IdeaCategory cat = new IdeaCategory(mtApp, canv);
+						cat.setText(t.getText());
+						canv.addChild(cat);
+						
+						t.clear();
+					}
+					return false;
+		
+				}
+		};
+		
+		keyboard.addKeyFromOutside(ki, tp);
+		
+		canv.addChild(keyboard);
+		keyboard.setVisible(false);
+//		keyboard.setPickable(false); // nicht verwenden
+		keyboard.setGestureAllowance(DragProcessor.class, false);
+		keyboard.setGestureAllowance(ScaleProcessor.class, false);
+		keyboard.setGestureAllowance(RotateProcessor.class, false);
+		keyboard.scale(0.7f, 0.7f, 1, keyboard.getCenterPointRelativeToParent());
+		keyboard.setPositionRelativeToParent(new Vector3D(mtApp.getWidth()/2, mtApp.getHeight()-keyboard.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2));
+		
+	}
 	
 	
 	//create right menubar, um mit der n�chsten Scene zu beginnen

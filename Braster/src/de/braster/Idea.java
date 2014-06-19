@@ -12,6 +12,8 @@ import org.mt4j.components.PickResult.PickEntry;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
+import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
+import org.mt4j.components.visibleComponents.widgets.keyboard.MTKeyboard;
 import org.mt4j.input.IMTInputEventListener;
 import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
@@ -28,14 +30,8 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
+import de.braster.BWKeyboard.KeyInfo;
 
-
-
-
-
-
-
-import processing.core.PApplet;
 
 public class Idea extends MTTextArea {
 	
@@ -118,7 +114,6 @@ public class Idea extends MTTextArea {
 							} else {
 								(i).snapToIdea(self);
 							}
-							
 						}
 					}
 
@@ -160,6 +155,30 @@ public class Idea extends MTTextArea {
 			}
 		});
 				
+	}
+	
+	
+	/**
+	 * Konstruktor für Kategorie
+	 * @param mtApplication
+	 * @param canvas
+	 * @param fillColor
+	 * @param strokeColor
+	 * @param textColor
+	 * @param flashColor
+	 * @param hoverOverColor
+	 */
+	public Idea (MTApplication mtApplication, MTCanvas canvas, MTColor fillColor, MTColor strokeColor, MTColor textColor, MTColor flashColor, MTColor hoverOverColor) {
+		this(mtApplication, canvas);
+		ideaFillColor = fillColor;
+		ideaStrokeColor = strokeColor;
+		ideaTextColor = textColor;
+		ideaFlashColor = flashColor;
+		ideaHoverOverColor = hoverOverColor;
+		
+		setFillColor(ideaFillColor);
+		setStrokeColor(ideaStrokeColor);
+		
 	}
 
 	public static LinkedList<Idea> getAllIdeas() {
@@ -308,6 +327,12 @@ public class Idea extends MTTextArea {
 		
 		
 	}
-	
 
+	public void setDesignColors(MTColor fillColor, MTColor strokeColor, MTColor textColor, MTColor flashColor, MTColor hoverOverColor) {
+		ideaFillColor = fillColor;
+		ideaStrokeColor = strokeColor;
+		ideaTextColor = textColor;
+		ideaFlashColor = flashColor;
+		ideaHoverOverColor = hoverOverColor;
+	}
 }
