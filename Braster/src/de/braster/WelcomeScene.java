@@ -51,28 +51,20 @@ public class WelcomeScene extends AbstractScene {
 		
 		canv.addChild(logo);
 		
-
-		
-		
-		
 		//text abstract
-		MTTextArea abstrct = new MTTextArea(mtApplication,                                
+		MTTextArea abstractText = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		32, //fontzize 
                 		MTColor.BLACK)); //Font color
-		abstrct.setText("Durchlaufen Sie den kreativen Prozess und finden Sie mithilfe \nvon Brainwriting und Clustering die beste Lösung für Ihr Problem");
-		abstrct.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height/2f + 60));
-		abstrct.setPickable(false);
-		canv.addChild(abstrct);
-				
-		
-		
-		
+		abstractText.setText("Durchlaufen Sie den kreativen Prozess und finden Sie mithilfe \nvon Brainwriting und Clustering die beste Loesung fuer Ihr Problem");
+		abstractText.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height/2f + 60));
+		abstractText.setPickable(false);
+		canv.addChild(abstractText);
 		
 		//text tippen zum starten
 		MTTextArea tippen = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-                		42, //fontzize 
+                		40, //fontzize 
                 		MTColor.BLACK)); //Font color
 		tippen.setText("Tippen zum starten");
 		tippen.setPositionRelativeToParent(new Vector3D(mtApplication.width/2f, mtApplication.height*0.8f));

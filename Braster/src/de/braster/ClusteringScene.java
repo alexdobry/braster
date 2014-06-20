@@ -62,7 +62,7 @@ public class ClusteringScene extends AbstractScene{
 		
 		//Titel
 		MTTextArea titel = new MTTextArea(mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		40, MTColor.BLACK, false));
+        		40, MTColor.BLACK));
 		titel.unregisterAllInputProcessors();
 		titel.setPickable(false);
 		titel.setNoFill(true);
@@ -73,7 +73,7 @@ public class ClusteringScene extends AbstractScene{
 		
 		//ideen stack
 		final MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		20, MTColor.WHITE, false));
+        		20, MTColor.WHITE));
 		rText.unregisterAllInputProcessors();
 		rText.setPickable(false);
 		rText.setNoFill(true);
