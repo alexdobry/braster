@@ -773,7 +773,6 @@ public class Keyboard extends MTRoundRectangle {
 				return false;
 		}
 	}//class
-
 	
 	/**
 	 * Called after keyboard button pressed.
@@ -785,12 +784,18 @@ public class Keyboard extends MTRoundRectangle {
 		ITextInputListener[] listeners = this.getTextInputListeners();
         for (ITextInputListener textInputListener : listeners) {
             if (clickedKey.getCharacterToWrite().equals("back")) {
-                textInputListener.removeLastCharacter();
+            	if (size != maxSize) {
+            		++size;
+            	}                
+            	textInputListener.removeLastCharacter();
             } else if (clickedKey.getCharacterToWrite().equals("shift")) {
                 //no nothing
             } else {
                 String charToAdd = shiftPressed ? clickedKey.getCharacterToWriteShifted() : clickedKey.getCharacterToWrite();
-                textInputListener.appendCharByUnicode(charToAdd);
+                if (size > 0) {
+                	textInputListener.appendCharByUnicode(charToAdd);
+                	--size;
+                }
             }
         }
 	}
@@ -835,6 +840,7 @@ public class Keyboard extends MTRoundRectangle {
 	
 
 	public void close(){
+		this.size = maxSize;
 		this.closeKeyboard();
 	}
 	
@@ -900,7 +906,6 @@ public class Keyboard extends MTRoundRectangle {
                 if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                 	textInputListener.removeLastCharacter();
                 	if (size != maxSize) {
-                		System.out.println(size);
                 		++size;
                 	}
                 } else if (e.getKeyCode() == KeyEvent.VK_SHIFT
@@ -914,7 +919,6 @@ public class Keyboard extends MTRoundRectangle {
                 	//TODO: ???
                 } else {
                 	if (size > 0) {
-                		System.out.println(size);
                     	textInputListener.appendCharByUnicode(keyCharString);
                     	--size;
                 	}

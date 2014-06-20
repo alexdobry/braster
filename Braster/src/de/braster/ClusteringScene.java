@@ -261,7 +261,7 @@ public class ClusteringScene extends AbstractScene{
 		});
 		
 		IFont font = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		20, MTColor.WHITE, false);
+        		20, MTColor.WHITE);
 		
 		MTTextArea rText = new MTTextArea(this.mtApp, font);
 		rText.unregisterAllInputProcessors();

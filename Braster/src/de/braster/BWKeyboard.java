@@ -813,12 +813,18 @@ public class BWKeyboard extends MTRoundRectangle {
 		ITextInputListener[] listeners = this.getTextInputListeners();
         for (ITextInputListener textInputListener : listeners) {
             if (clickedKey.getCharacterToWrite().equals("back")) {
-                textInputListener.removeLastCharacter();
+            	if (size != maxSize) {
+            		++size;
+            	}     
+            	textInputListener.removeLastCharacter();
             } else if (clickedKey.getCharacterToWrite().equals("shift")) {
                 //no nothing
             } else {
                 String charToAdd = shiftPressed ? clickedKey.getCharacterToWriteShifted() : clickedKey.getCharacterToWrite();
-                textInputListener.appendCharByUnicode(charToAdd);
+                if (size > 0) {
+                	textInputListener.appendCharByUnicode(charToAdd);
+                	--size;
+                }            
             }
         }
 	}
@@ -980,6 +986,11 @@ public class BWKeyboard extends MTRoundRectangle {
 //		this.translate(new Vector3D(30, -(getFont().getFontAbsoluteHeight() * (getLineCount())) + getFont().getFontMaxDescent() - borderHeight, 0));
 		this.addChild(textArea);
 		textArea.setPositionRelativeToParent(new Vector3D(40, -textArea.getHeightXY(TransformSpace.LOCAL)*0.5f));
+	}
+
+
+	public void resetSize(int size) {
+		this.size = size;
 	}
 
 }

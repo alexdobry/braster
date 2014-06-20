@@ -58,13 +58,13 @@ public class SetupScene  extends AbstractScene{
 		//fungiert als mehrzeilige textarea f�r die Problembeschreibung
 		final MTTextArea textareaProblem = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-                		50, //fontzize 
+                		40, //fontzize 
                 		MTColor.BLACK)); //Font color
 		
 		//textArea.setText("Problem eingeben...");
 		textareaProblem.setHeightLocal(100);
 		textareaProblem.setWidthLocal(500);
-		textareaProblem.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height/4));
+		textareaProblem.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height/4 - 20));
 		textareaProblem.unregisterAllInputProcessors();
 	
 		textareaProblem.registerInputProcessor(new TapProcessor(this.mtApp));
@@ -89,16 +89,18 @@ public class SetupScene  extends AbstractScene{
 		canv.addChild(textareaProblem);			
 		
 		 
-		MTTextField labelProblem = new MTTextField(mtApp, mtApp.width/2-200,mtApp.height/13, 400, 50, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		40, MTColor.WHITE, false));
+		MTTextField labelProblem = new MTTextField(mtApp, mtApp.width/2-200+30,mtApp.height/13, 400, 50, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+        		40, MTColor.WHITE));
+		labelProblem.setGestureAllowance(DragProcessor.class, false);
 		labelProblem.setFillColor(new MTColor(73, 112, 138, 255));
 		labelProblem.setStrokeColor(new MTColor(73, 112, 138, 255));
 		labelProblem.setText("Problem definieren");
 		canv.addChild(labelProblem);
 		
 		
-		MTTextField labelTeilnehmer = new MTTextField(mtApp, mtApp.width/2-200,mtApp.height/10*4, 400, 50, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		40, MTColor.WHITE, false));
+		MTTextField labelTeilnehmer = new MTTextField(mtApp, mtApp.width/2-200,mtApp.height/10*4 - 4, 450, 50, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+        		40, MTColor.WHITE));
+		labelTeilnehmer.setGestureAllowance(DragProcessor.class, false);
 		labelTeilnehmer.setFillColor(new MTColor(73, 112, 138, 255));
 		labelTeilnehmer.setStrokeColor(new MTColor(73, 112, 138, 255));
 		labelTeilnehmer.setText("Teilnehmer auswaehlen");
@@ -108,11 +110,12 @@ public class SetupScene  extends AbstractScene{
 		createPlayerButtons();	
 		
 		Checkbox c = new Checkbox(mtApplication,0,0, 0, 0, 0, 0, 0, "Hilfe notwendig?");
-		c.setPositionRelativeToParent(new Vector3D(mtApp.width/2-210 ,mtApp.height/10*7));        
+		c.setGestureAllowance(DragProcessor.class, false);
+		c.setPositionRelativeToParent(new Vector3D(mtApp.width/2-210+35 ,mtApp.height/10*7));        
 		canv.addChild(c);
 		
-		final MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100, 450, 55, "Brainwriting starten", FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		50, MTColor.BLACK, false), MTColor.GREY);
+		final MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100 - 13, 450, 55, "Brainwriting starten", FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+        		40, MTColor.WHITE), MTColor.GREY);
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
@@ -168,7 +171,7 @@ public class SetupScene  extends AbstractScene{
 							}
 							else if(number==0)
 							{
-								JOptionPane.showMessageDialog(null, "Bitte die Personenanzahl eingeben.");
+								JOptionPane.showMessageDialog(null, "Bitte die Teilnehmerzahl festlegen.");
 								r.setFillColor(MTColor.GREY);
 							}
 						}
