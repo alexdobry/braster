@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import javafx.stage.PopupWindow.AnchorLocation;
+
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
@@ -197,7 +199,7 @@ public class ClusteringScene extends AbstractScene{
 						IdeaCategory cat = new IdeaCategory(mtApp, canv);
 						cat.setText(t.getText());
 						canv.addChild(cat);
-						
+						cat.setPositionRelativeToOther(t, new Vector3D(t.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2, -50));
 						t.clear();
 					}
 					return false;
