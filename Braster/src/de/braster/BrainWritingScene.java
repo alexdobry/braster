@@ -21,6 +21,10 @@ import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
+import org.mt4j.util.animation.Animation;
+import org.mt4j.util.animation.AnimationEvent;
+import org.mt4j.util.animation.IAnimationListener;
+import org.mt4j.util.animation.MultiPurposeInterpolator;
 import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
@@ -350,13 +354,14 @@ public class BrainWritingScene extends AbstractScene{
 			    		idea.setText(t.getText());
 			    		idea.setName(t.getText());
 			    		keyboard.resetSize(INPUT_SIZE);
+			    		animateInput(keyboard, t.getText());
 			    		t.clear();
-			    		
 			    		System.out.print(idea.getChildCount());
 					
 					}
 					return false;
 				}
+
 			};
 			
 				
@@ -437,6 +442,50 @@ public class BrainWritingScene extends AbstractScene{
 		
 
 		return keyboard;
+	}
+	
+	private void animateInput(BWKeyboard kb, String ideaText) {
+		final MTTextArea textArea = new MTTextArea(mtApp);
+		textArea.setText(ideaText);
+		textArea.setPickable(false);
+		textArea.setFillColor(green1);
+		textArea.setStrokeColor(green2);
+		
+		
+		Vector3D pos = new Vector3D(kb.getWidthXY(TransformSpace.LOCAL)/2, -50, 0);
+		textArea.setPositionRelativeToOther(kb, pos);
+		canv.addChild(textArea);
+		
+		Vector3D v = new Vector3D(0, -100, 0);
+		
+		textArea.tweenTranslate(v, 500, 0.3f, 0.7f);
+
+		MultiPurposeInterpolator scaleAnimation = new MultiPurposeInterpolator(textArea.getWidthXY(TransformSpace.LOCAL), 0, 500, 0.3f, 0.7f, 1);
+		
+		Animation animScale = new Animation("Idee verschwinden lassen", scaleAnimation, textArea);
+		animScale.addAnimationListener(new IAnimationListener() {
+			
+			@Override
+			public void processAnimationEvent(AnimationEvent ae) {
+				
+				switch (ae.getId()) {
+				case AnimationEvent.ANIMATION_STARTED:
+					
+				case AnimationEvent.ANIMATION_UPDATED:
+					textArea.setWidthXYRelativeToParent(ae.getValue());
+					break;
+				case AnimationEvent.ANIMATION_ENDED:
+//					t.setWidthXYRelativeToParent(width);
+					textArea.setVisible(false);
+					textArea.destroy();
+					break;	
+				default:
+					break;
+				}//switch
+			}
+		}).start();
+		
+			
 	}
 	
 }

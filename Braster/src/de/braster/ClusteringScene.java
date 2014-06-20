@@ -10,6 +10,7 @@ import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.font.IFont;
+import org.mt4j.components.visibleComponents.shapes.MTRectangle.PositionAnchor;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
@@ -191,7 +192,13 @@ public class ClusteringScene extends AbstractScene{
 						IdeaCategory cat = new IdeaCategory(mtApp, canv);
 						cat.setText(t.getText());
 						canv.addChild(cat);
-						cat.setPositionRelativeToOther(t, new Vector3D(t.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2, -50));
+						
+						cat.setPositionRelativeToOther(t, new Vector3D(t.getCenterPointLocal().x,0,0));
+						
+						Vector3D v = new Vector3D(0, -60, 0);
+						
+						cat.tweenTranslate(v, 300, 0.3f, 0.7f);
+						
 						t.clear();
 					}
 					return false;
