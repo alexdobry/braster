@@ -343,13 +343,14 @@ public class BrainWritingScene extends AbstractScene{
 			    		idea.setText(t.getText());
 			    		idea.setName(t.getText());
 			    		keyboard.resetSize(INPUT_SIZE);
+			    		animateInput(keyboard, t.getText());
 			    		t.clear();
-			    		
 			    		System.out.print(idea.getChildCount());
 					
 					}
 					return false;
 				}
+
 			};
 			
 				
@@ -430,6 +431,26 @@ public class BrainWritingScene extends AbstractScene{
 		
 
 		return keyboard;
+	}
+	
+	private void animateInput(BWKeyboard kb, String ideaText) {
+//		MTTextArea textArea = new MTTextArea(mtApp);
+//		textArea.setText(ideaText);
+//		textArea.setPickable(false);
+//		textArea.setFillColor(green1);
+//		textArea.setStrokeColor(green2);
+//		
+//		Vector3D trans = new Vector3D();
+//		Vector3D rot = new Vector3D();
+//		Vector3D scale = new Vector3D();
+//		kb.getGlobalMatrix().decompose(trans, rot, scale);;
+//		
+//		textArea.getGlobalMatrix().rotateVect(rot);
+//		
+//		canv.addChild(textArea);
+//		Vector3D pos = new Vector3D(0, -100, 0);
+//		textArea.setPositionRelativeToOther(kb, pos);
+		
 	}
 	
 }
