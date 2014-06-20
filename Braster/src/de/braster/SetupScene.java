@@ -42,8 +42,7 @@ public class SetupScene  extends AbstractScene{
 	private ArrayList<Positioncomponent> playerButtons;
 	private static String problemDefinition = "";
 	private boolean problemEdit = false;
-	
-	
+		
 	public SetupScene( final MTApplication mtApplication, String name)
 	{
 		super(mtApplication, name);
@@ -71,14 +70,14 @@ public class SetupScene  extends AbstractScene{
 		textareaProblem.addGestureListener(TapProcessor.class, new IGestureEventListener(){
 			public boolean processGestureEvent(MTGestureEvent ge){
 				TapEvent te = (TapEvent) ge;
-				   if (te.isTapped())
-				   { 		
+				   if (te.isTapped()) { 
 					   if (!problemEdit) {
 						   textareaProblem.setText("");
 						   problemEdit = true;
 					   }
-				       Keyboard keyboard = makeKB(mtApplication, textareaProblem);
-                       keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f)));                    
+					   Keyboard keyboard = makeKB(mtApplication, textareaProblem);
+					   keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f)));                    						   
+					   
 				   }
 				   return false;
 			}
@@ -114,12 +113,12 @@ public class SetupScene  extends AbstractScene{
 		c.setPositionRelativeToParent(new Vector3D(mtApp.width/2-210+35 ,mtApp.height/10*7));        
 		canv.addChild(c);
 		
-		final MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100 - 13, 450, 55, "Brainwriting starten", FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
+		final MTRoundRectangle button = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100 - 13, 450, 55, "Brainwriting starten", FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		40, MTColor.WHITE), MTColor.GREY);
-		r.setNoStroke(true);
-		r.registerInputProcessor(new TapProcessor(getMTApplication()));
-		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
-		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+		button.setNoStroke(true);
+		button.registerInputProcessor(new TapProcessor(getMTApplication()));
+		button.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(button));
+		button.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			final ArrayList<Positioncomponent> temp = playerButtons;
 			
 			public boolean processGestureEvent(MTGestureEvent ge) {
@@ -128,7 +127,7 @@ public class SetupScene  extends AbstractScene{
 				if (te.isTapped()){
 					switch (te.getId()) {
 						case MTGestureEvent.GESTURE_STARTED:
-							r.setFillColor(new MTColor(220,220,220,255));
+							button.setFillColor(new MTColor(220,220,220,255));
 							break;
 						case MTGestureEvent.GESTURE_ENDED:
 					 
@@ -167,20 +166,20 @@ public class SetupScene  extends AbstractScene{
 							else if(problemDefinition.length()==0 || problemDefinition.equals("Problem eingeben..."))
 							{
 								JOptionPane.showMessageDialog(null, "Bitte das Problem definieren.");
-								r.setFillColor(MTColor.GREY);
+								button.setFillColor(MTColor.GREY);
 								
 							}
 							else if(number==0)
 							{
 								JOptionPane.showMessageDialog(null, "Bitte die Teilnehmerzahl festlegen.");
-								r.setFillColor(MTColor.GREY);
+								button.setFillColor(MTColor.GREY);
 							}
 						}
 				}
 				return false;
 			}
 		});
-		canv.addChild(r);
+		canv.addChild(button);
 	}
 
 	
@@ -257,7 +256,7 @@ public class SetupScene  extends AbstractScene{
 	
 
 	
-public Keyboard makeKB(MTApplication mtApplication, final MTTextArea t) {
+public Keyboard makeKB(final MTApplication mtApplication, final MTTextArea t) {
 		
 	final MTTextArea textAreaOfKeyboard = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 32, MTColor.WHITE)); 
     
@@ -285,19 +284,14 @@ public Keyboard makeKB(MTApplication mtApplication, final MTTextArea t) {
 	IGestureEventListener tp = new IGestureEventListener() {
 		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
-		TapEvent te = (TapEvent)ge;
-		if (te.isTapped() )
-		{				
-			keyboard.onCloseButtonClicked();
-			t.setText(textAreaOfKeyboard.getText());
-			
-			t.setPositionGlobal(new Vector3D(mtApp.width/2, mtApp.height/4));
-			/*t.setFont( FontManager.getInstance().createFont(mtApp, "arial.ttf", 
-                		50, //fontzize 
-                		MTColor.BLACK));
-			t.setSizeXYGlobal(500, 100);*/
-		}
-		return false;
+			TapEvent te = (TapEvent)ge;
+			if (te.isTapped() ) {				
+				keyboard.onCloseButtonClicked();
+				t.setText(textAreaOfKeyboard.getText());
+				//t.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 40));
+				t.setPositionGlobal(new Vector3D(mtApp.width/2, mtApp.height/4 - 20));
+			}
+			return false;
 		}
 	};
 	keyboard.addKeyFromOutside(enter, tp);

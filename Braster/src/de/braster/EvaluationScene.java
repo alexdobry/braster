@@ -116,7 +116,7 @@ public class EvaluationScene extends AbstractScene{
 		
 		//Problembeschreibung
 		MTTextArea textProblem = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		40, MTColor.BLACK, false));
+        		40, MTColor.BLACK));
 		textProblem.unregisterAllInputProcessors();
 		textProblem.setPickable(false);
 		textProblem.setNoFill(true);
@@ -165,7 +165,7 @@ public class EvaluationScene extends AbstractScene{
 		 
 		//Problembeschreibung
 		MTTextArea textProblem = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		40, MTColor.BLACK, false));
+        		40, MTColor.BLACK));
 		textProblem.unregisterAllInputProcessors();
 		textProblem.setPickable(false);
 		textProblem.setNoFill(true);
@@ -244,13 +244,13 @@ public class EvaluationScene extends AbstractScene{
 		int x = 5;
 		int y = 5;		
 				
-		//brauch updatemethode, sodass die zellenlänge vergrößert wird
-		//Größe einer Zelle (standardhöhe)
+		//brauch updatemethode, sodass die zellenlï¿½nge vergrï¿½ï¿½ert wird
+		//Grï¿½ï¿½e einer Zelle (standardhï¿½he)
 		MTListCell cell = createListCell(70);
 		listMiddle.addChild(cell);
 								
 		//arraylist durchgehen
-		//für jede arraylist das erste element anzeigen als ein symbol
+		//fï¿½r jede arraylist das erste element anzeigen als ein symbol
 		for(Cluster cluster : allCluster)
 		{
 			int widthElement =0;
@@ -286,9 +286,9 @@ public class EvaluationScene extends AbstractScene{
 			}			
 			
 			x += widthElement +20;
-			//überprüfung ob das element reinpasst in die zeile noch
+			//ï¿½berprï¿½fung ob das element reinpasst in die zeile noch
 			//wenn ja alle elemente des clusters adden
-			//wenn nicht nächste zeile beginnen
+			//wenn nicht nï¿½chste zeile beginnen
 			if(x  > 3*einheitX) 
 			{
 				x = 5;
@@ -320,13 +320,13 @@ public class EvaluationScene extends AbstractScene{
 		int x = 5;
 		int y = 5;		
 				
-		//brauch updatemethode, sodass die zellenlänge vergrößert wird
-		//Größe einer Zelle (standardhöhe)
+		//brauch updatemethode, sodass die zellenlï¿½nge vergrï¿½ï¿½ert wird
+		//Grï¿½ï¿½e einer Zelle (standardhï¿½he)
 		MTListCell cell = createListCellOnSide(70);
 		liste.addChild(cell);
 								
 		//arraylist durchgehen
-		//für jede arraylist das erste element anzeigen als ein symbol
+		//fï¿½r jede arraylist das erste element anzeigen als ein symbol
 		for(Cluster cluster : clusters)
 		{
 			int widthElement =0;
@@ -362,9 +362,9 @@ public class EvaluationScene extends AbstractScene{
 			}			
 			
 			x += widthElement +20;
-			//überprüfung ob das element reinpasst in die zeile noch
+			//ï¿½berprï¿½fung ob das element reinpasst in die zeile noch
 			//wenn ja alle elemente des clusters adden
-			//wenn nicht nächste zeile beginnen
+			//wenn nicht nï¿½chste zeile beginnen
 			if(x  > 2*einheitX) 
 			{
 				x = 5;
@@ -429,7 +429,7 @@ public class EvaluationScene extends AbstractScene{
 								break;
 							}
 						}
-						//Popup muss aufgehen für weitere Ideen
+						//Popup muss aufgehen fï¿½r weitere Ideen
 						else if(selectedComponent.toString().contains("MTRect"))
 						{
 							MTRectangle childTextarea = (MTRectangle) selectedComponent;
@@ -512,7 +512,7 @@ public class EvaluationScene extends AbstractScene{
 								break;
 							}
 						}
-						//Popup muss aufgehen für weitere Ideen
+						//Popup muss aufgehen fï¿½r weitere Ideen
 						else if(selectedComponent.toString().contains("MTRect"))
 						{
 							MTRectangle childTextarea = (MTRectangle) selectedComponent;
@@ -695,7 +695,7 @@ public class EvaluationScene extends AbstractScene{
 			area.addChild(line3);
 					
 			MTTextArea textareaPapierkorb = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		30, MTColor.BLACK, false));
+	        		24, MTColor.BLACK));
 			textareaPapierkorb.unregisterAllInputProcessors();
 			textareaPapierkorb.setPickable(false);
 			textareaPapierkorb.setNoFill(true);
@@ -707,7 +707,7 @@ public class EvaluationScene extends AbstractScene{
 	
 			
 			MTTextArea textareaIdeas = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		30, MTColor.BLACK, false));
+	        		24, MTColor.BLACK));
 			textareaIdeas.unregisterAllInputProcessors();
 			textareaIdeas.setPickable(false);
 			textareaIdeas.setNoFill(true);
@@ -719,14 +719,14 @@ public class EvaluationScene extends AbstractScene{
 			
 			
 			MTTextArea textareaBestIdeas = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		30, MTColor.BLACK, false));
+	        		24, MTColor.BLACK));
 			textareaBestIdeas.unregisterAllInputProcessors();
 			textareaBestIdeas.setPickable(false);
 			textareaBestIdeas.setNoFill(true);
 			textareaBestIdeas.setNoStroke(true);
 			textareaBestIdeas.setText("Ideen weiter");
 			textareaBestIdeas.setSizeLocal(200, 40);
-			textareaBestIdeas.setPositionGlobal(new Vector3D(mtApp.width/10*8,40));
+			textareaBestIdeas.setPositionGlobal(new Vector3D(mtApp.width/10*8 + 30,40));
 			area.addChild(textareaBestIdeas);
 	 }
 	 
@@ -784,7 +784,7 @@ public class EvaluationScene extends AbstractScene{
 									if(centerPoint.x <  2*einheitX+75)
 									{			
 										boolean added = false;
-										//überprüfung ob der cluster bereits besteht
+										//ï¿½berprï¿½fung ob der cluster bereits besteht
 										for(Cluster leftCluster : rubbishCluster)
 										{
 											
@@ -810,7 +810,7 @@ public class EvaluationScene extends AbstractScene{
 									else if(centerPoint.x>  5*einheitX+75)
 									{							 
 										boolean added = false;
-										//überprüfung ob der cluster bereits besteht
+										//ï¿½berprï¿½fung ob der cluster bereits besteht
 										for(Cluster rightCluster : bestIdeasCluster)
 										{
 											Note fo = showedCluster.get(0);

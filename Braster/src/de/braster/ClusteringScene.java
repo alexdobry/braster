@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javafx.stage.PopupWindow.AnchorLocation;
-
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
@@ -63,12 +61,9 @@ public class ClusteringScene extends AbstractScene{
 			idea.updateCanvas(canv);
 		}
 		
-		
 		//Titel
-		IFont font1 = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		42, MTColor.BLACK, false);
-		
-		MTTextArea titel = new MTTextArea(mtApp, font1);
+		MTTextArea titel = new MTTextArea(mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		40, MTColor.BLACK));
 		titel.unregisterAllInputProcessors();
 		titel.setPickable(false);
 		titel.setNoFill(true);
@@ -77,12 +72,9 @@ public class ClusteringScene extends AbstractScene{
 		canv.addChild(titel);
 		titel.setPositionRelativeToParent(new Vector3D(mtApp.width/2, 80));
 		
-		
 		//ideen stack
-		IFont font = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		20, MTColor.WHITE, false);
-		
-		final MTTextArea rText = new MTTextArea(this.mtApp, font);
+		final MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		20, MTColor.WHITE));
 		rText.unregisterAllInputProcessors();
 		rText.setPickable(false);
 		rText.setNoFill(true);
@@ -270,10 +262,8 @@ public class ClusteringScene extends AbstractScene{
 			}
 		});
 		
-		IFont font = FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		20, MTColor.WHITE);
-		
-		MTTextArea rText = new MTTextArea(this.mtApp, font);
+		MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		20, MTColor.WHITE));
 		rText.unregisterAllInputProcessors();
 		rText.setPickable(false);
 		rText.setNoFill(true);
