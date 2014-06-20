@@ -49,8 +49,8 @@ public class BWIdeaView extends MTRectangle{
 		private MTColor green1 = new MTColor(0, 100, 0, 255);
 		private MTColor green2 = new MTColor(34, 139, 34, 255);
 		
-		public BWIdeaView(PApplet pApplet, float width, float height, final BWKeyboard kb) {
-			super(pApplet, width, height);
+		public BWIdeaView(PApplet pApplet, final BWKeyboard kb) {
+			super(pApplet, kb.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb.getHeightXY(TransformSpace.RELATIVE_TO_PARENT));
 			this.pApplet = pApplet;
 			setFillColor(MTColor.WHITE);
 			setStrokeColor(MTColor.WHITE);
@@ -64,7 +64,7 @@ public class BWIdeaView extends MTRectangle{
 			MTSvgButton keybCloseSvg = new MTSvgButton(pApplet, MT4jSettings.getInstance().getDefaultSVGPath()
 					+ "keybClose.svg");
 
-			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
+//			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
 			keybCloseSvg.scale(0.7f, 0.7f, 1, new Vector3D(0,0,0)); //2x ist notwendig aufgrund wie die tastatur auf ihre gräße kommt
 			
 			keybCloseSvg.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-25, 25,0));
@@ -225,7 +225,7 @@ public class BWIdeaView extends MTRectangle{
 			ideaArea.setPickable(false);
 			ideaArea.setText(s);
 			
-			setAnimations(ideaArea, ideaArea.getWidthXY(TransformSpace.LOCAL));
+			setAnimations(ideaArea);
 			ideaArea.setWidthXYRelativeToParent(1);
 
 			this.addChild(ideaArea);
@@ -249,15 +249,18 @@ public class BWIdeaView extends MTRectangle{
 		/**
 		 * Setzt Animation für eine Textarea.
 		 * @param t
-		 * @param width
+		 * @param scaleWidth
 		 */
-		private void setAnimations (final MTTextArea t, final float width) {
-			scaleAnimation = new MultiPurposeInterpolator(width, 0, 300, 0, 1, 1);
-			leftAnimation = new MultiPurposeInterpolator(getWidthXYRelativeToParent()/2, getCenterPointLocal().x-getWidthXYRelativeToParent()/2, 300, 0.1f, 0.8f, 1);
-			leftReverseAnimation = new MultiPurposeInterpolator(getCenterPointLocal().x-getWidthXYRelativeToParent()/2,getWidthXYRelativeToParent()/2 , 300, 0.1f, 0.8f, 1);
-			rightAnimation = new MultiPurposeInterpolator(getWidthXYRelativeToParent()/2, getWidthXYRelativeToParent(), 300, 0.1f, 0.8f, 1);
-			rightReverseAnimation =new MultiPurposeInterpolator(getWidthXYRelativeToParent(), getWidthXYRelativeToParent()/2, 300, 0.1f, 0.8f, 1);
-			MultiPurposeInterpolator reverseScaleAnimation = new MultiPurposeInterpolator(0, width, 300, 0, 1, 1);
+		private void setAnimations (final MTTextArea t) {
+			float scaleWidth = t.getWidthXY(TransformSpace.RELATIVE_TO_PARENT);
+			float middleX = getCenterPointLocal().x;
+			
+			scaleAnimation = new MultiPurposeInterpolator(scaleWidth, 0, 300, 0, 1, 1);
+			leftAnimation = new MultiPurposeInterpolator(getWidthXYRelativeToParent()/2, 0, 300, 0.1f, 0.8f, 1);
+			leftReverseAnimation = new MultiPurposeInterpolator(0, middleX, 300, 0.1f, 0.8f, 1);
+			rightAnimation = new MultiPurposeInterpolator(middleX, middleX*2, 300, 0.1f, 0.8f, 1);
+			rightReverseAnimation =new MultiPurposeInterpolator(middleX*2, middleX, 300, 0.1f, 0.8f, 1);
+			MultiPurposeInterpolator reverseScaleAnimation = new MultiPurposeInterpolator(0, scaleWidth, 300, 0, 1, 1);
 			
 			animScale = new Animation("Idee verschwinden lassen", scaleAnimation, t);
 			animScale.addAnimationListener(new IAnimationListener() {

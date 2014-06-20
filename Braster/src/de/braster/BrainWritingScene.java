@@ -6,18 +6,12 @@ import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
-import org.mt4j.components.visibleComponents.shapes.AbstractShape;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
-import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
-import org.mt4j.components.visibleComponents.widgets.buttons.MTSvgButton;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent.FlickDirection;
-import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
@@ -25,17 +19,9 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
-import org.mt4j.util.MT4jSettings;
 import org.mt4j.util.MTColor;
-import org.mt4j.util.animation.Animation;
-import org.mt4j.util.animation.AnimationEvent;
-import org.mt4j.util.animation.IAnimationListener;
-import org.mt4j.util.animation.MultiPurposeInterpolator;
 import org.mt4j.util.math.Vector3D;
-import org.mt4j.util.opengl.GLTexture;
 
-import processing.core.PApplet;
-import processing.core.PImage;
 import de.braster.BWKeyboard.KeyInfo;
 
 
@@ -114,6 +100,25 @@ public class BrainWritingScene extends AbstractScene{
 		kb3 = makeKB();
 		kb4 = makeKB();
 		
+
+		final BWIdeaView iv1 = new BWIdeaView(mtApplication, kb1);
+		final BWIdeaView iv2 = new BWIdeaView(mtApplication, kb2);
+		final BWIdeaView iv3 = new BWIdeaView(mtApplication, kb3);
+		final BWIdeaView iv4 = new BWIdeaView(mtApplication, kb4);
+		
+
+		kb1.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		kb2.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		kb3.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		kb4.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		
+		iv1.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		iv2.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		iv3.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		iv4.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		
+
+		
 		keyboardPositionRU = new Vector3D(mtApplication.width-(kb1.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)/2),
 				mtApplication.height-(kb1.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f),
 				0);
@@ -133,6 +138,7 @@ public class BrainWritingScene extends AbstractScene{
 		keyboardPositionMiddle = new Vector3D(mtApplication.width/2f,
 				mtApplication.height-(kb1.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f),
 				0);
+
 		
 		kb1.setPositionGlobal(keyboardPositionRU);
 		kb2.setPositionGlobal(keyboardPositionLU);
@@ -149,11 +155,6 @@ public class BrainWritingScene extends AbstractScene{
 		
 		//canv.addChild(test);
 		
-		
-		final BWIdeaView iv1 = new BWIdeaView(mtApplication, kb1.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb1.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb1);
-		final BWIdeaView iv2 = new BWIdeaView(mtApplication, kb2.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb2.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb2);
-		final BWIdeaView iv3 = new BWIdeaView(mtApplication, kb3.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb3.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb3);
-		final BWIdeaView iv4 = new BWIdeaView(mtApplication, kb4.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), kb4.getHeightXY(TransformSpace.RELATIVE_TO_PARENT), kb4);
 		
 
 		
@@ -412,7 +413,7 @@ public class BrainWritingScene extends AbstractScene{
 		
 		getCanvas().addChild(keyboard);
 		
-		keyboard.scale(0.7f, 0.7f, 1, new Vector3D(0, 0, 0));
+		
 		keyboard.removeAllGestureEventListeners(DragProcessor.class);
 		keyboard.removeAllGestureEventListeners(ScaleProcessor.class);
 		keyboard.removeAllGestureEventListeners(RotateProcessor.class);
