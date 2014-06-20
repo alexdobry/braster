@@ -23,6 +23,7 @@ import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
+import processing.core.PImage;
 import de.braster.BWKeyboard.KeyInfo;
 
 
@@ -92,9 +93,16 @@ public class BrainWritingScene extends AbstractScene{
 		this.getCanvas().addChild(problemTextArea);
 		
 		problemTextArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height*0.2f));
+		String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
+	    
+		
+		PImage texture = getMTApplication().loadImage(path + "tastatur_test.png");
 		
 		
+		MTRectangle test = new MTRectangle(mtApplication, texture);
 		
+		test.setPositionGlobal(new Vector3D(mtApplication.getWidth()/2, mtApplication.getHeight()*0.8f, 0));
+		canv.addChild(test);
 		//Keyboards erstellen und positionieren
 		kb1 = makeKB();
 //		BWKeyboard kb2 = new BWKeyboard(mtApplication); //tmp
@@ -287,10 +295,10 @@ public class BrainWritingScene extends AbstractScene{
 //		canv.addChild(help);
 	
 	
-		MTRectangle test = new MTRectangle(mtApplication, mtApplication.getWidth(), mtApplication.getHeight());		
-		test.setFillColor(new MTColor(30,144,255, 200));
-		test.setPickable(false);
-		canv.addChild(test);
+//		MTRectangle test = new MTRectangle(mtApplication, mtApplication.getWidth(), mtApplication.getHeight());		
+//		test.setFillColor(new MTColor(30,144,255, 200));
+//		test.setPickable(false);
+//		canv.addChild(test);
 	
 	}
 

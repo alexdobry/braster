@@ -150,12 +150,12 @@ public class BWIdeaView extends MTRectangle{
 			this.addChild(swipeleft);
 			
 			//swipe right hilfe
-			PImage swr = pApplet.loadImage(path + "swipe_right_2.png");
-			swiperight = new MTRectangle(pApplet, swr);
-			swiperight.scale(0.15f, 0.15f, 0, swiperight.getCenterPointLocal());
-			swiperight.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.3f, getHeightXYRelativeToParent()*0.3f - 15));
-			swiperight.setNoStroke(true);
-			this.addChild(swiperight);
+//			PImage swr = pApplet.loadImage(path + "swipe_right_2.png");
+//			swiperight = new MTRectangle(pApplet, swr);
+//			swiperight.scale(0.15f, 0.15f, 0, swiperight.getCenterPointLocal());
+//			swiperight.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.3f, getHeightXYRelativeToParent()*0.3f - 15));
+//			swiperight.setNoStroke(true);
+//			this.addChild(swiperight);
 			
 		}
 		

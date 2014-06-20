@@ -8,7 +8,7 @@ public class StartBraster extends MTApplication {
 	
 	
 	public static void main(String[] args) {
-		initialize();
+		initialize(true);
 	}
  
 	@Override
