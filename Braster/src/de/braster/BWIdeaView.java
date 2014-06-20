@@ -161,12 +161,12 @@ public class BWIdeaView extends MTRectangle{
 		
 		private void hideHelp() {
 			swipeleft.setVisible(false);
-			swiperight.setVisible(false);;
+			//swiperight.setVisible(false);;
 		}
 		
 		private void showHelp() {
 			swipeleft.setVisible(true);
-			swiperight.setVisible(true);
+			//swiperight.setVisible(true);
 		}
 		
 
