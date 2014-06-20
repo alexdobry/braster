@@ -116,6 +116,7 @@ public class SetupScene  extends AbstractScene{
 		
 		final MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100 - 13, 450, 55, "Brainwriting starten", FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
         		40, MTColor.WHITE), MTColor.GREY);
+		r.setNoStroke(true);
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {

@@ -7,6 +7,7 @@ import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
+import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
@@ -284,6 +285,14 @@ public class BrainWritingScene extends AbstractScene{
 //			}
 //		});
 //		canv.addChild(help);
+	
+	
+MTRectangle test = new MTRectangle(mtApplication, mtApplication.getWidth(), mtApplication.getHeight());
+		
+		test.setFillColor(new MTColor(30,144,255, 200));
+		test.setPickable(false);
+		canv.addChild(test);
+	
 	}
 
 	private boolean checkReady(int players) {

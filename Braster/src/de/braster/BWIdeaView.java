@@ -220,7 +220,7 @@ public class BWIdeaView extends MTRectangle{
 			
 			ideaArea.setFillColor(green1);
 			ideaArea.setStrokeColor(green2);
-			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, MTColor.WHITE, true));
+			ideaArea.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 32, MTColor.WHITE, true));
 			ideaArea.removeAllGestureEventListeners();
 			ideaArea.setPickable(false);
 			ideaArea.setText(s);

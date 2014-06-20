@@ -141,11 +141,11 @@ public class WelcomeScene extends AbstractScene {
 		
 		//farbfilter �ber alles
 		
-//		MTRectangle test = new MTRectangle(mtApplication, mtApplication.getWidth(), mtApplication.getHeight());
-//		
-//		test.setFillColor(new MTColor(30,144,255, 100));
-//		test.setPickable(false);
-//		canv.addChild(test);
+		MTRectangle test = new MTRectangle(mtApplication, mtApplication.getWidth(), mtApplication.getHeight());
+		
+		test.setFillColor(new MTColor(30,144,255, 200));
+		test.setPickable(false);
+		canv.addChild(test);
 		
 		
 
