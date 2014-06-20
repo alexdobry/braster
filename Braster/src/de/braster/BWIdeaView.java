@@ -65,7 +65,7 @@ public class BWIdeaView extends MTRectangle{
 					+ "keybClose.svg");
 
 //			keybCloseSvg.scale(0.8f, 0.8f, 1, new Vector3D(0,0,0));
-			keybCloseSvg.scale(0.7f, 0.7f, 1, new Vector3D(0,0,0)); //2x ist notwendig aufgrund wie die tastatur auf ihre gräße kommt
+			keybCloseSvg.scale(0.7f, 0.7f, 1, new Vector3D(0,0,0)); //2x ist notwendig aufgrund wie die tastatur auf ihre grï¿½ï¿½e kommt
 			
 			keybCloseSvg.setPositionRelativeToParent(new Vector3D(this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT)-25, 25,0));
 			keybCloseSvg.setBoundsPickingBehaviour(AbstractShape.BOUNDS_ONLY_CHECK);
@@ -91,7 +91,7 @@ public class BWIdeaView extends MTRectangle{
 					FlickEvent e = (FlickEvent)ge;
 					getLocalMatrix().decompose(trans, rot, scale); //versuch die aktuelle Rotation zu bestimmen
 					if (e.getId() == MTGestureEvent.GESTURE_ENDED)  {
-						//flick Gesten abhängig der tastatur orientation
+						//flick Gesten abhï¿½ngig der tastatur orientation
 						//nord orientation
 						if (e.getDirection() == FlickDirection.WEST && rot.z == 0) {
 							animLeft.start();
@@ -142,18 +142,18 @@ public class BWIdeaView extends MTRectangle{
 			String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
 		    
 			//swipe left hilfe
-			PImage swl = pApplet.loadImage(path + "swipe_left.png");
+			PImage swl = pApplet.loadImage(path + "swipe_left_2.png");
 			swipeleft = new MTRectangle(pApplet, swl);
-			swipeleft.scale(0.1f, 0.1f, 0, swipeleft.getCenterPointLocal());
-			swipeleft.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.7f, getHeightXYRelativeToParent()*0.3f));
+			swipeleft.scale(0.15f, 0.15f, 0, swipeleft.getCenterPointLocal());
+			swipeleft.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.7f, getHeightXYRelativeToParent()*0.3f - 15));
 			swipeleft.setNoStroke(true);
 			this.addChild(swipeleft);
 			
 			//swipe right hilfe
-			PImage swr = pApplet.loadImage(path + "swipe_right.png");
+			PImage swr = pApplet.loadImage(path + "swipe_right_2.png");
 			swiperight = new MTRectangle(pApplet, swr);
-			swiperight.scale(0.1f, 0.1f, 0, swiperight.getCenterPointLocal());
-			swiperight.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.3f, getHeightXYRelativeToParent()*0.3f));
+			swiperight.scale(0.15f, 0.15f, 0, swiperight.getCenterPointLocal());
+			swiperight.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.3f, getHeightXYRelativeToParent()*0.3f - 15));
 			swiperight.setNoStroke(true);
 			this.addChild(swiperight);
 			
@@ -173,7 +173,7 @@ public class BWIdeaView extends MTRectangle{
 		/**
 		 * Wechselt durch die Liste der Ideen in der angegebenen Richtung.
 		 * 
-		 * @param direction -1 = zurück; 1 = vorwärts
+		 * @param direction -1 = zurï¿½ck; 1 = vorwï¿½rts
 		 */
 		public void fillIdeaArea(int direction) {
 			Idea i = null;
@@ -181,14 +181,14 @@ public class BWIdeaView extends MTRectangle{
 					
 				
 				
-				//flick nach links = vorwärts
+				//flick nach links = vorwï¿½rts
 				if (ideas.get(iterator) == ideas.getLast() && direction == 1) {
 					iterator = 0;
 				} else if (direction == 1) {
 					iterator++;
 				}
 				
-				//flick nach rechts = zurück 
+				//flick nach rechts = zurï¿½ck 
 				if (ideas.get(iterator) == ideas.getFirst() && direction == -1) {
 					iterator = ideas.size()-1;
 				} else if (direction == -1) {
@@ -247,7 +247,7 @@ public class BWIdeaView extends MTRectangle{
 		
 		
 		/**
-		 * Setzt Animation für eine Textarea.
+		 * Setzt Animation fï¿½r eine Textarea.
 		 * @param t
 		 * @param scaleWidth
 		 */
