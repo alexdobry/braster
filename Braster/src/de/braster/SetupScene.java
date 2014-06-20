@@ -90,7 +90,7 @@ public class SetupScene  extends AbstractScene{
 		
 		 
 		MTTextField labelProblem = new MTTextField(mtApp, mtApp.width/2-200+30,mtApp.height/13, 400, 50, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		40, MTColor.WHITE, false));
+        		40, MTColor.WHITE));
 		labelProblem.setGestureAllowance(DragProcessor.class, false);
 		labelProblem.setFillColor(new MTColor(73, 112, 138, 255));
 		labelProblem.setStrokeColor(new MTColor(73, 112, 138, 255));
@@ -99,7 +99,7 @@ public class SetupScene  extends AbstractScene{
 		
 		
 		MTTextField labelTeilnehmer = new MTTextField(mtApp, mtApp.width/2-200,mtApp.height/10*4 - 4, 450, 50, FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		40, MTColor.WHITE, false));
+        		40, MTColor.WHITE));
 		labelTeilnehmer.setGestureAllowance(DragProcessor.class, false);
 		labelTeilnehmer.setFillColor(new MTColor(73, 112, 138, 255));
 		labelTeilnehmer.setStrokeColor(new MTColor(73, 112, 138, 255));
@@ -111,11 +111,11 @@ public class SetupScene  extends AbstractScene{
 		
 		Checkbox c = new Checkbox(mtApplication,0,0, 0, 0, 0, 0, 0, "Hilfe notwendig?");
 		c.setGestureAllowance(DragProcessor.class, false);
-		c.setPositionRelativeToParent(new Vector3D(mtApp.width/2-210 ,mtApp.height/10*7));        
+		c.setPositionRelativeToParent(new Vector3D(mtApp.width/2-210+35 ,mtApp.height/10*7));        
 		canv.addChild(c);
 		
 		final MTRoundRectangle r = getRoundRectWithText(mtApplication.width/2-225, mtApplication.height-100 - 13, 450, 55, "Brainwriting starten", FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-        		50, MTColor.BLACK, false), MTColor.GREY);
+        		40, MTColor.WHITE), MTColor.GREY);
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {

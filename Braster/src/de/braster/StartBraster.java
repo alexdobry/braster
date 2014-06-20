@@ -13,8 +13,8 @@ public class StartBraster extends MTApplication {
  
 	@Override
 	public void startUp() {
-		addScene(new WelcomeScene(this, "Hello World Scene"));
-		//addScene(new SetupScene(this, "Hello World Scene"));
+		//addScene(new WelcomeScene(this, "Hello World Scene"));
+		addScene(new SetupScene(this, "Hello World Scene"));
 		//addScene(new ClusteringScene(this, "Hello World Scene"));
 		//addScene(new EvaluationHelp(this, "Hello World Scene"));
 		//addScene(new EvaluationScene(this, "Hello World Scene"));
