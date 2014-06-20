@@ -41,6 +41,7 @@ import de.braster.BWKeyboard.KeyInfo;
 
 public class BrainWritingScene extends AbstractScene{
 
+	private static final int INPUT_SIZE = 40;
 	private MTCanvas canv;
 	final MTApplication mtApp;
 	
@@ -67,18 +68,18 @@ public class BrainWritingScene extends AbstractScene{
 		this.setClearColor(new MTColor(136, 171, 194, 255));
 		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		
-		MTTextArea textArea = new MTTextArea(mtApplication,                                
+		MTTextArea problemTextArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
-                		50, //fontzize 
+                		40, //fontzize 
                 		new MTColor(255, 255, 255, 255))); //Font color
 		
-		textArea.setNoFill(true);
-		textArea.setNoStroke(true);
+		problemTextArea.setNoFill(true);
+		problemTextArea.setNoStroke(true);
 		
-		textArea.setText(problem);
-		textArea.setGestureAllowance(DragProcessor.class, false);
-		textArea.registerInputProcessor(new TapProcessor(mtApplication, 25, true, 350));
-		textArea.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+		problemTextArea.setText(problem);
+		problemTextArea.setGestureAllowance(DragProcessor.class, false);
+		problemTextArea.registerInputProcessor(new TapProcessor(mtApplication, 25, true, 350));
+		problemTextArea.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isDoubleTap()){
@@ -101,9 +102,9 @@ public class BrainWritingScene extends AbstractScene{
 				return false;
 			}
 		});
-		this.getCanvas().addChild(textArea);
+		this.getCanvas().addChild(problemTextArea);
 		
-		textArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height*0.2f));
+		problemTextArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height*0.2f));
 		
 		
 		
@@ -298,7 +299,7 @@ public class BrainWritingScene extends AbstractScene{
 
 	public BWKeyboard makeKB() {
 		
-		BWKeyboard keyboard = new BWKeyboard(mtApp, 40);
+		final BWKeyboard keyboard = new BWKeyboard(mtApp, INPUT_SIZE);
 		
         final MTTextArea t = new MTTextArea(mtApp, FontManager.getInstance().createFont(mtApp, "arial.ttf", 32, MTColor.WHITE)); 
         t.setExpandDirection(ExpandDirection.UP);
@@ -331,7 +332,7 @@ public class BrainWritingScene extends AbstractScene{
 			    		Idea idea = new Idea(getMTApplication(), canv);
 			    		idea.setText(t.getText());
 			    		idea.setName(t.getText());
-			    		
+			    		keyboard.resetSize(INPUT_SIZE);
 			    		t.clear();
 			    		
 			    		System.out.print(idea.getChildCount());
