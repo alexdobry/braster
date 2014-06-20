@@ -222,7 +222,8 @@ public class SetupScene  extends AbstractScene{
 						for (Positioncomponent item: temp  ) 
 						{
 							MTRectangle r2 = item.getRectangle();
-							r2.setStrokeColor(new MTColor(73, 112, 138, 255));
+							r2.setStrokeColor(MTColor.WHITE);
+							r2.setStrokeWeight(0);
 						}
 						r.setStrokeColor(MTColor.RED);
 						r.setStrokeWeight(8);
