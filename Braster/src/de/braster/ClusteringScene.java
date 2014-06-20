@@ -2,6 +2,7 @@ package de.braster;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.mt4j.MTApplication;
@@ -83,11 +84,11 @@ public class ClusteringScene extends AbstractScene{
 		rText.setPickable(false);
 		rText.setNoFill(true);
 		rText.setNoStroke(true);
-		rText.setText(ideas.size() + " Ideen uebrig");
+		rText.setText(ideaSizeWithoutCategory() + " Ideen uebrig");
 		
 		
 		mtRoundRectangle.unregisterAllInputProcessors();
-		if (ideas.size() != 0 ) {
+		if (ideaSizeWithoutCategory() != 0 ) {
 			mtRoundRectangle.setFillColor(MTColor.GREEN); 
 		} else {
 			mtRoundRectangle.setFillColor(MTColor.RED);
@@ -107,14 +108,14 @@ public class ClusteringScene extends AbstractScene{
 						if (te.isTapped()){
 							
 							
-							if (count < ideas.size()) {
+							if (count < ideaSizeWithoutCategory()) {
 								ideas.get(count++).setVisible(true);
-								rText.setText(ideas.size()-count + " Ideen uebrig");
+								rText.setText(ideaSizeWithoutCategory()-count + " Ideen uebrig");
 							}
 							
 						}
 						
-						if (ideas.size()-count != 0) {
+						if (ideaSizeWithoutCategory()-count != 0) {
 							mtRoundRectangle.setFillColor(MTColor.GREEN);
 						} else {
 							mtRoundRectangle.setFillColor(MTColor.RED);
@@ -277,5 +278,15 @@ public class ClusteringScene extends AbstractScene{
 		this.canv.addChild(mtRoundRectangle);	
 	}
 	
+	private int ideaSizeWithoutCategory() {
+		int count = 0;
+		for (int i = 0; i < ideas.size(); i++) {
+			if (!(ideas.get(i) instanceof IdeaCategory)) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
 	
 }
