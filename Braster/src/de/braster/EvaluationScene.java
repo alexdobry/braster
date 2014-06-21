@@ -743,14 +743,15 @@ public class EvaluationScene extends AbstractScene{
 								dragTarget = dragEvent.getTarget(); 
 							
 							switch (dragEvent.getId()) {
-							case MTGestureEvent.GESTURE_RESUMED:
-								//Put target on top -> draw on top of others
+							case MTGestureEvent.GESTURE_STARTED:
 								if (dragTarget instanceof MTComponent){
-									MTComponent baseComp = (MTComponent)dragTarget;
-									
-									baseComp.sendToFront();						 
+									MTTextArea baseComp = (MTTextArea)dragTarget;
+									baseComp.setFillColor(new MTColor(220,220,220,255));
+									break;					 
 								}
 								break;
+								
+							 
 							case MTGestureEvent.GESTURE_ENDED:
 								//wenn Gesture zu Ende, wird die Position bestimmt
 								if (dragTarget instanceof MTTextArea){
