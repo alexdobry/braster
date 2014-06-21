@@ -30,6 +30,7 @@ import java.util.Locale;
 
 
 
+
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.bounds.BoundsArbitraryPlanarPolygon;
 import org.mt4j.components.interfaces.IMTComponent3D;
@@ -805,12 +806,18 @@ public class ClusterKeyboard extends MTRoundRectangle {
 		ITextInputListener[] listeners = this.getTextInputListeners();
         for (ITextInputListener textInputListener : listeners) {
             if (clickedKey.getCharacterToWrite().equals("back")) {
-                textInputListener.removeLastCharacter();
+            	if (size != maxSize) {
+            		++size;
+            	}     
+            	textInputListener.removeLastCharacter();
             } else if (clickedKey.getCharacterToWrite().equals("shift")) {
                 //no nothing
             } else {
                 String charToAdd = shiftPressed ? clickedKey.getCharacterToWriteShifted() : clickedKey.getCharacterToWrite();
-                textInputListener.appendCharByUnicode(charToAdd);
+                if (size > 0) {
+                	textInputListener.appendCharByUnicode(charToAdd);
+                	--size;
+                }            
             }
         }
 	}
@@ -961,6 +968,9 @@ public class ClusterKeyboard extends MTRoundRectangle {
 		}
 	}
 	
+	public void resetSize(int size) {
+		this.size = size;
+	}
 	
 	/**
 	 * Snap to keyboard.

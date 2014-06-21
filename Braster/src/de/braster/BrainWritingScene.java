@@ -96,17 +96,8 @@ public class BrainWritingScene extends AbstractScene{
 		});
 		this.getCanvas().addChild(problemTextArea);
 		
-		problemTextArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, mtApplication.height*0.2f));
-		String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
-	    
+		problemTextArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, 80));
 		
-		PImage texture = getMTApplication().loadImage(path + "tastatur_test.png");
-		
-		
-		MTRectangle test = new MTRectangle(mtApplication, texture);
-		
-		test.setPositionGlobal(new Vector3D(mtApplication.getWidth()/2, mtApplication.getHeight()*0.8f, 0));
-		canv.addChild(test);
 		//Keyboards erstellen und positionieren
 		kb1 = makeKB();
 //		BWKeyboard kb2 = new BWKeyboard(mtApplication); //tmp

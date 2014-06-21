@@ -40,6 +40,7 @@ public class ClusteringScene extends AbstractScene{
 	private LinkedList<Idea> ideas;
 	private MTRoundRectangle mtRoundRectangle;
 	private ClusterKeyboard keyboard;
+	private MTImageButton keyboardButton;
 	
 	public ClusteringScene( MTApplication mtApplication, String name) {
 		super(mtApplication, name);
@@ -137,22 +138,24 @@ public class ClusteringScene extends AbstractScene{
 	}
 	
 	private void makeKBButton() {
-		PImage keyboardImg = mtApp.loadImage("advanced" + MTApplication.separator + "flickrMT"+ MTApplication.separator + "data"+ MTApplication.separator 
-				+ "keyb128.png");
-		final MTImageButton keyboardButton = new MTImageButton(mtApp, keyboardImg);
+		PImage keyboardImg = mtApp.loadImage("de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator 
+				+ "keyboard.png");
+		keyboardButton = new MTImageButton(mtApp, keyboardImg);
 		keyboardButton.setFillColor(new MTColor(255,255,255,200));
 		keyboardButton.setName("KeyboardButton");
 		keyboardButton.setNoStroke(true);
-		keyboardButton.translateGlobal(new Vector3D(-2,mtApp.height-keyboardButton.getWidthXY(TransformSpace.GLOBAL)+2,0));
+		keyboardButton.setPositionGlobal(new Vector3D(mtApp.width/2, mtApp.height - 62));
+		keyboardButton.scale(0.9f, 0.9f, 1, keyboardButton.getCenterPointRelativeToParent());
 		canv.addChild(keyboardButton);
-//		keyboardButton.scale(0.8f, 0.8f, 0, keyboardButton.getCenterPointRelativeToParent());
-		
+
 		keyboardButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ae) {
 				
 				switch (ae.getID()) {
 				case TapEvent.TAPPED:
 					keyboard.setVisible(true);
+					keyboard.resetSize(40);
+					keyboardButton.setVisible(false);
 					break;
 
 				default:
@@ -200,6 +203,8 @@ public class ClusteringScene extends AbstractScene{
 						cat.tweenTranslate(v, 300, 0.3f, 0.7f);
 						
 						t.clear();
+						keyboard.setVisible(false);
+						keyboardButton.setVisible(true);
 					}
 					return false;
 		
