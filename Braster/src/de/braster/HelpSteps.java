@@ -1,6 +1,7 @@
 package de.braster;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.mt4j.components.MTComponent;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
@@ -17,7 +18,9 @@ import org.mt4j.util.math.Vector3D;
 import processing.core.PApplet;
 
 public class HelpSteps extends MTRoundRectangle{
-
+	
+	LinkedList<MTEllipse> points = new LinkedList<MTEllipse>();
+	
 	public HelpSteps(PApplet pApplet, float x, float y, float z, float width,
 			float height, float arcWidth, float arcHeight,int schrittanzahl) {
 		super(pApplet, x, y, z, width, height,arcWidth , arcHeight);
@@ -36,24 +39,34 @@ public class HelpSteps extends MTRoundRectangle{
 			circle.setStrokeColor(MTColor.BLACK);
 			circle.setPickable(true);
 			this.addChild(circle);
-			
+			points.add(circle);
+			final int i1 = points.size()-1;
+			circle.unregisterAllInputProcessors();
 			circle.registerInputProcessor(new TapProcessor(pApplet));
 			circle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 				public boolean processGestureEvent(MTGestureEvent ge) {
 					TapEvent te = (TapEvent)ge;
 					if (te.isTapped()) 
 					{		
-						for(MTComponent child :getChildren())
-						{
-							MTEllipse childcircle = (MTEllipse) child;
-							childcircle.setFillColor(MTColor.BLACK);
-						}
-						circle.setFillColor(MTColor.LIME);
+						highlightPoint(i1);
 					}
 					return false;
 				}
 			});
 		}
+		
+		highlightPoint(0);
+	}
+	
+	
+	public void highlightPoint(int i) {
+		MTEllipse point = points.get(i);
+		for(MTComponent child :getChildren())
+		{
+			MTEllipse childcircle = (MTEllipse) child;
+			childcircle.setFillColor(MTColor.BLACK);
+		}
+		point.setFillColor(MTColor.LIME);
 	}
 	
 
