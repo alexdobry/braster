@@ -224,21 +224,10 @@ public class BrainWritingScene extends AbstractScene{
 		}
 		
 		
-		String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
-		LinkedList<PImage> stepPictures = new LinkedList<>();
-		stepPictures.add(mtApplication.loadImage(path + "brainwriting1.png"));
-		stepPictures.add(mtApplication.loadImage(path + "brainwriting2.png"));
-		stepPictures.add(mtApplication.loadImage(path + "brainwriting3.png"));
-		stepPictures.add(mtApplication.loadImage(path + "brainwriting4.png"));
-		
-		HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), stepPictures);
-	
-		canv.addChild(help);
-//		MTRectangle test = new MTRectangle(mtApplication, mtApplication.getWidth(), mtApplication.getHeight());		
-//		test.setFillColor(new MTColor(30,144,255, 200));
-//		test.setPickable(false);
-//		canv.addChild(test);
-	
+		if (SetupScene.needHelp) {
+			HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), StartBraster.helpBW);
+			canv.addChild(help);
+		}
 	}
 
 	private boolean checkReady(int players) {

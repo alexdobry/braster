@@ -48,7 +48,7 @@ public class Checkbox extends  MTRoundRectangle {
             		checkBox.setFillColor(MTColor.GREEN);
             	}
             	
-                 needHelp = checkBox.getBooleanValue();
+                 SetupScene.needHelp = checkBox.getBooleanValue();
                  return false;
             }
         });

@@ -27,10 +27,15 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
+import org.mt4j.sceneManagement.transition.BlendTransition;
+import org.mt4j.sceneManagement.transition.FadeTransition;
+import org.mt4j.util.MT4jSettings;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
  
 
+
+import org.mt4j.util.opengl.GLFBO;
 
 import de.braster.Keyboard.KeyInfo;
 
@@ -42,6 +47,7 @@ public class SetupScene  extends AbstractScene{
 	private ArrayList<Positioncomponent> playerButtons;
 	private static String problemDefinition = "";
 	private boolean problemEdit = false;
+	public static boolean needHelp;
 		
 	public SetupScene( final MTApplication mtApplication, String name)
 	{
