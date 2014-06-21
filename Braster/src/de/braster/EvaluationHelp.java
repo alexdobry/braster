@@ -118,9 +118,9 @@ public class EvaluationHelp extends AbstractScene {
 		 canv.addChild(textfieldContinue);
 	
 		 
-		 HelpSteps steps = new HelpSteps(mtApp, 0, 0, 0, 0, 0, 6, 6, 8);
-		 steps.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height/20*19));
-		 canv.addChild(steps);
+//		 HelpSteps steps = new HelpSteps(mtApp, 0, 0, 0, 0, 0, 6, 6, 8);
+//		 steps.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height/20*19));
+//		 canv.addChild(steps);
 		 
 	}
 

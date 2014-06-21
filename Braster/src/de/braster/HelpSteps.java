@@ -20,10 +20,14 @@ import processing.core.PApplet;
 public class HelpSteps extends MTRoundRectangle{
 	
 	LinkedList<MTEllipse> points = new LinkedList<MTEllipse>();
+	HelpOnScene caller;
 	
 	public HelpSteps(PApplet pApplet, float x, float y, float z, float width,
-			float height, float arcWidth, float arcHeight,int schrittanzahl) {
+			float height, float arcWidth, float arcHeight,int schrittanzahl, HelpOnScene call) {
 		super(pApplet, x, y, z, width, height,arcWidth , arcHeight);
+		
+		caller = call;
+		
 		//soll so kreise drauf haben, die anklickbar sind == ellippsen
 		//anzahl abhängig vom eingabeparameter
 		//größe variert dann
@@ -31,6 +35,7 @@ public class HelpSteps extends MTRoundRectangle{
 		this.setStrokeColor(new MTColor(73, 112, 138, 255));
 		this.setSizeLocal(schrittanzahl*20+10, 30);
 		this.setPickable(false);
+		
 		
 		for(int i=0;i<schrittanzahl;i++)
 		{
@@ -49,6 +54,7 @@ public class HelpSteps extends MTRoundRectangle{
 					if (te.isTapped()) 
 					{		
 						highlightPoint(i1);
+						caller.setStep(i1);
 					}
 					return false;
 				}
@@ -69,5 +75,4 @@ public class HelpSteps extends MTRoundRectangle{
 		point.setFillColor(MTColor.LIME);
 	}
 	
-
 }
