@@ -2,10 +2,13 @@ package de.braster;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.MTComponent;
+import org.mt4j.components.PickResult;
+import org.mt4j.components.PickResult.PickEntry;
 import org.mt4j.components.interfaces.IMTComponent3D;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
@@ -14,6 +17,7 @@ import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTList;
 import org.mt4j.components.visibleComponents.widgets.MTListCell;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
+import org.mt4j.components.visibleComponents.widgets.MTTextField;
 import org.mt4j.input.gestureAction.DefaultDragAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
@@ -24,8 +28,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
-import org.mt4j.util.math.Vector3D;
-
+import org.mt4j.util.math.Vector3D; 
 import processing.core.PImage;
 
 
@@ -34,199 +37,189 @@ public class EvaluationScene extends AbstractScene{
 	private MTCanvas canv;
 	private MTApplication mtApp;
 	private MTColor listColor;
-
-	/** The last event. */
-	private MTGestureEvent lastEvent;
-	/** The drag target. */
-	private IMTComponent3D dragTarget;	
-
-    /** The use custom target. */
-	private boolean useCustomTarget;
-	private MTEllipse area;
-    
-	private ArrayList<Note> ideas;
-	private ArrayList<Note> rubbish;
-	private ArrayList<Note> bestIdeas;
+ 
+	private MTEllipse area;	 
+	private float einheitX;
+	private Vector3D trennlinieLinks;
+	private Vector3D trennlinieRechts;
+	private Vector3D trennlinieOben;
 	
-	private ArrayList<Cluster> rubbishCluster;
-	private ArrayList<Cluster> bestIdeasCluster;
+	private ArrayList<Cluster> clusterVerbleibend;
+	private ArrayList<Cluster> clusterVerworfen;
+	private ArrayList<Cluster> clusterWeiter;
+	
+	private Cluster showedCluster;
 	
 	private MTList listMiddle;
-	//private MTList listLeft;
-	//private MTList listRight;
 	
 	private Iscene finalScene;
-	
-	private ArrayList<Cluster> allCluster;
-	
-	private ArrayList<Note> showedCluster;
-	
-	private float einheitX;
-	
-	
-	/*
-     * die anzeige auf MTTextArea ï¿½ndern, dann brauch nicht extra textfeld in rectangle basteln und anklickbar sind die auch
-     * 
-     * wenn bereits idee selektiert ist und unten angezeigt wird
-     * dann aber eine andere idee selektiert wird
-     * wird die unten, wieder nach oben verschoben
-     * 
-     * dazu nach selektierung vorm verschieben, prï¿½fen ob bereits was in der liste drin ist
-     * wenn nicht, normal nach unten 
-     * 
-     * sonst
-     * die bisher angezeigten in liste adden
-     * updateliste
-     * showedTextAreas leeren
-     * neue angeklickte adden und in liste abspeichern
-     * 
-     * nach selektierung und der verschiebung nach unten, die angezeigten ideen in einer liste abspeichern (vom typ mttextarea)
-     * zu den ideas wieder adden
-     */
-	
+		
+	 
 	public EvaluationScene( MTApplication mtApplication, String name)
 	{		
 		super(mtApplication, name);		
-		
-		//muss noch die ganzen ideen aus dem clustern ï¿½bergeben bekommen
-		//solange templiste mit ideen
-		//createStructureForIdeas(Idea.getAllParents());
+				
+		createStructureForIdeas(Idea.getAllParents());
 		 
 		//temporär
-	 	allCluster = new ArrayList<Cluster>();
+	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
 		ArrayList<Note> ideaTemp = new ArrayList<Note>();
-		ideaTemp.add(new Note("eine neue gute Idee ", "einleitung" ));
-		Cluster cluster = new Cluster("cluster",ideaTemp);
-		allCluster.add(cluster);
+		ideaTemp.add(new Note("fussball", "sport" ));
+		Cluster cluster = new Cluster("sport",ideaTemp);
+		clusterVerbleibend.add(cluster);
 		
-		ArrayList<Note> ideaTemp2 = new ArrayList<Note>();
-		for(int i=0;i<3;i++)
-		{
-			ideaTemp2.add(new Note("fdshfisuhgi "+i, "cludsgster"));			
-		}
+		ArrayList<Note> ideaTemp2 = new ArrayList<Note>();		 
+		ideaTemp2.add(new Note("Einleitung", "Struktur"));			
+		ideaTemp2.add(new Note("Zusammenfassung", "Struktur"));
+		ideaTemp2.add(new Note("Fazit", "Struktur"));		
+		Cluster cluster2 = new Cluster("Struktur",ideaTemp2);
+		clusterVerbleibend.add(cluster2);
 		
-		Cluster cluster2 = new Cluster("cludsgster",ideaTemp2);
-		allCluster.add(cluster2);
-		//methodenaufruf
+		ArrayList<Note> ideaTemp3 = new ArrayList<Note>();		 
+		ideaTemp3.add(new Note("Anforderungsmanagement", "UNI"));			
+		ideaTemp3.add(new Note("MCI", "UNI"));
+		ideaTemp3.add(new Note("Noten", "UNI"));		
+		Cluster cluster3 = new Cluster("UNI",ideaTemp3);
+		clusterVerbleibend.add(cluster3);
 		
+		ArrayList<Note> ideaTemp5 = new ArrayList<Note>();
+		ideaTemp5.add(new Note("hallllooo", "jas" ));
+		Cluster cluster5 = new Cluster("jas",ideaTemp5);
+		clusterVerbleibend.add(cluster5);
 		
-		showedCluster = new ArrayList<Note>();		
-		rubbishCluster = new ArrayList<Cluster>();
-		bestIdeasCluster = new ArrayList<Cluster>();
+		ArrayList<Note> ideaTemp4 = new ArrayList<Note>();
+		ideaTemp4.add(new Note("julia ist eine sehr sehr gute freundin", "freundin"));
+		Cluster cluster4 = new Cluster("freundin",ideaTemp4);
+		clusterVerbleibend.add(cluster4);
+				
+		showedCluster = new Cluster();	
+		clusterVerworfen = new ArrayList<Cluster>();
+		clusterWeiter = new ArrayList<Cluster>();
 		
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
 		this.listColor = new MTColor(211,211,211);
-		this.setClearColor(new MTColor(235, 247, 248, 255));		
+		this.setClearColor(new MTColor(235, 247, 248, 255));	
 		
-		createArea();						
-		
-		
-		
-		einheitX = area.getRadiusX()*2/7;
+		createArea();	
 		//Listen erzeugen
-		listMiddle = new MTList(mtApp, 2*einheitX+85, 80,  3*einheitX-20, 250);		 
+		listMiddle = new MTList(mtApp, trennlinieLinks.x+10, 80,  3*einheitX-20, 250);		 
 		
 		//dort passiert das liste fï¿½llen, was bereits implementiert habe
-		updateMiddleList();
+		updateMiddleList();				
+	}
+	
+	
+	//constructor fï¿½r weitere Bewertungsrunde, wenn bereits alle Ideen einmal zugeordnet worden sind
+	public EvaluationScene( MTApplication mtApplication, String name, ArrayList<Cluster> tideas, ArrayList<Cluster> trubbish)
+	{		
+		super(mtApplication, name);		
+			
+		clusterVerbleibend = tideas;
+		showedCluster = new Cluster();	
+		clusterVerworfen = trubbish;
+		clusterWeiter = new ArrayList<Cluster>();
 		
-		//Problembeschreibung
-		MTTextArea textProblem = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		40, MTColor.BLACK));
-		textProblem.unregisterAllInputProcessors();
-		textProblem.setPickable(false);
-		textProblem.setNoFill(true);
-		textProblem.setNoStroke(true);
-		textProblem.setText(SetupScene.getProblem());
-		textProblem.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height-100));
-		this.canv.addChild(textProblem);		
+		this.mtApp = mtApplication;		
+		this.canv = getCanvas();
+		this.listColor = new MTColor(211,211,211);
+		this.setClearColor(new MTColor(235, 247, 248, 255));	
+		
+		createArea();	
+		//Listen erzeugen
+		listMiddle = new MTList(mtApp, trennlinieLinks.x+10, 80,  3*einheitX-20, 250);		 
+		
+		//dort passiert das liste fï¿½llen, was bereits implementiert habe
+		updateMiddleList();	
+		updateleftSide();
 	}
 
 	
 	
-	//constructor fï¿½r weitere Bewertungsrunde, wenn bereits alle Ideen einmal zugeordnet worden sind
-	public EvaluationScene( MTApplication mtApplication, String name, ArrayList<Note> tideas, ArrayList<Note> trubbish)
+	private void createArea()
 	{		
-		super(mtApplication, name);		
-		
-		//muss noch die ganzen ideen aus dem clustern ï¿½bergeben bekommen
-		//solange templiste mit ideen
-		ideas = tideas;
-		rubbish = trubbish;
-		bestIdeas = new ArrayList<Note>();
-		//createAllIdeasNew(ideas);
-		showedCluster = new ArrayList<Note>();
-		showedCluster.clear();
-		
-		this.mtApp = mtApplication;		
-		this.canv = getCanvas();
-		this.listColor = new MTColor(211,211,211);
-		this.setClearColor(MTColor.WHITE);		
-		
-		//Bereich erzeugen
-		createArea();						
-		
+		//Bereich zum Bewerten
+		area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),mtApp.width/2-75, mtApp.height/10*8);
+		area.setFillColor(new MTColor(listColor));
+		area.setPickable(false);			
+		this.canv.addChild(area);					
+			
 		einheitX = area.getRadiusX()*2/7;
-		//Listen erzeugen
-		listMiddle = new MTList(mtApp, 2*einheitX+85, 80,  3*einheitX-20, 250);		 
+		trennlinieLinks = new Vector3D(einheitX*2+75,0);
+		trennlinieRechts = new Vector3D(einheitX*5+75,0);
+		trennlinieOben = new Vector3D(0,70);
 		
-		//dort passiert das liste fï¿½llen, was bereits implementiert habe
-		//zunï¿½chst nur mittlere liste fï¿½llen
-		//nach jedem drag&drop vorgang die neue liste updaten
-		updateMiddleList();
-		 
+		//Trennlinie zum Papierkorb
+		MTLine line1 = new MTLine(this.mtApp, trennlinieLinks.x, 0,   trennlinieLinks.x, area.getRadiusY());	 
+		line1.setFillColor(MTColor.BLACK);
+		line1.setStrokeWeight(5);
+		line1.setPickable(false);
+		area.addChild(line1);
+					
+		//Trennlinie zu den besseren Ideen
+		MTLine line2 = new MTLine(this.mtApp, trennlinieRechts.x, 0 ,  trennlinieRechts.x, area.getRadiusY());  
+		line2.setFillColor(MTColor.BLACK);
+		line2.setStrokeWeight(5);
+		line2.setPickable(false);
+		area.addChild(line2);
+			
+		//Trennlinie zu den besseren Ideen
+		MTLine line3 = new MTLine(this.mtApp, area.getCenterPointLocal().x-area.getRadiusX()+30, 70,area.getCenterPointLocal().x+area.getRadiusX()-30, 70);  
+		line3.setFillColor(MTColor.BLACK);
+		line3.setStrokeWeight(3);
+		line3.setPickable(false);
+		area.addChild(line3);
+		
+		MTTextArea textareaPapierkorb = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		24, MTColor.BLACK));	 
+		textareaPapierkorb.unregisterAllInputProcessors();
+		textareaPapierkorb.setPickable(false);
+		textareaPapierkorb.setNoFill(true);
+		textareaPapierkorb.setNoStroke(true);
+		textareaPapierkorb.setText("Ideen verworfen");
+		textareaPapierkorb.setSizeLocal(200, 40);
+		textareaPapierkorb.setPositionGlobal(new Vector3D(mtApp.width/10*2,40));
+		area.addChild(textareaPapierkorb);
+	
+		MTTextArea textareaIdeas = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		24, MTColor.BLACK));
+		textareaIdeas.unregisterAllInputProcessors();
+		textareaIdeas.setPickable(false);
+		textareaIdeas.setNoFill(true);
+		textareaIdeas.setNoStroke(true);
+		textareaIdeas.setText("Ideen verbleibend");
+		textareaIdeas.setSizeLocal(200, 40);			 
+		textareaIdeas.setPositionGlobal(new Vector3D(mtApp.width/2,40));
+		area.addChild(textareaIdeas);
+				
+		MTTextArea textareaBestIdeas = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		24, MTColor.BLACK));
+		textareaBestIdeas.unregisterAllInputProcessors();
+		textareaBestIdeas.setPickable(false);
+		textareaBestIdeas.setNoFill(true);
+		textareaBestIdeas.setNoStroke(true);
+		textareaBestIdeas.setText("Ideen weiter");
+		textareaBestIdeas.setSizeLocal(200, 40);
+		textareaBestIdeas.setPositionGlobal(new Vector3D(mtApp.width/10*8,40));
+		area.addChild(textareaBestIdeas);
+		
 		//Problembeschreibung
 		MTTextArea textProblem = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-        		40, MTColor.BLACK));
+		    		40, MTColor.BLACK));
 		textProblem.unregisterAllInputProcessors();
 		textProblem.setPickable(false);
 		textProblem.setNoFill(true);
 		textProblem.setNoStroke(true);
-		textProblem.setSizeLocal(500, 100);
-		textProblem.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height-100));
 		textProblem.setText(SetupScene.getProblem());
-		this.canv.addChild(textProblem);		
-	}
-	
-	
-	//Aus dem Datenmodell von Patrick eine angepasste Version machen
-	//in allIdeas gibst fï¿½r jeden CLuster eine Liste der Ideen
-	private void createStructureForIdeas(LinkedList<Idea> allParents)
-	{		
-		allCluster = new ArrayList<Cluster>();
-		for(Idea idea : allParents)
-		{
-			//falls kein child hat, ist es nur eine einzelne idee
-			//sonst erste idee die kategorie
-			//children sind die ideen
-			if(idea.getChildren().length==0)
-			{
-				ArrayList<Note> ideasTemp = new ArrayList<Note>();
-				ideasTemp.add(new Note(idea.getText()));				
-				Cluster cluster = new Cluster("",ideasTemp);
-				allCluster.add(cluster);
-			}
-			else
-			{
-				ArrayList<Note> ideasTemp = new ArrayList<Note>();
-				String clusterName = idea.getText();
-				for(MTComponent childIdea : idea.getChildren())
-				{
-					MTTextArea textArea = (MTTextArea) childIdea;
-					ideasTemp.add(new Note(textArea.getText(),clusterName));
-				}
-				Cluster newCluster = new Cluster(clusterName,ideasTemp); 
-				allCluster.add(newCluster);								
-			}
-		}
-	}
+		textProblem.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height-100));
+		this.canv.addChild(textProblem);
+	 }
 	
 	
 	
 	
-	
-	@SuppressWarnings("deprecation")
+	//Füllt die mittlere Liste mit den Clustern
 	private void updateMiddleList()
 	{
 		//liste leeren und erstellen
@@ -235,17 +228,17 @@ public class EvaluationScene extends AbstractScene{
 		listMiddle.setStrokeColor(listColor);
 		area.addChild(listMiddle);
 				
-		int x = 5;
+		int x = 5; 
 		int y = 5;		
 				
 		//brauch updatemethode, sodass die zellenlänge vergrößert wird
 		//Größe einer Zelle (standardhöhe)
-		MTListCell cell = createListCell(70);
-		listMiddle.addChild(cell);
+		MTListCell cell = createListCell();
+		
 								
 		//arraylist durchgehen
 		//für jede arraylist das erste element anzeigen als ein symbol
-		for(Cluster cluster : allCluster)
+		for(Cluster cluster : clusterVerbleibend)
 		{
 			int widthElement =0;
 			MTTextArea textAreaIdee = null;
@@ -255,7 +248,6 @@ public class EvaluationScene extends AbstractScene{
 			{
 				textAreaIdee = new MTTextArea(mtApp);
 				textAreaIdee.setText(cluster.getNotes().get(0).getName());	
-				textAreaIdee.setPositionRelativeToParent(new Vector3D(x+textAreaIdee.getWidthXYVectLocal().length()/2,25));
 				textAreaIdee.setFillColor(MTColor.GREEN);
 				textAreaIdee.setStrokeColor(MTColor.LIME);
 				textAreaIdee.unregisterAllInputProcessors();
@@ -269,7 +261,6 @@ public class EvaluationScene extends AbstractScene{
 			{
 				ordner = new MTTextArea(mtApp);
 				ordner.setText(cluster.getName());	
-				ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,25));
 				ordner.setFillColor(new MTColor(139,69,0,255));
 				ordner.setStrokeColor(new MTColor(205,133,0,255));
 				ordner.unregisterAllInputProcessors();
@@ -277,79 +268,353 @@ public class EvaluationScene extends AbstractScene{
 				ordner.removeAllGestureEventListeners();
 				ordner.setPickable(false);
 				widthElement = (int) ordner.getWidthXYVectLocal().length();	
-			}			
+			}				
 			
-			x += widthElement +20;
 			//überprüfung ob das element reinpasst in die zeile noch
-			//wenn ja alle elemente des clusters adden
-			//wenn nicht nächste zeile beginnen
-			if(x  > 3*einheitX) 
+			if(x + widthElement  > 3*einheitX)  //nur wenn element reinpasst
 			{
-				x = 5;
-				cell = createListCell(50);
-				listMiddle.addChild(cell);
+				x = 5;   //x wieder auf zeilenbeginn setzen
+				cell = createListCell();				
 			}
 					
 			if(cluster.getNotes().size()==1)
 			{
 				cell.addChild(textAreaIdee);
+				textAreaIdee.setPositionRelativeToParent(new Vector3D(x+textAreaIdee.getWidthXYVectLocal().length()/2,20));
 			}
 			else
 			{
 				cell.addChild(ordner);
+				ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,20));
 			}	
-								
+			x += widthElement +20;		//x erhöhen um länge des elements + abstand 20						
 		}				
 	}
 	
-	private void updateRightSide()
+	
+	//Erstellt eine Zelle für die Liste und beinhaltet das Click Event, um Cluster aus der Liste nach unten zuschieben
+	private MTListCell createListCell()
 	{
-		
+		MTListCell cell = new MTListCell(this.mtApp,3*einheitX-20, 40);
+		cell.setPickable(true);
+		cell.setStrokeColor(listColor);
+		cell.setFillColor(listColor);
+		cell.unregisterAllInputProcessors();
+		listMiddle.addChild(cell);		
+		cell.registerInputProcessor(new TapProcessor(mtApp));
+		cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent)ge;
+				if (te.isTapped()) 
+				{		
+					//wird die unten angezeigt und aus der liste entfernt
+					MTListCell clickedCell = (MTListCell) te.getTarget();
+					Vector3D clickedPosition = te.getCursor().getPosition();
+					for(MTComponent selectedComponent : clickedCell.getChildren())
+					{
+						if(selectedComponent.toString().contains("MTTextArea"))
+						{
+							MTTextArea actualTextarea = (MTTextArea) selectedComponent;
+							@SuppressWarnings("deprecation")
+							float halbeLaengeTextarea = actualTextarea.getWidthXYVectLocal().length()/2;
+							//wenn in x-Richtung zwischen die maximalen Ausmaï¿½e geklickt wurde
+							if(actualTextarea.getCenterPointGlobal().x - halbeLaengeTextarea < clickedPosition.x && actualTextarea.getCenterPointGlobal().x + halbeLaengeTextarea > clickedPosition.x)
+							{
+								//falls unten eine drin ist, die wieder nach oben schieben als cluster
+								 
+								if(showedCluster !=null && showedCluster.getNotes().size()>0)  //falls aktuell ideen angezeigt werden, müssen diese in cluster zurückbefördert werden
+								{
+									moveShowedClusterToList(); 
+								}						 
+								//selektierte aus der liste lï¿½schen
+							 
+								Cluster selectedCluster = removeFromClusterList(actualTextarea, clusterVerbleibend);
+								//element lï¿½schen
+								actualTextarea.destroy();
+								//die selektierte unten erstellen
+								if(selectedCluster!=null)
+								{
+									createSelectedIdea(selectedCluster);
+								}
+								
+								//liste updaten
+								updateMiddleList();
+								break;
+								 
+							}
+						}						
+					}
+				}
+				return false;
+			}
+		});		
+		return cell;
+	}	
+	
+	
+	//Sucht vorgegebene textarea in der clusterliste und löscht diese raus und gibt sie zurück
+	private Cluster removeFromClusterList(MTTextArea idee, ArrayList<Cluster> clusterlist)
+	{
+		for(Cluster cluster : clusterlist)
+		{			
+			if(cluster.getName().equals(idee.getText()))
+			{
+				clusterlist.remove(cluster);
+				return cluster;
+			}
+			for(Note note : cluster.getNotes())
+			{				 
+				if(note.getName().equals(idee.getText()))
+				{						 
+					if(cluster.getNotes().size()==1)
+					{
+						clusterlist.remove(cluster);
+						return cluster;					 
+					}
+					return cluster;
+				}
+			}
+		}
+		return null;
+	}	
+	
+	
+	//Löscht die aktuell angezeigten Ideen und schiebt sie in die Liste zurück
+	private void moveShowedClusterToList()
+	{
+		//showedCluster wieder nach oben schieben
+		clusterVerbleibend.add(showedCluster);		 
+		showedCluster = null;
+		//alle kinder der area löschen die vom Typ MTtextarea sind und in dem bereich liegen
+		for(MTComponent comp : area.getChildren())
+		{
+			try
+			{
+				MTTextArea text = (MTTextArea)comp;
+				//Ausnahme einfügen fï¿½r die Textareas im tabellenkopf
+				if(text.getCenterPointGlobal().x> trennlinieLinks.x && text.getCenterPointGlobal().x<trennlinieRechts.x && text.getCenterPointGlobal().y > trennlinieOben.y)
+				{
+					area.removeChild(text);
+				}				
+			}
+			catch(Exception castexception)
+			{
+				continue;
+			}
+		}
 	}
 	
-	@SuppressWarnings("deprecation")
+	
+	//Erstellt die selektierten Cluster unten in groß
+	private void createSelectedIdea(Cluster selectedCluster)
+	{	
+		//bereich von 350 -540 platz		 
+		int y=350;
+		showedCluster = selectedCluster;
+		for(Note note : selectedCluster.getNotes())
+		{			 
+			final MTTextArea rText = new MTTextArea(mtApp);
+			rText.setFillColor(MTColor.GREEN);
+			rText.setStrokeColor(MTColor.LIME);
+			rText.unregisterAllInputProcessors();
+			rText.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 25, MTColor.WHITE, true));		 
+			rText.setPickable(true);
+			rText.setText(note.getName());				
+			rText.setPositionGlobal(new Vector3D((mtApp.width/2),y));
+			area.addChild(rText);
+			
+			y+=50;  //abstand der elemente
+			 
+			rText.registerInputProcessor(new DragProcessor(getMTApplication()));
+			rText.addGestureListener(DragProcessor.class, new IGestureEventListener() {				
+				@Override
+				public boolean processGestureEvent(MTGestureEvent ge) {
+					DragEvent de = (DragEvent)ge;
+					
+					switch (de.getId()) {
+					case DragEvent.GESTURE_STARTED:						 
+						rText.setFillColor(new MTColor(220,220,220,255));
+						break;
+					case DragEvent.GESTURE_UPDATED:							
+						break;
+					case DragEvent.GESTURE_ENDED:							 					
+						Vector3D centerPoint = rText.getCenterPointRelativeToParent();						
+						if(centerPoint.x <  trennlinieLinks.x) //wird nach links verschoben
+						{			
+							boolean added = false;
+							//überprüfung ob der cluster bereits besteht
+							for(Cluster leftCluster : clusterVerworfen)
+							{								
+								if(leftCluster.getName().equals(showedCluster.getName()))
+								{
+									leftCluster.getNotes().add(new Note(rText.getText(),showedCluster.getName()));
+									added=true;
+									break;
+								}											
+							}
+							if(added==false)
+							{								
+								ArrayList<Note> newNotes = new ArrayList<Note>();
+								newNotes.add(new Note(rText.getText(),showedCluster.getName()));
+								Cluster newCluster = new Cluster(showedCluster.getName(), newNotes);
+								clusterVerworfen.add(newCluster);
+							}
+							updateShowedNotes(rText);
+							rText.destroy();					
+							updateleftSide();
+						}
+						else if(centerPoint.x > trennlinieRechts.x) //wird nach rechts verschoben
+						{							 
+							boolean added = false;
+							//überprüfung ob der cluster bereits besteht
+							for(Cluster rightCluster : clusterWeiter)
+							{
+								if(rightCluster.getName().equals(showedCluster.getName()))
+								{
+									rightCluster.getNotes().add(new Note(rText.getText(), showedCluster.getName()));
+									added=true;
+									break;
+								}											
+							}
+							if(added==false)
+							{											
+								ArrayList<Note> newNotes = new ArrayList<Note>();
+								newNotes.add(new Note(rText.getText(),showedCluster.getName()));
+								Cluster newCluster = new Cluster(showedCluster.getName(), newNotes);
+								clusterWeiter.add(newCluster);
+							}
+							updateShowedNotes(rText);
+							rText.destroy();					
+							updateRightSide();	
+						}
+					 	
+						break;
+					}
+					//Falls keine Elemente mehr drin sind
+					
+					if(clusterVerbleibend.size()==0 && clusterWeiter.size()==1 && showedCluster == null)
+					{						 
+						//FinalScene gehen
+						mtApp.pushScene();							
+						if (finalScene == null){
+							finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), clusterWeiter);
+							mtApp.addScene(finalScene);
+						}
+						//Do the scene change
+						mtApp.changeScene(finalScene);						
+					}
+					if(clusterVerbleibend.size()==0 && clusterWeiter.size()>1 && showedCluster==null)
+					{
+						//rechten ideen in die mitte
+						//alle restlichen in papierkorb
+						//FinalScene gehen
+						mtApp.pushScene();
+						if (finalScene == null)
+						{				
+							//Im konstruktor mï¿½ssen die ideen als 2 listen ï¿½bergeben werden
+							finalScene = new EvaluationScene(mtApp, "Evaluation Again", clusterWeiter, clusterVerworfen);
+							mtApp.addScene(finalScene);
+						}
+						//Do the scene change
+						mtApp.changeScene(finalScene);						
+					}				 
+				
+				return false;
+				}
+		});
+			
+		  			
+		}
+	}
+	
+	
+	
+	//wenn neue idee hinzugefügt wird, muss die anzeige links aktualisiert werden
 	private void updateleftSide()
 	{		
-		//liste leeren
-		//indem die position auslese und alle links von der linie1 lösche
+		//Liste leeren		 
 		for(MTComponent component : area.getChildren())
 		{
 			if(component.toString().contains("MTText"))
 			{
 				MTTextArea textTemp = (MTTextArea) component;
-				if(textTemp.getCenterPointGlobal().x<einheitX*2+75 && textTemp.getCenterPointGlobal().y>80)
+				if(textTemp.getCenterPointGlobal().x < trennlinieLinks.x && textTemp.getCenterPointGlobal().y > trennlinieOben.y)
 				{
 					area.removeChild(component);
 					continue;
 				}
 			}
 		}
-	
-				
-		int x = (int) (einheitX +75);
-		int y =  100;		
-				
+					
+		float x = (einheitX +75);
+		float y =  100;					
 		 						
 		//arraylist durchgehen
 		//für jede arraylist das erste element anzeigen als ein symbol
-		for(Cluster cluster : rubbishCluster)
-		{
-			
-			MTTextArea textAreaIdee = null;
+		for(final Cluster cluster : clusterVerworfen)
+		{			
+			final MTTextArea textAreaIdee = new MTTextArea(mtApp);
 			MTTextArea ordner = null;
 			//wenn im cluster nur eine idee ist, wird diese direkt angezeigt
 			if(cluster.getNotes().size()==1)
-			{
-				textAreaIdee = new MTTextArea(mtApp);
+			{				
 				textAreaIdee.setText(cluster.getNotes().get(0).getName());	
 				textAreaIdee.setPositionRelativeToParent(new Vector3D(x,y));
 				textAreaIdee.setFillColor(MTColor.GREEN);
 				textAreaIdee.setStrokeColor(MTColor.LIME);
 				textAreaIdee.unregisterAllInputProcessors();
 				textAreaIdee.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
-				textAreaIdee.removeAllGestureEventListeners();
-				textAreaIdee.setPickable(false);
+				textAreaIdee.setPickable(true);				
+				textAreaIdee.registerInputProcessor(new DragProcessor(getMTApplication()));
+				textAreaIdee.addGestureListener(DragProcessor.class, new DefaultDragAction() {
+					public boolean processGestureEvent(MTGestureEvent g) {
+						DragEvent de = (DragEvent)g;
+						switch (de.getId()) {
+							case MTGestureEvent.GESTURE_STARTED:								 
+								 textAreaIdee.setFillColor(new MTColor(220,220,220,255));
+								 break;		
+							case MTGestureEvent.GESTURE_UPDATED:
+								break;
+							case MTGestureEvent.GESTURE_ENDED:									 								
+								 Vector3D centerPoint = textAreaIdee.getCenterPointRelativeToParent();
+								 String ideenText = cluster.getName();
+								 if(centerPoint.x >  trennlinieLinks.x && centerPoint.x < trennlinieRechts.x)
+								 {
+									 boolean added = false;
+									 //überprüfung ob der cluster bereits besteht
+									 for(Cluster middleCluster : clusterVerbleibend)
+									 {
+										if(middleCluster.getName().equals(ideenText))
+										{
+											middleCluster.getNotes().add(new Note(textAreaIdee.getText(),cluster.getNotes().get(0).getClusterName()));
+											added=true;
+											break;
+										}	 										
+									 }
+									if(added==false)
+									{
+										ArrayList<Note> newNotes = new ArrayList<Note>();
+										newNotes.add(new Note(textAreaIdee.getText()));
+										Cluster newCluster = new Cluster(ideenText, newNotes);
+										clusterVerbleibend.add(newCluster);
+									}
+									removeFromClusterList(textAreaIdee,clusterVerworfen);
+									textAreaIdee.destroy();					
+									updateMiddleList();
+								}
+								else if(centerPoint.x> trennlinieRechts.x)
+								{							 
+									//baseComp.destroy();					
+									//updateRightSide();	
+								}
+								 break;
+							} 
+						  
+						return false;
+					}
+				});  
 			}
+			
 			//andernfalls ein ordner objekt mit namen drauf
 			else
 			{
@@ -389,502 +654,182 @@ public class EvaluationScene extends AbstractScene{
 			else
 			{
 				area.addChild(ordner);
-			}	
-								
-		}
-						
+			}									
+		}						
 	}
 	
 	
-	private MTListCell createListCell(int height)
-	{
-		MTListCell cell = new MTListCell(this.mtApp,3*einheitX-20, height);
-		cell.setPickable(true);
-		cell.setStrokeColor(listColor);
-		cell.setFillColor(listColor);
-		cell.unregisterAllInputProcessors();
-		cell.registerInputProcessor(new TapProcessor(mtApp));
-		cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				TapEvent te = (TapEvent)ge;
-				if (te.isTapped()) 
-				{		
-					//wird die unten angezeigt und aus der liste entfernt
-					MTListCell clickedCell = (MTListCell) te.getTarget();
-					Vector3D clickedPosition = te.getCursor().getPosition();
-					for(MTComponent selectedComponent : clickedCell.getChildren())
+	
+	//wenn neue idee hinzugefügt wird, muss die anzeige links aktualisiert werden
+		private void updateRightSide()
+		{		
+			//Liste leeren		 
+			for(MTComponent component : area.getChildren())
+			{
+				if(component.toString().contains("MTText"))
+				{
+					MTTextArea textTemp = (MTTextArea) component;
+					if(textTemp.getCenterPointGlobal().x > trennlinieRechts.x && textTemp.getCenterPointGlobal().y > trennlinieOben.y)
 					{
-						if(selectedComponent.toString().contains("MTTextArea"))
-						{
-							MTTextArea childTextarea = (MTTextArea) selectedComponent;
-							//wenn in x-Richtung zwischen die maximalen Ausmaï¿½e geklickt wurde
-							if(childTextarea.getCenterPointGlobal().x - 50 < clickedPosition.x && childTextarea.getCenterPointGlobal().x + 50 > clickedPosition.x)
-							{
-								//falls unten eine drin ist, die wieder nach oben schieben als cluster
-								if(showedCluster.size()>0)
-								{
-									moveBottomIdeasToTop(); 
-								}						 
-								//selektierte aus der liste lï¿½schen
-							 
-								Cluster selectedCluster = removeSelectedIdeaFromIdeas(childTextarea);
-								//element lï¿½schen
-								childTextarea.destroy();
-								//die selektierte unten erstellen
-								if(selectedCluster!=null)
-								{
-									createSelectedIdea(selectedCluster);
-								}
-								//liste updaten
-								updateMiddleList();
-								break;
-							}
-						}
-						//Popup muss aufgehen für weitere Ideen
-						
+						area.removeChild(component);
+						continue;
 					}
 				}
-				return false;
 			}
-		});
-		
-		return cell;
-	}
-	 
-	
-	private MTListCell createListCellOnSide(int height)
-	{
-		MTListCell cell = new MTListCell(this.mtApp,3*einheitX-20, height);
-		cell.setPickable(true);
-		cell.setStrokeColor(listColor);
-		cell.setFillColor(listColor);
-		cell.unregisterAllInputProcessors();
-		cell.registerInputProcessor(new TapProcessor(mtApp));
-		cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				TapEvent te = (TapEvent)ge;
-				if (te.isTapped()) 
-				{	
-					//wenn getapped wird
-					/*
-					//wird die unten angezeigt und aus der liste entfernt
-					MTListCell clickedCell = (MTListCell) te.getTarget();
-					Vector3D clickedPosition = te.getCursor().getPosition();
-					for(MTComponent selectedComponent : clickedCell.getChildren())
-					{
-						if(selectedComponent.toString().contains("MTTextArea"))
-						{
-							MTTextArea childTextarea = (MTTextArea) selectedComponent;
-							//wenn in x-Richtung zwischen die maximalen Ausmaï¿½e geklickt wurde
-							if(childTextarea.getCenterPointGlobal().x - 50 < clickedPosition.x && childTextarea.getCenterPointGlobal().x + 50 > clickedPosition.x)
-							{
-								//falls unten eine drin ist, die wieder nach oben schieben als cluster
-								if(showedCluster.size()>0)
-								{
-									moveBottomIdeasToTop(); 
-								}						 
-								//selektierte aus der liste lï¿½schen
-							 
-								Cluster selectedCluster = removeSelectedIdeaFromIdeas(childTextarea);
-								//element lï¿½schen
-								childTextarea.destroy();
-								//die selektierte unten erstellen
-								if(selectedCluster!=null)
-								{
-									createSelectedIdea(selectedCluster);
-								}
-								//liste updaten
-								updateMiddleList();
-								break;
-							}
-						}
-						//Popup muss aufgehen für weitere Ideen
-						else if(selectedComponent.toString().contains("MTRect"))
-						{
-							MTRectangle childTextarea = (MTRectangle) selectedComponent;
-							//wenn in x-Richtung zwischen die maximalen Ausmaï¿½e geklickt wurde
-							if(childTextarea.getCenterPointGlobal().x - 25 < clickedPosition.x && childTextarea.getCenterPointGlobal().x + 25 > clickedPosition.x)
-							{
-								//falls unten eine drin ist, die wieder nach oben schieben als cluster
-								if(showedCluster.size()>0)
-								{
-									moveBottomIdeasToTop(); 
-								}						 
-								//selektierte aus der liste lï¿½schen
-							 
-								Cluster selectedCluster = removeSelectedIdeaFromIdeas(childTextarea);
-								//element lï¿½schen
-								childTextarea.destroy();
-								//die selektierte unten erstellen
-								if(selectedCluster!=null)
-								{
-									createSelectedIdea(selectedCluster);
-								}
-								//liste updaten
-								updateMiddleList();
-								break;
-							}
-						}
-					}*/
-				}
-				return false;
-			}
-		});
-		
-		return cell;
-	}
-	 
-	
-	
-	private Cluster removeSelectedIdeaFromIdeas(MTTextArea clickedTextArea)
-	{
-		//rausbekommen zu welchem cluster die gehï¿½rt
-		for(Cluster actualCluster : allCluster)
-		{
-			if(actualCluster.getNotes().size()>1)
-			{
-				String s1 = actualCluster.getName();
-				String s2 = clickedTextArea.getText();
-				
-				if(s1.equals(s2))
-				{
-					allCluster.remove(actualCluster);
-					return actualCluster;				
-				}
-			}
-			else
-			{						
-				for(Note note : actualCluster.getNotes())
-				{
-					String s1 = note.getName();
-					String s2 = clickedTextArea.getText();
 					
-					if(s1.equals(s2))
-					{
-						allCluster.remove(actualCluster);
-						return actualCluster;				
-					}
-				}
-				
-			}
-		}
-			 
-		return null;
-	}
-		
-	
-	
-	 
-	
-	
-	private void moveBottomIdeasToTop()
-	{
-		ArrayList<Note> ideasTemp = new ArrayList<Note>();
-		String clusterNameTemp ="";
-		for(Note n : showedCluster)
-		{
-			ideasTemp.add(new Note(n.getName()));
-			clusterNameTemp = n.getClusterName();
-		}
-		Cluster cluster = new Cluster(clusterNameTemp,ideasTemp);
-		allCluster.add(cluster);
-		showedCluster.clear();
-		//alle kinder der area lï¿½schen die typ mttextarea sind
-		for(MTComponent comp : area.getChildren())
-		{
-			try
-			{
-				MTTextArea text = (MTTextArea)comp;
-				//Ausnahme einfï¿½gen fï¿½r die Textareas im tabellenkopf
-				if(text.getText().equals("Ideen verworfen") || text.getText().equals("Ideen verbleibend") || text.getText().equals("Ideen weiter"))
-				{
-					continue;
-				}
-				if(text.getCenterPointGlobal().x> 2*einheitX+75 && text.getCenterPointGlobal().x<5*einheitX+75)
-				{
-					area.removeChild(text);
-				}
-			}
-			catch(Exception castexception)
-			{
-				continue;
-			}
-		}
-	}
-	
-	//eingegeben String nach der vorgegeben Lï¿½nge formatieren wegen den Zeilenumbrï¿½chen
-	 private static String formatString(String str, int length)
-	    {
-	        String result ="";
-	        //alle 50 zeichen eine neue Zeile starten
-	          
-	        //split bei leerzeichen     
-	        String [] splitText = str.split(" ");
-	          
-	        //textzusammenbauen
-	        //wenn text + neues wort ï¿½ber 50 ist, dann neue zeile beginnen mit \n
-	        String aktuelleZeile = "";
-	        for(int i=0;i<splitText.length;i++)
-	        {
-	            if(aktuelleZeile.length() + splitText[i].length() <length)
-	            {
-	                result+= splitText[i]+ " ";
-	                aktuelleZeile+= splitText[i] +" ";          
-	            }
-	            else
-	            {
-	                result += "\n"+ splitText[i]+ " ";
-	                aktuelleZeile=splitText[i]+  " ";
-	            }
-	        }       
-	        return result;
-	    } 
-	 
-	 
-	
-	 
-	 
-	 private void createArea()
-	 {
-		//Bereich zum Bewerten
-			area = new MTEllipse(this.mtApp, new Vector3D(this.mtApp.width/2,0),mtApp.width/2-75, mtApp.height/10*8);
-			area.setFillColor(new MTColor(listColor));
-			area.setPickable(false);			
-			this.canv.addChild(area);
-					
-			
-			//Trennlinie zum Papierkorb
-		 	MTLine line1 = new MTLine(this.mtApp, (area.getRadiusX()*2)/7*2+75, 0,  (area.getRadiusX()*2)/7*2+75, area.getRadiusY());	 
-			line1.setFillColor(MTColor.BLACK);
-			line1.setStrokeWeight(5);
-			line1.setPickable(false);
- 
-			area.addChild(line1);
-					
-			//Trennlinie zu den besseren Ideen
-			MTLine line2 = new MTLine(this.mtApp, (area.getRadiusX()*2)/7*5+75, 0 , (area.getRadiusX()*2)/7*5+75, area.getRadiusY());  
-			line2.setFillColor(MTColor.BLACK);
-			line2.setStrokeWeight(5);
-			line2.setPickable(false);
-	 
-			area.addChild(line2);
-			
-			//Trennlinie zu den besseren Ideen
-			MTLine line3 = new MTLine(this.mtApp, area.getCenterPointLocal().x-area.getRadiusX()+30, 70,area.getCenterPointLocal().x+area.getRadiusX()-30, 70);  
-			line3.setFillColor(MTColor.BLACK);
-			line3.setStrokeWeight(3);
-			line3.setPickable(false);
-			area.addChild(line3);
-			
-			MTTextArea textareaPapierkorb = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		24, MTColor.BLACK));	 
-			textareaPapierkorb.unregisterAllInputProcessors();
-			textareaPapierkorb.setPickable(false);
-			textareaPapierkorb.setNoFill(true);
-			textareaPapierkorb.setNoStroke(true);
-			textareaPapierkorb.setText("Ideen verworfen");
-			textareaPapierkorb.setSizeLocal(200, 40);
-			textareaPapierkorb.setPositionGlobal(new Vector3D(mtApp.width/10*2,40));
-			area.addChild(textareaPapierkorb);
-	
-			MTTextArea textareaIdeas = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		24, MTColor.BLACK));
-			textareaIdeas.unregisterAllInputProcessors();
-			textareaIdeas.setPickable(false);
-			textareaIdeas.setNoFill(true);
-			textareaIdeas.setNoStroke(true);
-			textareaIdeas.setText("Ideen verbleibend");
-			textareaIdeas.setSizeLocal(200, 40);			 
-			textareaIdeas.setPositionGlobal(new Vector3D(mtApp.width/2,40));
-			area.addChild(textareaIdeas);
-				
-			MTTextArea textareaBestIdeas = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
-	        		24, MTColor.BLACK));
-			textareaBestIdeas.unregisterAllInputProcessors();
-			textareaBestIdeas.setPickable(false);
-			textareaBestIdeas.setNoFill(true);
-			textareaBestIdeas.setNoStroke(true);
-			textareaBestIdeas.setText("Ideen weiter");
-			textareaBestIdeas.setSizeLocal(200, 40);
-			textareaBestIdeas.setPositionGlobal(new Vector3D(mtApp.width/10*8,40));
-			area.addChild(textareaBestIdeas);
-	 }
-	 
-	 
-	 
-	 @SuppressWarnings("deprecation")
-	private void createSelectedIdea(Cluster selectedCluster)
-		{	
-			//bereich von 400 -540 platz
-			//mit mtlist bearbeiten, weil es auch sehr viele ideen sein kï¿½nnen?
-			int y=350;
-			for(Note note : selectedCluster.getNotes())
-			{
-				//breite und hï¿½he an den text anpassen
-				MTTextArea rText = new MTTextArea(mtApp);
-
-				rText.setFillColor(MTColor.GREEN);
-				rText.setStrokeColor(MTColor.LIME);
-				rText.unregisterAllInputProcessors();
-				rText.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 25, MTColor.WHITE, true));
-				//rText.removeAllGestureEventListeners();
-				rText.setPickable(true);
-				rText.setText(formatString(note.getName(),80));				
-				rText.setPositionGlobal(new Vector3D((mtApp.width/2) /*-(rText.getWidthXYVectLocal().x/2)*/,y));
-					 
-				rText.registerInputProcessor(new DragProcessor(getMTApplication()));
-				rText.addGestureListener(DragProcessor.class, new DefaultDragAction() {
-					public boolean processGestureEvent(MTGestureEvent g) {
-						if (g instanceof DragEvent){
-							DragEvent dragEvent = (DragEvent)g;
-							lastEvent = dragEvent;
-							
-							if (!useCustomTarget)
-								dragTarget = dragEvent.getTarget(); 
-							
-							switch (dragEvent.getId()) {
-							case MTGestureEvent.GESTURE_STARTED:
-								if (dragTarget instanceof MTComponent){
-									MTTextArea baseComp = (MTTextArea)dragTarget;
-									baseComp.setFillColor(new MTColor(220,220,220,255));
-									break;					 
-								}
-								break;
-								
-							 
-							case MTGestureEvent.GESTURE_ENDED:
-								//wenn Gesture zu Ende, wird die Position bestimmt
-								if (dragTarget instanceof MTTextArea){
-									MTTextArea baseComp = (MTTextArea)dragTarget;
-									
-									Vector3D centerPoint = baseComp.getCenterPointRelativeToParent();
-									//wenn links von MTline1 dann wird zur listeLeft gehauen
-									//element verschwindet
-									//liste updaten
-									//rechts dasselbe
-									if(centerPoint.x <  2*einheitX+75)
-									{			
-										boolean added = false;
-										//überprüfung ob der cluster bereits besteht
-										for(Cluster leftCluster : rubbishCluster)
-										{
-											
-											if(leftCluster.getName().equals(showedCluster.get(0).getClusterName()))
+			float x = trennlinieRechts.x+10;
+			float y =  100;					
+			 						
+			//arraylist durchgehen
+			//für jede arraylist das erste element anzeigen als ein symbol
+			for(final Cluster cluster : clusterWeiter)
+			{			
+				final MTTextArea textAreaIdee = new MTTextArea(mtApp);
+				final MTTextArea ordner =  new MTTextArea(mtApp);
+				//wenn im cluster nur eine idee ist, wird diese direkt angezeigt
+				if(cluster.getNotes().size()==1)
+				{				
+					textAreaIdee.setText(cluster.getNotes().get(0).getName());	
+					textAreaIdee.setPositionRelativeToParent(new Vector3D(x,y));
+					textAreaIdee.setFillColor(MTColor.GREEN);
+					textAreaIdee.setStrokeColor(MTColor.LIME);
+					textAreaIdee.unregisterAllInputProcessors();
+					textAreaIdee.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
+					textAreaIdee.setPickable(true);					 
+					textAreaIdee.registerInputProcessor(new DragProcessor(getMTApplication()));
+					textAreaIdee.addGestureListener(DragProcessor.class, new DefaultDragAction() {
+						public boolean processGestureEvent(MTGestureEvent g) {
+							DragEvent de = (DragEvent)g;
+							switch (de.getId()) {
+								case MTGestureEvent.GESTURE_STARTED:								 
+									 textAreaIdee.setFillColor(new MTColor(220,220,220,255));
+									 break;		
+								case MTGestureEvent.GESTURE_UPDATED:
+									break;
+								case MTGestureEvent.GESTURE_ENDED:									 								
+									 Vector3D centerPoint = textAreaIdee.getCenterPointRelativeToParent();
+									 String ideenText = cluster.getName();
+									 if(centerPoint.x >  trennlinieLinks.x && centerPoint.x < trennlinieRechts.x)
+									 {
+										 boolean added = false;
+										 //überprüfung ob der cluster bereits besteht
+										 for(Cluster middleCluster : clusterVerbleibend)
+										 {
+											if(middleCluster.getName().equals(ideenText))
 											{
-												leftCluster.getNotes().add(new Note(baseComp.getText()));
+												middleCluster.getNotes().add(new Note(textAreaIdee.getText(),cluster.getNotes().get(0).getClusterName()));
 												added=true;
 												break;
-											}											
-										}
+											}	 										
+										 }
 										if(added==false)
 										{
-											
 											ArrayList<Note> newNotes = new ArrayList<Note>();
-											newNotes.add(new Note(baseComp.getText()));
-											Cluster newCluster = new Cluster(showedCluster.get(0).getClusterName(), newNotes);
-											rubbishCluster.add(newCluster);
+											newNotes.add(new Note(textAreaIdee.getText()));
+											Cluster newCluster = new Cluster(ideenText, newNotes);
+											clusterVerbleibend.add(newCluster);
 										}
-										updateShowedNotes(baseComp);
-										baseComp.destroy();					
-										updateleftSide();
+										removeFromClusterList(textAreaIdee,clusterWeiter);
+										textAreaIdee.destroy();					
+										updateMiddleList();
 									}
 									else if(centerPoint.x>  5*einheitX+75)
 									{							 
-										boolean added = false;
-										//überprüfung ob der cluster bereits besteht
-										for(Cluster rightCluster : bestIdeasCluster)
-										{
-											Note fo = showedCluster.get(0);
-											if(rightCluster.getName().equals(showedCluster.get(0).getClusterName()))
-											{
-												rightCluster.getNotes().add(new Note(baseComp.getText()));
-												added=true;
-												break;
-											}											
-										}
-										if(added==false)
-										{											
-											ArrayList<Note> newNotes = new ArrayList<Note>();
-											newNotes.add(new Note(baseComp.getText()));
-											Cluster newCluster = new Cluster(showedCluster.get(0).getClusterName(), newNotes);
-											bestIdeasCluster.add(newCluster);
-										}
-										updateShowedNotes(baseComp);
-										baseComp.destroy();					
-										updateRightSide();	
+										//baseComp.destroy();					
+										//updateRightSide();	
 									}
-									else if(centerPoint.x >  2*einheitX+75 && centerPoint.x < 5*einheitX+75 && centerPoint.y < 300 )
-									{											
-										moveBottomIdeasToTop();
-										updateMiddleList();
-										baseComp.destroy();
-									}								
-								}
-								//Falls keine Elemente mehr drin sind
-								int i1 = allCluster.size();
-								int i2= bestIdeasCluster.size();
-								int i3= showedCluster.size();
-								if(allCluster.size()==0 && bestIdeasCluster.size()==1 && showedCluster.size()==0)
-								{
-									String result = bestIdeas.get(0).getName();
-									//FinalScene gehen
-									mtApp.pushScene();							
-									if (finalScene == null){
-										finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), result);
-										//Konstruktor erweitern um Anzahl Spieler, da genau soviele
-										//Tastaturen geladen werden
-									//Add the scene to the mt application
-									mtApp.addScene(finalScene);
-									}
-									//Do the scene change
-									mtApp.changeScene(finalScene);
-								}
-								if(allCluster.size()==0 && bestIdeas.size()>1 && showedCluster.size()==0)
-								{
-									//rechten ideen in die mitte
-									//alle restlichen in papierkorb
-									//FinalScene gehen
-									mtApp.pushScene();
-									if (finalScene == null)
-									{				
-										//Im konstruktor mï¿½ssen die ideen als 2 listen ï¿½bergeben werden
-										finalScene = new EvaluationScene(mtApp, "Evaluation Again", bestIdeas, rubbish);
-										mtApp.addScene(finalScene);
-									}
-									//Do the scene change
-									mtApp.changeScene(finalScene);
-							
-								}
-								break;
-							default:
-								break;
-							}
+									 break;
+								} 
+							  
+							return false;
 						}
-						return false;
-					}
-				});
-				 
-				area.addChild(rText);
-				showedCluster.add(note);
-				y+=60;
-			}
+					});   
+				}
+				
+				//andernfalls ein ordner objekt mit namen drauf
+				else
+				{					
+					ordner.setText(cluster.getName());	
+					ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,y));
+					ordner.setFillColor(new MTColor(139,69,0,255));
+					ordner.setStrokeColor(new MTColor(205,133,0,255));
+					ordner.unregisterAllInputProcessors();
+					ordner.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
+					ordner.removeAllGestureEventListeners();
+					ordner.setPickable(false);
+					 //gesture für den popup adden
+				
+				}			
+				
+				
+				//überprüfung ob das element reinpasst in die zeile noch
+				//wenn ja alle elemente des clusters adden
+				//wenn nicht nächste zeile beginnen
+				y+= 70;
+						
+				if(cluster.getNotes().size()==1)
+				{
+					area.addChild(textAreaIdee);		
+				}
+				else
+				{
+					area.addChild(ordner);
+				}									
+			}						
 		}
-	 
-	 
+	
+	
+	//wenn showedNote verschoben wird, muss die Datenstruktur geupdated werden, weil eine note raus muss
 	 private void updateShowedNotes(MTTextArea draggedTextarea)
 	 {
 		 //muss aus der liste showedNotes gelï¿½scht werden
-		 for(Note note : showedCluster)
-		 {
-			 String s1 = formatString(note.getName(),40);
-			 
-			 if(s1.equals(draggedTextarea.getText()))
+		 for(Note note : showedCluster.getNotes())
+		 {			 
+			 if(note.getName().equals(draggedTextarea.getText()))
 			 {
-				 showedCluster.remove(note);
+				 showedCluster.getNotes().remove(note);
+				 if(showedCluster.getNotes().size()==0)
+				 {
+					 showedCluster=null;
+				 }
 				 break;
 			 }
 		 }
 	 }
-			 
-		
+	 
+	 
+	 
+	//Aus dem Datenmodell von Patrick eine angepasste Version machen
+	//in allIdeas gibst fï¿½r jeden CLuster eine Liste der Ideen
+	private void createStructureForIdeas(LinkedList<Idea> allParents)
+	{		
+		clusterVerbleibend = new ArrayList<Cluster>();
+		for(Idea idea : allParents)
+		{
+			//falls kein child hat, ist es nur eine einzelne idee
+			//sonst erste idee die kategorie
+			//children sind die ideen
+			if(idea.getChildren().length==0)
+			{
+				ArrayList<Note> ideasTemp = new ArrayList<Note>();
+				ideasTemp.add(new Note(idea.getText()));				
+				Cluster cluster = new Cluster("",ideasTemp);
+				clusterVerbleibend.add(cluster);
+			}
+			else
+			{
+				ArrayList<Note> ideasTemp = new ArrayList<Note>();
+				String clusterName = idea.getText();
+				for(MTComponent childIdea : idea.getChildren())
+				{
+					MTTextArea textArea = (MTTextArea) childIdea;
+					ideasTemp.add(new Note(textArea.getText(),clusterName));
+				}
+				Cluster newCluster = new Cluster(clusterName,ideasTemp); 
+				clusterVerbleibend.add(newCluster);								
+			}
+		}
+	}
+ 
+
 }

@@ -1,5 +1,7 @@
 package de.braster;
 
+import java.util.ArrayList;
+
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
@@ -15,7 +17,7 @@ import org.mt4j.util.math.Vector3D;
 
 public class FinalScene extends AbstractScene{
 
-	public FinalScene( final MTApplication mtApplication, String name, String problem, String result)
+	public FinalScene( final MTApplication mtApplication, String name, String problem, ArrayList<Cluster> result)
 	{
 		super(mtApplication, name);
 		MTCanvas canvas = getCanvas();
@@ -36,7 +38,7 @@ public class FinalScene extends AbstractScene{
 		textArea.setNoStroke(true);
 		textArea.setHeightLocal(600);
 		textArea.setWidthLocal(600);
-		textArea.setText("Für das Problem \n \n" + problem +"\n\nwurde folgende Lösung gefunden  \n \n" +result+".");		
+		//textArea.setText("Für das Problem \n \n" + problem +"\n\nwurde folgende Lösung gefunden  \n \n" +result+".");		
 		textArea.setPositionRelativeToParent(new Vector3D(mtApplication.width/2,mtApplication.height/2));
 		canvas.addChild(textArea);	
 	}
