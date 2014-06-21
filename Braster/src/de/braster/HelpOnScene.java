@@ -2,21 +2,20 @@ package de.braster;
 
 import java.util.LinkedList;
 
-import javafx.scene.input.SwipeEvent;
-
-import org.mt4j.components.PickResult.PickEntry;
+import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
+import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
+import org.mt4j.components.visibleComponents.widgets.MTTextArea;
+import org.mt4j.input.gestureAction.DefaultButtonClickAction;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent.FlickDirection;
-import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
+import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
-
-import com.sun.glass.events.SwipeGesture;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -27,6 +26,7 @@ public class HelpOnScene extends MTRectangle {
 	private LinkedList<PImage> stepPics;
 	private int activeStep = 0;
 	private HelpSteps steps;
+	private MTRoundRectangle weiter;
 	
 	public HelpOnScene(PApplet pApplet, float width, float height, LinkedList<PImage> stepPictures) {
 		super(pApplet, width, height);
@@ -71,28 +71,64 @@ public class HelpOnScene extends MTRectangle {
 			}
 		});
 		
+		
+		
+		weiter = new MTRoundRectangle(pApplet, pApplet.getWidth()/2, pApplet.getHeight()*0.8f, 0, 150, 40, 12, 12);
+		weiter.unregisterAllInputProcessors();
+		weiter.setFillColor(MTColor.GRAY);
+		MTTextArea rText = new MTTextArea(pApplet, FontManager.getInstance().createFont(pApplet, "arial.ttf", 
+        		18, //fontzize 
+        		MTColor.BLACK));
+		rText.unregisterAllInputProcessors();
+		rText.setNoFill(true);
+		rText.setPickable(false);
+		rText.setNoStroke(true);
+		rText.setText("Weiter");
+		weiter.addChild(rText);
+		rText.setPositionRelativeToParent(weiter.getCenterPointLocal());
+		weiter.setNoStroke(true);
+		weiter.registerInputProcessor(new TapProcessor(pApplet));
+		weiter.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(weiter));
+		weiter.setVisible(false);
+		addChild(weiter);
+		
+		weiter.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent)ge;
+				if (te.isTapped()) {
+					destroy();
+				}
+				return false;
+			}
+		});
 	}
-
-	
 	
 	private void nextPic() {
 		if (activeStep<stepPics.size()-1) {
-			setTexture(stepPics.get(++activeStep));
-			steps.highlightPoint(activeStep);
+			++activeStep;
+			setStep(activeStep);
 		} 
 	}
 	
 	private void previousPic() {
 		if (activeStep > 0) {
-			setTexture(stepPics.get(--activeStep));
-			steps.highlightPoint(activeStep);
+			--activeStep;
+			setStep(activeStep);
 		}
 	}
 	
 	public void setStep(int step) {
-		setTexture(stepPics.get(step));
-		steps.highlightPoint(step);
 		activeStep = step;
+		if (activeStep == stepPics.size()-1) {
+			weiter.setVisible(true);
+		} else {
+			weiter.setVisible(false);
+		}
+		setTexture(stepPics.get(activeStep));
+		steps.highlightPoint(activeStep);
+		
 	}
 	
 }
