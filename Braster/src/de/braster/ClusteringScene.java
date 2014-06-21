@@ -40,7 +40,7 @@ public class ClusteringScene extends AbstractScene{
 	private LinkedList<Idea> ideas;
 	private MTRoundRectangle mtRoundRectangle;
 	private ClusterKeyboard keyboard;
-	private MTImageButton keyboardButton;
+	private static MTImageButton keyboardButton;
 	
 	public ClusteringScene( MTApplication mtApplication, String name) {
 		super(mtApplication, name);
@@ -165,7 +165,10 @@ public class ClusteringScene extends AbstractScene{
 			}
 		});
 		
-		
+	}
+	
+	public static void setKBButtonVisible(boolean b) {
+		keyboardButton.setVisible(b);
 	}
 	
 	private void makeKB() {
@@ -203,8 +206,7 @@ public class ClusteringScene extends AbstractScene{
 						cat.tweenTranslate(v, 300, 0.3f, 0.7f);
 						
 						t.clear();
-						keyboard.setVisible(false);
-						keyboardButton.setVisible(true);
+						keyboard.close();
 					}
 					return false;
 		

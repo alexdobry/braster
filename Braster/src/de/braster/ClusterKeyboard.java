@@ -148,8 +148,8 @@ public class ClusterKeyboard extends MTRoundRectangle {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped() && Idea.getAllIdeas().size() > 0){
-//					onCloseButtonClicked();
-					setVisible(false);
+					onCloseButtonClicked();
+//					setVisible(false);
 				}
 				return false;
 			}
@@ -866,7 +866,7 @@ public class ClusterKeyboard extends MTRoundRectangle {
 	}
 	
 	protected void closeKeyboard(){
-		float width = this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT);
+		final float width = this.getWidthXY(TransformSpace.RELATIVE_TO_PARENT);
 		IAnimation keybCloseAnim = new Animation("Keyboard Fade", new MultiPurposeInterpolator(width, 1, 300, 0.2f, 0.5f, 1), this);
 		keybCloseAnim.addAnimationListener(new IAnimationListener(){
 			public void processAnimationEvent(AnimationEvent ae) {
@@ -878,7 +878,9 @@ public class ClusterKeyboard extends MTRoundRectangle {
 					break;
 				case AnimationEvent.ANIMATION_ENDED:
 					setVisible(false);
-					destroy();
+					ClusteringScene.setKBButtonVisible(true);
+					setWidthRelativeToParent(width);
+//					destroy();
 					break;	
 				default:
 					break;
