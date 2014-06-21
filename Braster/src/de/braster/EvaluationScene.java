@@ -103,10 +103,10 @@ public class EvaluationScene extends AbstractScene{
 		ArrayList<Note> ideaTemp2 = new ArrayList<Note>();
 		for(int i=0;i<3;i++)
 		{
-			ideaTemp2.add(new Note("fdshfisuhgi "+i, "fazit"));			
+			ideaTemp2.add(new Note("fdshfisuhgi "+i, "cludsgster"));			
 		}
 		
-		Cluster cluster2 = new Cluster(" cludsgster",ideaTemp2);
+		Cluster cluster2 = new Cluster("cludsgster",ideaTemp2);
 		allCluster.add(cluster2);
 		//methodenaufruf
 		
@@ -249,7 +249,7 @@ public class EvaluationScene extends AbstractScene{
 		{
 			int widthElement =0;
 			MTTextArea textAreaIdee = null;
-			MTRectangle ordner = null;
+			MTTextArea ordner = null;
 			//wenn im cluster nur eine idee ist, wird diese direkt angezeigt
 			if(cluster.getNotes().size()==1)
 			{
@@ -267,16 +267,16 @@ public class EvaluationScene extends AbstractScene{
 			//andernfalls ein ordner objekt mit namen drauf
 			else
 			{
-				ordner = new MTRectangle(mtApp, x, y, 50, 40);
-				ordner.setName(cluster.getName());
-				ordner.setStrokeColor(listColor);
+				ordner = new MTTextArea(mtApp);
+				ordner.setText(cluster.getName());	
+				ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,25));
+				ordner.setFillColor(new MTColor(139,69,0,255));
+				ordner.setStrokeColor(new MTColor(205,133,0,255));
 				ordner.unregisterAllInputProcessors();
+				ordner.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
 				ordner.removeAllGestureEventListeners();
 				ordner.setPickable(false);
-				widthElement=80;
-				String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
-				PImage img = mtApp.loadImage(path + "ordner-symbol.png");
-				ordner.setTexture(img);	
+				widthElement = (int) ordner.getWidthXYVectLocal().length();	
 			}			
 			
 			x += widthElement +20;
@@ -327,7 +327,7 @@ public class EvaluationScene extends AbstractScene{
 	
 				
 		int x = (int) (einheitX +75);
-		int y = (int) 100;		
+		int y =  100;		
 				
 		 						
 		//arraylist durchgehen
@@ -336,7 +336,7 @@ public class EvaluationScene extends AbstractScene{
 		{
 			
 			MTTextArea textAreaIdee = null;
-			MTRectangle ordner = null;
+			MTTextArea ordner = null;
 			//wenn im cluster nur eine idee ist, wird diese direkt angezeigt
 			if(cluster.getNotes().size()==1)
 			{
@@ -353,15 +353,15 @@ public class EvaluationScene extends AbstractScene{
 			//andernfalls ein ordner objekt mit namen drauf
 			else
 			{
-				ordner = new MTRectangle(mtApp, x, y, 50, 40);
-				ordner.setName(cluster.getName());
-				ordner.setStrokeColor(listColor);
+				ordner = new MTTextArea(mtApp);
+				ordner.setText(cluster.getName());	
+				ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,y));
+				ordner.setFillColor(new MTColor(139,69,0,255));
+				ordner.setStrokeColor(new MTColor(205,133,0,255));
 				ordner.unregisterAllInputProcessors();
+				ordner.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
 				ordner.removeAllGestureEventListeners();
 				ordner.setPickable(false);
-				String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
-				PImage img = mtApp.loadImage(path + "ordner-symbol.png");
-				ordner.setTexture(img);	
 				ordner.registerInputProcessor(new TapProcessor(mtApp));
 				ordner.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 					public boolean processGestureEvent(MTGestureEvent ge) {
@@ -441,32 +441,7 @@ public class EvaluationScene extends AbstractScene{
 							}
 						}
 						//Popup muss aufgehen für weitere Ideen
-						else if(selectedComponent.toString().contains("MTRect"))
-						{
-							MTRectangle childTextarea = (MTRectangle) selectedComponent;
-							//wenn in x-Richtung zwischen die maximalen Ausmaï¿½e geklickt wurde
-							if(childTextarea.getCenterPointGlobal().x - 25 < clickedPosition.x && childTextarea.getCenterPointGlobal().x + 25 > clickedPosition.x)
-							{
-								//falls unten eine drin ist, die wieder nach oben schieben als cluster
-								if(showedCluster.size()>0)
-								{
-									moveBottomIdeasToTop(); 
-								}						 
-								//selektierte aus der liste lï¿½schen
-							 
-								Cluster selectedCluster = removeSelectedIdeaFromIdeas(childTextarea);
-								//element lï¿½schen
-								childTextarea.destroy();
-								//die selektierte unten erstellen
-								if(selectedCluster!=null)
-								{
-									createSelectedIdea(selectedCluster);
-								}
-								//liste updaten
-								updateMiddleList();
-								break;
-							}
-						}
+						
 					}
 				}
 				return false;
@@ -566,60 +541,52 @@ public class EvaluationScene extends AbstractScene{
 		//rausbekommen zu welchem cluster die gehï¿½rt
 		for(Cluster actualCluster : allCluster)
 		{
-			for(Note note : actualCluster.getNotes())
+			if(actualCluster.getNotes().size()>1)
 			{
-				String s1 = formatString(note.getName(),40);
+				String s1 = actualCluster.getName();
 				String s2 = clickedTextArea.getText();
-				System.out.println(note.getName());
-				System.out.println(clickedTextArea.getText());
+				
 				if(s1.equals(s2))
 				{
 					allCluster.remove(actualCluster);
 					return actualCluster;				
 				}
-				int answer =s1.compareTo(s2);
-				if(answer==0)
+			}
+			else
+			{						
+				for(Note note : actualCluster.getNotes())
 				{
-					return actualCluster;
+					String s1 = note.getName();
+					String s2 = clickedTextArea.getText();
+					
+					if(s1.equals(s2))
+					{
+						allCluster.remove(actualCluster);
+						return actualCluster;				
+					}
 				}
+				
 			}
 		}
-		//cluster dann rauslï¿½schen
 			 
 		return null;
 	}
 		
 	
 	
-	private Cluster removeSelectedIdeaFromIdeas(MTRectangle clickedRectangle)
-	{
-		//rausbekommen zu welchem cluster die gehï¿½rt
-		for(Cluster actualCluster : allCluster)
-		{
-			String s1 = actualCluster.getName();
-			String s2 = clickedRectangle.getName();
-			
-			if(s1.equals(s2))
-			{
-				allCluster.remove(actualCluster);
-				return actualCluster;				
-			}
-			
-		}
-		//cluster dann rauslï¿½schen
-			 
-		return null;
-	}
+	 
 	
 	
 	private void moveBottomIdeasToTop()
 	{
 		ArrayList<Note> ideasTemp = new ArrayList<Note>();
+		String clusterNameTemp ="";
 		for(Note n : showedCluster)
 		{
 			ideasTemp.add(new Note(n.getName()));
+			clusterNameTemp = n.getClusterName();
 		}
-		Cluster cluster = new Cluster("",ideasTemp);
+		Cluster cluster = new Cluster(clusterNameTemp,ideasTemp);
 		allCluster.add(cluster);
 		showedCluster.clear();
 		//alle kinder der area lï¿½schen die typ mttextarea sind
@@ -633,7 +600,10 @@ public class EvaluationScene extends AbstractScene{
 				{
 					continue;
 				}
-				area.removeChild(text);
+				if(text.getCenterPointGlobal().x> 2*einheitX+75 && text.getCenterPointGlobal().x<5*einheitX+75)
+				{
+					area.removeChild(text);
+				}
 			}
 			catch(Exception castexception)
 			{
