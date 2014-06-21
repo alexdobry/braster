@@ -62,6 +62,7 @@ public class EvaluationScene extends AbstractScene{
 		createStructureForIdeas(Idea.getAllParents());
 		 
 		//temporär
+		/*
 	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
 		ArrayList<Note> ideaTemp = new ArrayList<Note>();
@@ -92,7 +93,8 @@ public class EvaluationScene extends AbstractScene{
 		ideaTemp4.add(new Note("julia ist eine sehr sehr gute freundin", "freundin"));
 		Cluster cluster4 = new Cluster("freundin",ideaTemp4);
 		clusterVerbleibend.add(cluster4);
-				
+			
+				*/
 		showedCluster = new Cluster();	
 		clusterVerworfen = new ArrayList<Cluster>();
 		clusterWeiter = new ArrayList<Cluster>();
@@ -604,8 +606,27 @@ public class EvaluationScene extends AbstractScene{
 								}
 								else if(centerPoint.x> trennlinieRechts.x)
 								{							 
-									//baseComp.destroy();					
-									//updateRightSide();	
+									boolean added = false;
+									 //überprüfung ob der cluster bereits besteht
+									 for(Cluster rightCluster : clusterWeiter)
+									 {
+										if(rightCluster.getName().equals(ideenText))
+										{
+											rightCluster.getNotes().add(new Note(textAreaIdee.getText(),cluster.getNotes().get(0).getClusterName()));
+											added=true;
+											break;
+										}	 										
+									 }
+									if(added==false)
+									{
+										ArrayList<Note> newNotes = new ArrayList<Note>();
+										newNotes.add(new Note(textAreaIdee.getText()));
+										Cluster newCluster = new Cluster(ideenText, newNotes);
+										clusterWeiter.add(newCluster);
+									}
+									removeFromClusterList(textAreaIdee,clusterVerworfen);
+									textAreaIdee.destroy();					
+									updateRightSide();	
 								}
 								 break;
 							} 
@@ -733,10 +754,29 @@ public class EvaluationScene extends AbstractScene{
 										textAreaIdee.destroy();					
 										updateMiddleList();
 									}
-									else if(centerPoint.x>  5*einheitX+75)
+									else if(centerPoint.x < trennlinieLinks.x)
 									{							 
-										//baseComp.destroy();					
-										//updateRightSide();	
+										boolean added = false;
+										 //überprüfung ob der cluster bereits besteht
+										 for(Cluster leftCluster : clusterVerworfen)
+										 {
+											if(leftCluster.getName().equals(ideenText))
+											{
+												leftCluster.getNotes().add(new Note(textAreaIdee.getText(),cluster.getNotes().get(0).getClusterName()));
+												added=true;
+												break;
+											}	 										
+										 }
+										if(added==false)
+										{
+											ArrayList<Note> newNotes = new ArrayList<Note>();
+											newNotes.add(new Note(textAreaIdee.getText()));
+											Cluster newCluster = new Cluster(ideenText, newNotes);
+											clusterVerworfen.add(newCluster);
+										}
+										removeFromClusterList(textAreaIdee,clusterWeiter);
+										textAreaIdee.destroy();					
+										updateMiddleList();
 									}
 									 break;
 								} 
