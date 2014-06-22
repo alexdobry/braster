@@ -666,7 +666,7 @@ public class EvaluationScene extends AbstractScene{
 						if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 						{		
 							//öffnet sich clusterpopup
-							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster,  tempScene );
+							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster,  tempScene,0 );
 							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 							area.addChild(openClusterPopup);
 							popupCluster = cluster;
@@ -686,7 +686,7 @@ public class EvaluationScene extends AbstractScene{
 						{					
 							
 							openClusterPopup.destroy();
-							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster , tempScene );
+							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster , tempScene,0 );
 							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 							area.addChild(openClusterPopup);
 							popupCluster = cluster;
@@ -847,7 +847,7 @@ public class EvaluationScene extends AbstractScene{
 							if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 							{		
 								//öffnet sich clusterpopup
-								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster, tempScene );
+								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster, tempScene,1 );
 								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 								area.addChild(openClusterPopup);
 								popupCluster = cluster;
@@ -860,7 +860,7 @@ public class EvaluationScene extends AbstractScene{
 							else if(te.isTapped())  //wenn neue cluster geöffnet wird
 							{
 								openClusterPopup.destroy();
-								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster ,tempScene);
+								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster ,tempScene,1);
 								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 								area.addChild(openClusterPopup);
 								popupCluster = cluster;							

@@ -22,12 +22,14 @@ public class ClusterPopup  extends MTRectangle{
 	private MTApplication mtApp;
 	private EvaluationScene caller;
 	private ClusterPopup popup;
+	private int side;
 	
 	@SuppressWarnings("deprecation")
 	public ClusterPopup(MTApplication pApplet, float width, float height, final Cluster cluster, 
-			  EvaluationScene call) {
+			  EvaluationScene call, int seite) {
 		super(pApplet, width, height);
 		
+		side = seite;
 		caller =call;
 		popup = this;
 		mtApp = pApplet;
@@ -75,10 +77,11 @@ public class ClusterPopup  extends MTRectangle{
 			textareaIdee.addGestureListener(DragProcessor.class, new DefaultDragAction() {
 				public boolean processGestureEvent(MTGestureEvent g) {
 					DragEvent de = (DragEvent)g;
+					 
 					switch (de.getId()) {
 						case MTGestureEvent.GESTURE_STARTED:								 
 							textareaIdee.setFillColor(new MTColor(220,220,220,255));
-							//Vector3D startPosition = textareaIdeen.getCenterPoin
+							
 							 break;		
 						case MTGestureEvent.GESTURE_UPDATED:
 							break;
@@ -86,7 +89,60 @@ public class ClusterPopup  extends MTRectangle{
 							
 							 Vector3D centerPoint = textareaIdee.getCenterPointGlobal();
 							 String ideenText = cluster.getName();
-							 if(centerPoint.x >  EvaluationScene.trennlinieLinks.x && centerPoint.x < EvaluationScene.trennlinieRechts.x)
+							//von links nach rechts
+							if(side ==0  && centerPoint.x> EvaluationScene.trennlinieRechts.x)
+							{							 
+								boolean added = false;
+								 //überprüfung ob der cluster bereits besteht
+								 for(Cluster rightCluster : caller.clusterWeiter)
+								 {
+									if(rightCluster.getName().equals(ideenText))
+									{
+										rightCluster.getNotes().add(new Note(textareaIdee.getText(),cluster.getName()));
+										added=true;
+										break;
+									}	 										
+								 }
+								if(added==false)
+								{
+									ArrayList<Note> newNotes = new ArrayList<Note>();
+									newNotes.add(new Note(textareaIdee.getText(),cluster.getName()));
+									Cluster newCluster = new Cluster(ideenText, newNotes);
+									caller.clusterWeiter.add(newCluster);
+								}
+								removeFromClusterList(textareaIdee,caller.clusterVerworfen);
+								textareaIdee.destroy();								 
+								caller.updateRightSide();
+								popup.sendToFront();
+							}
+							//von rechts nach links
+							if(side ==1 && centerPoint.x < EvaluationScene.trennlinieLinks.x)
+							{							 
+								boolean added = false;
+								 //überprüfung ob der cluster bereits besteht
+								 for(Cluster rightCluster : caller.clusterVerworfen)
+								 {
+									if(rightCluster.getName().equals(ideenText))
+									{
+										rightCluster.getNotes().add(new Note(textareaIdee.getText(),cluster.getName()));
+										added=true;
+										break;
+									}	 										
+								 }
+								if(added==false)
+								{
+									ArrayList<Note> newNotes = new ArrayList<Note>();
+									newNotes.add(new Note(textareaIdee.getText(),cluster.getName()));
+									Cluster newCluster = new Cluster(ideenText, newNotes);
+									caller.clusterVerworfen.add(newCluster);
+								}
+								removeFromClusterList(textareaIdee,caller.clusterWeiter);
+								textareaIdee.destroy();								 
+								caller.updateleftSide();
+								popup.sendToFront();
+							}
+							//von links in mitte
+							else if(side ==0  &&  centerPoint.x >  EvaluationScene.trennlinieLinks.x && centerPoint.x < EvaluationScene.trennlinieRechts.x)
 							 {
 								 boolean added = false;
 								 //überprüfung ob der cluster bereits besteht
@@ -111,15 +167,16 @@ public class ClusterPopup  extends MTRectangle{
 								caller.updateMiddleList();
 								popup.sendToFront();
 							}
-							else if(centerPoint.x> EvaluationScene.trennlinieRechts.x)
-							{							 
-								boolean added = false;
+							//von rechts in mitte
+							else if(side == 1 &&  centerPoint.x >  EvaluationScene.trennlinieLinks.x && centerPoint.x < EvaluationScene.trennlinieRechts.x)
+							 {
+								 boolean added = false;
 								 //überprüfung ob der cluster bereits besteht
-								 for(Cluster rightCluster : caller.clusterWeiter)
+								 for(Cluster middleCluster : caller.clusterVerbleibend)
 								 {
-									if(rightCluster.getName().equals(ideenText))
+									if(middleCluster.getName().equals(ideenText))
 									{
-										rightCluster.getNotes().add(new Note(textareaIdee.getText(),cluster.getName()));
+										middleCluster.getNotes().add(new Note(textareaIdee.getText(),cluster.getName()));
 										added=true;
 										break;
 									}	 										
@@ -127,13 +184,13 @@ public class ClusterPopup  extends MTRectangle{
 								if(added==false)
 								{
 									ArrayList<Note> newNotes = new ArrayList<Note>();
-									newNotes.add(new Note(textareaIdee.getText(),cluster.getName()));
+									newNotes.add(new Note(textareaIdee.getText(), cluster.getName()));
 									Cluster newCluster = new Cluster(ideenText, newNotes);
-									caller.clusterWeiter.add(newCluster);
+									caller.clusterVerbleibend.add(newCluster);
 								}
-								removeFromClusterList(textareaIdee,caller.clusterVerworfen);
-								textareaIdee.destroy();								 
-								caller.updateRightSide();
+								removeFromClusterList(textareaIdee,caller.clusterWeiter);
+								textareaIdee.destroy();					
+								caller.updateMiddleList();
 								popup.sendToFront();
 							}
 							break;							 
