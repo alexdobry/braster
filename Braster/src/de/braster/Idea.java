@@ -202,12 +202,12 @@ public class Idea extends MTTextArea {
 	/**
 	 * Fügt sich selbst und alle ihre Kinder an die übergebene Idee als kinder.
 	 * 
-	 * @param draggedIdea
+	 * @param ideaToSelft
 	 */
-	public void snapToIdea(final Idea draggedIdea) {
+	public void snapToIdea(final Idea ideaToSelft) {
 
-		if (draggedIdea.getChildren().length >= 1) {
-			MTComponent[] newIdeas = draggedIdea.getChildren();
+		if (ideaToSelft.getChildren().length >= 1) {
+			MTComponent[] newIdeas = ideaToSelft.getChildren();
 			for (MTComponent mtComponent : newIdeas) {
 				if (mtComponent instanceof Idea) {
 					Idea i = (Idea)mtComponent;
@@ -228,10 +228,10 @@ public class Idea extends MTTextArea {
 		}
 		
 		
-		this.addChild(draggedIdea);
+		this.addChild(ideaToSelft);
 		//positionieren
 
-		draggedIdea.setPositionRelativeToParent(new Vector3D(draggedIdea.getWidthXY(TransformSpace.LOCAL)/2f, getHeightXY(TransformSpace.LOCAL)*1.5f+height));
+		ideaToSelft.setPositionRelativeToParent(new Vector3D(ideaToSelft.getWidthXY(TransformSpace.LOCAL)/2f, getHeightXY(TransformSpace.LOCAL)*1.5f+height));
 		
 
 		
@@ -239,9 +239,9 @@ public class Idea extends MTTextArea {
 //		idea.setLocalMatrix(getLocalMatrix());
 		
 		//das neue kind passiv stellen
-		draggedIdea.setGestureAllowance(DragProcessor.class, false);
-		draggedIdea.setGestureAllowance(ScaleProcessor.class, false);
-		draggedIdea.setGestureAllowance(RotateProcessor.class, false);
+		ideaToSelft.setGestureAllowance(DragProcessor.class, false);
+		ideaToSelft.setGestureAllowance(ScaleProcessor.class, false);
+		ideaToSelft.setGestureAllowance(RotateProcessor.class, false);
 		
 		//TODO: implementieren der matrizenübertragung
 //		Vector3D trans = new Vector3D();
@@ -254,11 +254,11 @@ public class Idea extends MTTextArea {
 		
 //		setGestureAllowance(TapAndHoldProcessor.class, true); //das todo unten
 		
-		draggedIdea.registerInputProcessor(new TapAndHoldProcessor(app, 1500));
-		draggedIdea.addGestureListener(TapAndHoldProcessor.class, new TapAndHoldVisualizer(app, canvas));
+		ideaToSelft.registerInputProcessor(new TapAndHoldProcessor(app, 1500));
+		ideaToSelft.addGestureListener(TapAndHoldProcessor.class, new TapAndHoldVisualizer(app, canvas));
 		//TODO: bei erneuten ausführen wird der processor erneut hinzugefügt
 		//WARN - Warning: The same type of input processor (tap and hold processor) is already registered at component:
-		draggedIdea.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
+		ideaToSelft.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
 			
 			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
@@ -270,18 +270,18 @@ public class Idea extends MTTextArea {
 					break;
 				case TapAndHoldEvent.GESTURE_ENDED:
 					if (th.isHoldComplete()){
-						MTComponent parent = draggedIdea.getParent();
+						MTComponent parent = ideaToSelft.getParent();
 						if (parent instanceof Idea) { //wenn der parent eine idee ist <> wenn die aktuelle idee ein kind von einer idee ist
 							Idea p = (Idea)parent;
-							draggedIdea.removeFromParent();
-							canvas.addChild(draggedIdea);
-							draggedIdea.setPositionGlobal(th.getLocationOnScreen());
+							ideaToSelft.removeFromParent();
+							canvas.addChild(ideaToSelft);
+							ideaToSelft.setPositionGlobal(th.getLocationOnScreen());
 							
 							//TODO: logik für parent implementieren
-							draggedIdea.setGestureAllowance(DragProcessor.class, true);
-							draggedIdea.setGestureAllowance(ScaleProcessor.class, false);
-							draggedIdea.setGestureAllowance(RotateProcessor.class, false);
-							draggedIdea.setGestureAllowance(TapAndHoldProcessor.class, false);
+							ideaToSelft.setGestureAllowance(DragProcessor.class, true);
+							ideaToSelft.setGestureAllowance(ScaleProcessor.class, false);
+							ideaToSelft.setGestureAllowance(RotateProcessor.class, false);
+							ideaToSelft.setGestureAllowance(TapAndHoldProcessor.class, false);
 							p.repositionChildren();
 						}
 					}
