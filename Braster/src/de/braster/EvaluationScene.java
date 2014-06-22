@@ -14,6 +14,7 @@ import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
 import org.mt4j.components.visibleComponents.shapes.MTLine;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
+import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTList;
 import org.mt4j.components.visibleComponents.widgets.MTListCell;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
@@ -66,7 +67,7 @@ public class EvaluationScene extends AbstractScene{
 		createStructureForIdeas(Idea.getAllParents());
 		 
 		//temporär
-		 
+		 /*
 	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
 	 	
@@ -98,7 +99,7 @@ public class EvaluationScene extends AbstractScene{
 		ideaTemp4.add(new Note("julia ist eine sehr sehr gute freundin", "freundin"));
 		Cluster cluster4 = new Cluster("freundin",ideaTemp4);
 		clusterVerbleibend.add(cluster4);
-		 	
+		 	*/
 			 
 		showedCluster = new Cluster();	
 		clusterVerworfen = new ArrayList<Cluster>();
@@ -226,6 +227,57 @@ public class EvaluationScene extends AbstractScene{
 		textProblem.setText(SetupScene.getProblem());
 		textProblem.setPositionGlobal(new Vector3D(this.mtApp.width/2,this.mtApp.height-100));
 		this.canv.addChild(textProblem);
+		
+		
+		final MTRoundRectangle mtRoundRectangle = new MTRoundRectangle(this.mtApp, this.mtApp.width-240, this.mtApp.height-80, 0, 200, 60, 12, 12);
+		mtRoundRectangle.unregisterAllInputProcessors();
+		mtRoundRectangle.setFillColor(MTColor.GREY);  	
+		mtRoundRectangle.registerInputProcessor(new TapProcessor(this.mtApp));
+		mtRoundRectangle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent)ge;
+				
+				switch (te.getId()) {
+					case MTGestureEvent.GESTURE_STARTED:
+						mtRoundRectangle.setFillColor(new MTColor(220,220,220,255));
+						break;
+					case MTGestureEvent.GESTURE_UPDATED:
+						break;
+					case MTGestureEvent.GESTURE_ENDED:
+						if (te.isTapped()){
+							//Save the current scene on the scene stack before changing
+							mtApp.pushScene();
+							if (finalScene == null){
+								finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), clusterWeiter);
+								//Konstruktor erweitern um Anzahl Spieler, da genau soviele
+								//Tastaturen geladen werden
+							//Add the scene to the mt application
+							mtApp.addScene(finalScene);
+							}
+							//Do the scene change
+							mtApp.changeScene(finalScene);
+							
+						}						
+						mtRoundRectangle.setFillColor(MTColor.GREY);  	
+						break;
+					}				
+				return false;
+			}
+		});
+		
+		MTTextArea rText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		20, MTColor.WHITE));
+		rText.unregisterAllInputProcessors();
+		rText.setPickable(false);
+		rText.setNoFill(true);
+		rText.setNoStroke(true);
+		rText.setText("Bewertung beenden");
+		
+		mtRoundRectangle.scale(1.2f, 1.2f, 1, mtRoundRectangle.getCenterPointRelativeToParent());
+		mtRoundRectangle.addChild(rText);
+		rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
+		
+		this.canv.addChild(mtRoundRectangle);	
 	 }
 	
 	
