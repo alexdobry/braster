@@ -14,6 +14,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickPr
 import org.mt4j.input.inputProcessors.componentProcessors.flickProcessor.FlickEvent.FlickDirection;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
+import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
@@ -31,14 +32,18 @@ public class HelpOnScene extends MTRectangle {
 	public HelpOnScene(PApplet pApplet, float width, float height, LinkedList<PImage> stepPictures) {
 		super(pApplet, width, height);
 		stepPics = stepPictures;
-		
+//		final MTRectangle test = new MTRectangle(pApplet, pApplet.getWidth(), pApplet.getHeight());
+//		
+//		test.setFillColor(new MTColor(136, 171, 194, 200));
+//		test.setPickable(false);
+////		canv.addChild(test);
+//		scene.getCanvas().addChild(test);
 		setTexture(stepPictures.get(activeStep));
 		removeAllGestureEventListeners();
 		steps = new HelpSteps(pApplet, 0, 0, 0, 0, 0, 6, 6, stepPics.size(), this);
 		steps.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.5f, getHeightXYRelativeToParent()*0.7f));
 		
 		addChild(steps);
-		
 		registerInputProcessor(new FlickProcessor());
 		addGestureListener(FlickProcessor.class, new IGestureEventListener() {
 			
@@ -98,6 +103,7 @@ public class HelpOnScene extends MTRectangle {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()) {
+//					test.destroy();
 					destroy();
 				}
 				return false;

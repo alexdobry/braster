@@ -31,7 +31,7 @@ import processing.core.PImage;
 import de.braster.BWKeyboard.KeyInfo;
 
 
-public class BrainWritingScene extends AbstractScene{
+public class BrainWritingScene extends AbstractScene {
 
 	private static final int INPUT_SIZE = 40;
 	private MTCanvas canv;
@@ -94,7 +94,7 @@ public class BrainWritingScene extends AbstractScene{
 				return false;
 			}
 		});
-		this.getCanvas().addChild(problemTextArea);
+		canv.addChild(problemTextArea);
 		
 		problemTextArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, 80));
 		
@@ -223,9 +223,26 @@ public class BrainWritingScene extends AbstractScene{
 			break;
 		}
 		
-		
+		//Hilfe anzeigen
 		if (SetupScene.needHelp) {
-			HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), StartBraster.helpBW);
+			LinkedList<PImage> helpPics = null;
+			switch (players) {
+			case 1:
+				helpPics = StartBraster.K1helpBW;
+				break;
+			case 2:
+				helpPics = StartBraster.K2helpBW;
+				break;
+			case 3:
+				helpPics = StartBraster.K3helpBW;
+				break;
+			case 4:
+				helpPics = StartBraster.K4helpBW;
+				break;
+			default:
+				break;
+			}
+			HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), helpPics);
 			canv.addChild(help);
 		}
 	}

@@ -10,9 +10,12 @@ import processing.core.PImage;
 
 public class StartBraster extends MTApplication {
 	
-	public static LinkedList<PImage> helpBW = new LinkedList<PImage>();
+	public static LinkedList<PImage> K1helpBW = new LinkedList<PImage>();
+	public static LinkedList<PImage> K2helpBW = new LinkedList<PImage>();
+	public static LinkedList<PImage> K3helpBW = new LinkedList<PImage>();
+	public static LinkedList<PImage> K4helpBW = new LinkedList<PImage>();
 	public static LinkedList<PImage> helpEVA = new LinkedList<PImage>();
-	
+	public static LinkedList<PImage> helpTest = new LinkedList<PImage>();
 	public static void main(String[] args) {
 		
 		
@@ -22,12 +25,29 @@ public class StartBraster extends MTApplication {
 	@Override
 	public void startUp() {
 		
+		
 		String path = "de" + MTApplication.separator + "braster" + MTApplication.separator + "images" + MTApplication.separator;
-		helpBW = new LinkedList<>();
-		helpBW.add(loadImage(path + "brainwriting1.png"));
-		helpBW.add(loadImage(path + "brainwriting2.png"));
-		helpBW.add(loadImage(path + "brainwriting3.png"));
-		helpBW.add(loadImage(path + "brainwriting4.png"));
+		K1helpBW.add(loadImage(path + "K1_brainwriting1.png"));
+		K1helpBW.add(loadImage(path + "K1_brainwriting2.png"));
+		K1helpBW.add(loadImage(path + "K1_brainwriting3.png"));
+		K1helpBW.add(loadImage(path + "K1_brainwriting4.png"));
+		K2helpBW.add(loadImage(path + "K2_brainwriting1.png"));
+		K2helpBW.add(loadImage(path + "K2_brainwriting2.png"));
+		K2helpBW.add(loadImage(path + "K2_brainwriting3.png"));
+		K2helpBW.add(loadImage(path + "K2_brainwriting4.png"));
+		K3helpBW.add(loadImage(path + "K3_brainwriting1.png"));
+		K3helpBW.add(loadImage(path + "K3_brainwriting2.png"));
+		K3helpBW.add(loadImage(path + "K3_brainwriting3.png"));
+		K3helpBW.add(loadImage(path + "K3_brainwriting4.png"));
+		K4helpBW.add(loadImage(path + "K4_brainwriting1.png"));
+		K4helpBW.add(loadImage(path + "K4_brainwriting2.png"));
+		K4helpBW.add(loadImage(path + "K4_brainwriting3.png"));
+		K4helpBW.add(loadImage(path + "K4_brainwriting4.png"));
+		
+		helpTest.add(loadImage(path + "1.png"));
+		helpTest.add(loadImage(path + "2.png"));
+		helpTest.add(loadImage(path + "3.png"));
+		helpTest.add(loadImage(path + "4.png"));
 		
 		helpEVA.add(loadImage(path + "Evaluation_1.png"));
 		helpEVA.add(loadImage(path + "Evaluation_2.png"));
