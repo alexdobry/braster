@@ -49,7 +49,9 @@ public class EvaluationScene extends AbstractScene{
 	private ArrayList<Cluster> clusterWeiter;
 	
 	private Cluster showedCluster;
+	private Cluster popupCluster;
 	
+	private ClusterPopup openClusterPopup; 
 	private MTList listMiddle;
 	
 	private Iscene finalScene;
@@ -62,7 +64,7 @@ public class EvaluationScene extends AbstractScene{
 		createStructureForIdeas(Idea.getAllParents());
 		 
 		//temporär
-		/*
+		 
 	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
 		ArrayList<Note> ideaTemp = new ArrayList<Note>();
@@ -94,7 +96,7 @@ public class EvaluationScene extends AbstractScene{
 		Cluster cluster4 = new Cluster("freundin",ideaTemp4);
 		clusterVerbleibend.add(cluster4);
 			
-				*/
+			 
 		showedCluster = new Cluster();	
 		clusterVerworfen = new ArrayList<Cluster>();
 		clusterWeiter = new ArrayList<Cluster>();
@@ -555,15 +557,16 @@ public class EvaluationScene extends AbstractScene{
 		//für jede arraylist das erste element anzeigen als ein symbol
 		for(final Cluster cluster : clusterVerworfen)
 		{			
+			float width = 0;
 			final MTTextArea textAreaIdee = new MTTextArea(mtApp);
-			MTTextArea ordner = null;
+			final MTTextArea ordner = new MTTextArea(mtApp);
 			//wenn im cluster nur eine idee ist, wird diese direkt angezeigt
 			if(cluster.getNotes().size()==1)
 			{				
 				textAreaIdee.setText(cluster.getNotes().get(0).getName());	
-				textAreaIdee.setPositionRelativeToParent(new Vector3D(x,y));
 				textAreaIdee.setFillColor(MTColor.GREEN);
 				textAreaIdee.setStrokeColor(MTColor.LIME);
+				width = textAreaIdee.getWidthXYVectLocal().length();
 				textAreaIdee.unregisterAllInputProcessors();
 				textAreaIdee.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
 				textAreaIdee.setPickable(true);				
@@ -638,8 +641,7 @@ public class EvaluationScene extends AbstractScene{
 			
 			//andernfalls ein ordner objekt mit namen drauf
 			else
-			{
-				ordner = new MTTextArea(mtApp);
+			{				
 				ordner.setText(cluster.getName());	
 				ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,y));
 				ordner.setFillColor(new MTColor(139,69,0,255));
@@ -647,15 +649,27 @@ public class EvaluationScene extends AbstractScene{
 				ordner.unregisterAllInputProcessors();
 				ordner.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
 				ordner.removeAllGestureEventListeners();
-				ordner.setPickable(false);
+				ordner.setPickable(true);
 				ordner.registerInputProcessor(new TapProcessor(mtApp));
 				ordner.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapEvent te = (TapEvent)ge;
-						if (te.isTapped()) 
+						
+						if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 						{		
 							//öffnet sich clusterpopup
+							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster);
+							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+70));
+							area.addChild(openClusterPopup);
+							popupCluster = cluster;
 						}
+						else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet
+						{
+							popupCluster=null;
+							openClusterPopup.destroy();
+							 
+						}
+					
 						return false;
 					}
 				});
@@ -670,7 +684,9 @@ public class EvaluationScene extends AbstractScene{
 					
 			if(cluster.getNotes().size()==1)
 			{
-				area.addChild(textAreaIdee);		
+				area.addChild(textAreaIdee);
+				textAreaIdee.setPositionRelativeToParent(new Vector3D(x+ width,y));
+				
 			}
 			else
 			{
