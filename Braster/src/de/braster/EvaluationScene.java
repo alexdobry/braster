@@ -41,33 +41,34 @@ public class EvaluationScene extends AbstractScene{
  
 	private MTEllipse area;	 
 	private float einheitX;
-	private Vector3D trennlinieLinks;
-	private Vector3D trennlinieRechts;
-	private Vector3D trennlinieOben;
+	public static Vector3D trennlinieLinks;
+	public static Vector3D trennlinieRechts;
+	public static Vector3D trennlinieOben;
 	
-	private ArrayList<Cluster> clusterVerbleibend;
-	private ArrayList<Cluster> clusterVerworfen;
-	private ArrayList<Cluster> clusterWeiter;
+	public ArrayList<Cluster> clusterVerbleibend;
+	public ArrayList<Cluster> clusterVerworfen;
+	public ArrayList<Cluster> clusterWeiter;
 	
 	private Cluster showedCluster;
 	private Cluster popupCluster;
 	
 	private ClusterPopup openClusterPopup; 
-	private MTList listMiddle;
+	public MTList listMiddle;
 	
 	private Iscene finalScene;
-		
+	private EvaluationScene tempScene;	
 	 
 	public EvaluationScene( MTApplication mtApplication, String name)
 	{		
 		super(mtApplication, name);		
-				
+		
+		tempScene = this;
 		createStructureForIdeas(Idea.getAllParents());
 		 
 		//temporär
 		 
 	 	clusterVerbleibend = new ArrayList<Cluster>();
-		 /*
+		 
 	 	
 		ArrayList<Note> ideaTemp = new ArrayList<Note>();
 		ideaTemp.add(new Note("fussball", "sport" ));
@@ -97,7 +98,7 @@ public class EvaluationScene extends AbstractScene{
 		ideaTemp4.add(new Note("julia ist eine sehr sehr gute freundin", "freundin"));
 		Cluster cluster4 = new Cluster("freundin",ideaTemp4);
 		clusterVerbleibend.add(cluster4);
-		*/	
+		 	
 			 
 		showedCluster = new Cluster();	
 		clusterVerworfen = new ArrayList<Cluster>();
@@ -231,7 +232,7 @@ public class EvaluationScene extends AbstractScene{
 	
 	
 	//Füllt die mittlere Liste mit den Clustern
-	private void updateMiddleList()
+	public void updateMiddleList()
 	{
 		//liste leeren und erstellen
 		listMiddle.removeAllListElements();
@@ -541,7 +542,7 @@ public class EvaluationScene extends AbstractScene{
 	
 	
 	//wenn neue idee hinzugefügt wird, muss die anzeige links aktualisiert werden
-	private void updateleftSide()
+	public void updateleftSide()
 	{		
 		//Liste leeren		 
 		for(MTComponent component : area.getChildren())
@@ -657,6 +658,7 @@ public class EvaluationScene extends AbstractScene{
 				ordner.removeAllGestureEventListeners();
 				ordner.setPickable(true);
 				ordner.registerInputProcessor(new TapProcessor(mtApp));
+				
 				ordner.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						TapEvent te = (TapEvent)ge;
@@ -664,24 +666,33 @@ public class EvaluationScene extends AbstractScene{
 						if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 						{		
 							//öffnet sich clusterpopup
-							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster);
-							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+70));
+							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster,  tempScene,0 );
+							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 							area.addChild(openClusterPopup);
 							popupCluster = cluster;
+							 
 						}
 						else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet
 						{
+							//update machen, weil sich inhalt geändert haben kann	
+						
 							popupCluster=null;
-							openClusterPopup.destroy();
-							 
+							openClusterPopup.destroy();	
+							updateleftSide();
+							updateMiddleList();
+							updateRightSide();
 						}
 						else if(te.isTapped())  //wenn neue cluster geöffnet wird
-						{
+						{					
+							
 							openClusterPopup.destroy();
-							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster);
-							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+70));
+							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster , tempScene,0 );
+							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 							area.addChild(openClusterPopup);
 							popupCluster = cluster;
+							updateleftSide();
+							updateMiddleList();
+							updateRightSide();
 						}
 					
 						return false;
@@ -713,7 +724,7 @@ public class EvaluationScene extends AbstractScene{
 	
 	
 	//wenn neue idee hinzugefügt wird, muss die anzeige links aktualisiert werden
-		private void updateRightSide()
+		public void updateRightSide()
 		{		
 			//Liste leeren		 
 			for(MTComponent component : area.getChildren())
@@ -836,24 +847,23 @@ public class EvaluationScene extends AbstractScene{
 							if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 							{		
 								//öffnet sich clusterpopup
-								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster);
-								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+70));
+								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster, tempScene,1 );
+								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 								area.addChild(openClusterPopup);
 								popupCluster = cluster;
 							}
 							else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet
 							{
 								popupCluster=null;
-								openClusterPopup.destroy();
-								 
+								openClusterPopup.destroy();								 
 							}
 							else if(te.isTapped())  //wenn neue cluster geöffnet wird
 							{
 								openClusterPopup.destroy();
-								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster);
-								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+70));
+								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster ,tempScene,1);
+								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 								area.addChild(openClusterPopup);
-								popupCluster = cluster;
+								popupCluster = cluster;							
 							}
 						
 							return false;
