@@ -162,6 +162,7 @@ public class ClusterPopup  extends MTRectangle{
 									Cluster newCluster = new Cluster(ideenText, newNotes);
 									caller.clusterVerbleibend.add(newCluster);
 								}
+								
 								removeFromClusterList(textareaIdee,caller.clusterVerworfen);
 								textareaIdee.destroy();					
 								caller.updateMiddleList();

@@ -67,10 +67,10 @@ public class EvaluationScene extends AbstractScene{
 		createStructureForIdeas(Idea.getAllParents());
 		 
 		//temporär
-		 /*
+		 
 	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
-	 	
+	 	/*
 		ArrayList<Note> ideaTemp = new ArrayList<Note>();
 		ideaTemp.add(new Note("fussball", "sport" ));
 		Cluster cluster = new Cluster("sport",ideaTemp);
@@ -99,7 +99,7 @@ public class EvaluationScene extends AbstractScene{
 		ideaTemp4.add(new Note("julia ist eine sehr sehr gute freundin", "freundin"));
 		Cluster cluster4 = new Cluster("freundin",ideaTemp4);
 		clusterVerbleibend.add(cluster4);
-		 	*/
+		 */	 
 			 
 		showedCluster = new Cluster();	
 		clusterVerworfen = new ArrayList<Cluster>();
@@ -610,7 +610,7 @@ public class EvaluationScene extends AbstractScene{
 			}
 		}
 					
-		float x = (einheitX +75);
+		float x = einheitX+75;
 		float y =  100;					
 		 						
 		//arraylist durchgehen
@@ -735,16 +735,15 @@ public class EvaluationScene extends AbstractScene{
 							updateRightSide();
 						}
 						else if(te.isTapped())  //wenn neue cluster geöffnet wird
-						{					
-							
+						{						
+							updateleftSide();
+							updateMiddleList();
+							updateRightSide();
 							openClusterPopup.destroy();
 							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster , tempScene,0 );
 							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
 							area.addChild(openClusterPopup);
 							popupCluster = cluster;
-							updateleftSide();
-							updateMiddleList();
-							updateRightSide();
 						}
 					
 						return false;
@@ -761,12 +760,14 @@ public class EvaluationScene extends AbstractScene{
 			if(cluster.getNotes().size()==1)
 			{
 				area.addChild(textAreaIdee);
-				textAreaIdee.setPositionRelativeToParent(new Vector3D(x+ textAreaIdee.getWidthXYVectLocal().length()/2,y));				
+				textAreaIdee.setPositionGlobal(new Vector3D(x,y));
+				//textAreaIdee.setPositionRelativeToParent(new Vector3D(x+ textAreaIdee.getWidthXYVectLocal().length()/2,y));				
 			}
 			else
 			{
 				area.addChild(ordner);
-				ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,y));
+				//ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,y));
+				ordner.setPositionGlobal(new Vector3D(x ,y));
 				
 			}
 			y+= 35;
@@ -792,7 +793,7 @@ public class EvaluationScene extends AbstractScene{
 				}
 			}
 					
-			float x = trennlinieRechts.x+10;
+			float x = trennlinieRechts.x+einheitX;
 			float y =  100;					
 			 						
 			//arraylist durchgehen
@@ -933,12 +934,12 @@ public class EvaluationScene extends AbstractScene{
 				if(cluster.getNotes().size()==1)
 				{
 					area.addChild(textAreaIdee);	
-					textAreaIdee.setPositionRelativeToParent(new Vector3D(x+textAreaIdee.getWidthXYVectLocal().length()/2,y));					
+					textAreaIdee.setPositionGlobal(new Vector3D(x,y));					
 				}
 				else
 				{
 					area.addChild(ordner);
-					ordner.setPositionRelativeToParent(new Vector3D(x+ordner.getWidthXYVectLocal().length()/2,y));					
+					ordner.setPositionGlobal(new Vector3D(x,y));						
 				}	
 				y+= 35;
 			}						
