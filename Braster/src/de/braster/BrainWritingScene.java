@@ -242,7 +242,7 @@ public class BrainWritingScene extends AbstractScene {
 			default:
 				break;
 			}
-			HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), helpPics);
+			HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), helpPics, 0.7f);
 			canv.addChild(help);
 		}
 	}

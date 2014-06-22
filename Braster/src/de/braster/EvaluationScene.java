@@ -118,7 +118,7 @@ public class EvaluationScene extends AbstractScene{
 		updateMiddleList();		
 		
 		if (SetupScene.needHelp) {
-			HelpOnScene help = new HelpOnScene(mtApp, mtApp.getWidth(), mtApp.getHeight(), StartBraster.helpEVA);
+			HelpOnScene help = new HelpOnScene(mtApp, mtApp.getWidth(), mtApp.getHeight(), StartBraster.helpEVA, 0.8f);
 			canv.addChild(help);
 		}
 	}

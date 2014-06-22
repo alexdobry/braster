@@ -29,7 +29,7 @@ public class HelpOnScene extends MTRectangle {
 	private HelpSteps steps;
 	private MTRoundRectangle weiter;
 	
-	public HelpOnScene(PApplet pApplet, float width, float height, LinkedList<PImage> stepPictures) {
+	public HelpOnScene(PApplet pApplet, float width, float height, LinkedList<PImage> stepPictures, float heightFactor) {
 		super(pApplet, width, height);
 		stepPics = stepPictures;
 //		final MTRectangle test = new MTRectangle(pApplet, pApplet.getWidth(), pApplet.getHeight());
@@ -41,7 +41,7 @@ public class HelpOnScene extends MTRectangle {
 		setTexture(stepPictures.get(activeStep));
 		removeAllGestureEventListeners();
 		steps = new HelpSteps(pApplet, 0, 0, 0, 0, 0, 6, 6, stepPics.size(), this);
-		steps.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.5f, getHeightXYRelativeToParent()*0.7f));
+		steps.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.5f, getHeightXYRelativeToParent()*heightFactor));
 		
 		addChild(steps);
 		registerInputProcessor(new FlickProcessor());
