@@ -39,7 +39,6 @@ public class Idea extends MTTextArea {
 	private MTCanvas canvas;
 	private Idea self = null;
 	private static final LinkedList<Idea> ideas = new LinkedList<Idea>();
-	private static LinkedList<Idea> parents = new LinkedList<Idea>();
 	private LinkedList<Idea> children = new LinkedList<Idea>();
 	private MTColor ideaFillColor = new MTColor(0, 100, 0, 255);;
 	private MTColor ideaStrokeColor = new MTColor(34, 139, 34, 255);;
@@ -57,7 +56,6 @@ public class Idea extends MTTextArea {
 		app = pApplet;
 		this.self = this;
 		ideas.add(this);
-		parents.add(this);
 		
 		setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 24, ideaTextColor, true));
 		setStrokeColor(ideaStrokeColor);
@@ -132,7 +130,6 @@ public class Idea extends MTTextArea {
 						i.setFillColor(IdeaColors.FILL);	
 					}
 					
-					System.out.println(parents);
 					break;
 				default:
 					break;
@@ -208,9 +205,7 @@ public class Idea extends MTTextArea {
 	 * @param draggedIdea
 	 */
 	public void snapToIdea(final Idea draggedIdea) {
-		
-		parents.remove(this); //als parent von der liste entfernen
-		
+
 		if (draggedIdea.getChildren().length >= 1) {
 			MTComponent[] newIdeas = draggedIdea.getChildren();
 			for (MTComponent mtComponent : newIdeas) {
@@ -288,7 +283,6 @@ public class Idea extends MTTextArea {
 							draggedIdea.setGestureAllowance(RotateProcessor.class, false);
 							draggedIdea.setGestureAllowance(TapAndHoldProcessor.class, false);
 							p.repositionChildren();
-							parents.add(draggedIdea); //wird zu einem neuen parent
 						}
 					}
 					break;
