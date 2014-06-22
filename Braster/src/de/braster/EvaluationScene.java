@@ -29,6 +29,7 @@ import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D; 
+
 import processing.core.PImage;
 
 
@@ -112,7 +113,12 @@ public class EvaluationScene extends AbstractScene{
 		listMiddle = new MTList(mtApp, trennlinieLinks.x+10, 80,  3*einheitX-20, 250);		 
 		
 		//dort passiert das liste f�llen, was bereits implementiert habe
-		updateMiddleList();				
+		updateMiddleList();		
+		
+		if (SetupScene.needHelp) {
+			HelpOnScene help = new HelpOnScene(mtApp, mtApp.getWidth(), mtApp.getHeight(), StartBraster.helpEVA);
+			canv.addChild(help);
+		}
 	}
 	
 	

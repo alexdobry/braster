@@ -11,6 +11,8 @@ import processing.core.PImage;
 public class StartBraster extends MTApplication {
 	
 	public static LinkedList<PImage> helpBW = new LinkedList<PImage>();
+	public static LinkedList<PImage> helpEVA = new LinkedList<PImage>();
+	
 	public static void main(String[] args) {
 		
 		
@@ -27,8 +29,17 @@ public class StartBraster extends MTApplication {
 		helpBW.add(loadImage(path + "brainwriting3.png"));
 		helpBW.add(loadImage(path + "brainwriting4.png"));
 		
-		addScene(new WelcomeScene(this, "Hello World Scene"));
-//		addScene(new SetupScene(this, "Hello World Scene"));
+		helpEVA.add(loadImage(path + "Evaluation_1.png"));
+		helpEVA.add(loadImage(path + "Evaluation_2.png"));
+		helpEVA.add(loadImage(path + "Evaluation_3.png"));
+		helpEVA.add(loadImage(path + "Evaluation_4.png"));
+		helpEVA.add(loadImage(path + "Evaluation_5.png"));
+		helpEVA.add(loadImage(path + "Evaluation_6.png"));	 
+		helpEVA.add(loadImage(path + "Evaluation_8.png"));
+		
+		
+		//addScene(new WelcomeScene(this, "Hello World Scene"));
+		addScene(new SetupScene(this, "Hello World Scene"));
 		//addScene(new ClusteringScene(this, "Hello World Scene"));
 		//addScene(new EvaluationHelp(this, "Hello World Scene"));
 		//addScene(new EvaluationScene(this, "Hello World Scene"));

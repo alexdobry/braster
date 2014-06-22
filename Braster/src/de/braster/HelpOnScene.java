@@ -34,7 +34,7 @@ public class HelpOnScene extends MTRectangle {
 		
 		setTexture(stepPictures.get(activeStep));
 		removeAllGestureEventListeners();
-		steps = new HelpSteps(pApplet, 0, 0, 0, 0, 0, 6, 6, 4, this);
+		steps = new HelpSteps(pApplet, 0, 0, 0, 0, 0, 6, 6, stepPics.size(), this);
 		steps.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.5f, getHeightXYRelativeToParent()*0.7f));
 		
 		addChild(steps);
