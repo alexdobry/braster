@@ -14,6 +14,7 @@ public class StartBraster extends MTApplication {
 	public static LinkedList<PImage> K2helpBW = new LinkedList<PImage>();
 	public static LinkedList<PImage> K3helpBW = new LinkedList<PImage>();
 	public static LinkedList<PImage> K4helpBW = new LinkedList<PImage>();
+	public static LinkedList<PImage> helpCluster = new LinkedList<PImage>();
 	public static LinkedList<PImage> helpEVA = new LinkedList<PImage>();
 	public static LinkedList<PImage> helpTest = new LinkedList<PImage>();
 	public static void main(String[] args) {
@@ -43,6 +44,13 @@ public class StartBraster extends MTApplication {
 		K4helpBW.add(loadImage(path + "K4_brainwriting2.png"));
 		K4helpBW.add(loadImage(path + "K4_brainwriting3.png"));
 		K4helpBW.add(loadImage(path + "K4_brainwriting4.png"));
+		
+		helpCluster.add(loadImage(path + "clustering1.png"));
+		helpCluster.add(loadImage(path + "clustering2.png"));
+		helpCluster.add(loadImage(path + "clustering3.png"));
+		helpCluster.add(loadImage(path + "clustering4.png"));
+		helpCluster.add(loadImage(path + "clustering5.png"));
+		helpCluster.add(loadImage(path + "clustering6.png"));
 		
 		helpTest.add(loadImage(path + "1.png"));
 		helpTest.add(loadImage(path + "2.png"));

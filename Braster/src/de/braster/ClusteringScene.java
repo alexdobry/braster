@@ -135,6 +135,13 @@ public class ClusteringScene extends AbstractScene{
 		createRightMenubar();
 		makeKB();
 		makeKBButton();
+		
+		
+		//Hilfe anzeigen
+		if (SetupScene.needHelp) {
+			HelpOnScene help = new HelpOnScene(mtApplication, mtApplication.getWidth(), mtApplication.getHeight(), StartBraster.helpCluster, 0.7f);
+			canv.addChild(help);
+		}
 	}
 	
 	private void makeKBButton() {
