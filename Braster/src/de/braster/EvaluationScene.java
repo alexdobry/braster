@@ -60,7 +60,10 @@ public class EvaluationScene extends AbstractScene{
 	
 	private Iscene finalScene;
 	private EvaluationScene tempScene;	
-	 
+	private MTRectangle highlightLeft;
+	private MTRectangle highlightMiddle;
+	private MTRectangle highlightRight;
+	
 	public EvaluationScene( MTApplication mtApplication, String name)
 	{		
 		super(mtApplication, name);		
@@ -162,7 +165,28 @@ public class EvaluationScene extends AbstractScene{
 		area.setFillColor(new MTColor(listColor));
 		area.setPickable(false);			
 		this.canv.addChild(area);					
-			
+
+		highlightLeft = new MTRectangle(mtApp, StartBraster.evalHighlightLeft);
+//		highLeft.setTexture(StartBraster.evalHighlightLeft);
+		highlightLeft.setPickable(false);
+		highlightLeft.setNoStroke(true);
+		highlightLeft.setVisible(false);
+		area.addChild(highlightLeft);
+		
+		highlightRight = new MTRectangle(mtApp,StartBraster.evalHighlightRight);
+//		highRight.setTexture(StartBraster.evalHighlightRight);
+		highlightRight.setPickable(false);
+		highlightRight.setNoStroke(true);
+		highlightRight.setVisible(false);
+		area.addChild(highlightRight);
+		
+		highlightMiddle = new MTRectangle(mtApp, StartBraster.evalHighlightMiddle);
+//		highMiddle.setTexture(StartBraster.evalHighlightMiddle);
+		highlightMiddle.setPickable(false);
+		highlightMiddle.setNoStroke(true);
+		highlightMiddle.setVisible(false);
+		area.addChild(highlightMiddle);
+		
 		einheitX = area.getRadiusX()*2/7;
 		trennlinieLinks = new Vector3D(einheitX*2+75,0);
 		trennlinieRechts = new Vector3D(einheitX*5+75,0);
@@ -506,7 +530,17 @@ public class EvaluationScene extends AbstractScene{
 					case DragEvent.GESTURE_STARTED:						 
 						rText.setFillColor(new MTColor(220,220,220,255));
 						break;
-					case DragEvent.GESTURE_UPDATED:							
+					case DragEvent.GESTURE_UPDATED:	
+						if (de.getDragCursor().getCurrentEvtPosX() < trennlinieLinks.x) {
+							highlightLeft.setVisible(true);
+						} else if (de.getDragCursor().getCurrentEvtPosX() > trennlinieRechts.x) {
+							highlightRight.setVisible(true);
+						} else {
+							highlightLeft.setVisible(false);
+							highlightMiddle.setVisible(false);
+							highlightRight.setVisible(false);
+						}
+						
 						break;
 					case DragEvent.GESTURE_ENDED:							 					
 						Vector3D centerPoint = rText.getCenterPointRelativeToParent();						
@@ -559,6 +593,10 @@ public class EvaluationScene extends AbstractScene{
 							updateRightSide();	
 						}
 					 	
+						
+						highlightLeft.setVisible(false);
+						highlightMiddle.setVisible(false);
+						highlightRight.setVisible(false);
 						break;
 					}
 					//Falls keine Elemente mehr drin sind

@@ -53,12 +53,12 @@ public class ClusteringScene extends AbstractScene{
 		
 		mtRoundRectangle.setPositionGlobal(new Vector3D(mtApp.getWidth()/2, 180));
 		ideas = Idea.getAllIdeas();
-
+		final Vector3D tweenVector = new Vector3D(0, 80, 0);
 		Vector3D ideapos = new Vector3D(mtApp.getWidth()/2, 250);
 		for (Idea idea : ideas) {
 			idea.setVisible(false);
 			canv.addChild(idea);
-			idea.setPositionGlobal(ideapos);
+			idea.setPositionGlobal(mtRoundRectangle.getCenterPointRelativeToParent());
 			idea.updateCanvas(canv);
 		}
 		
@@ -105,7 +105,9 @@ public class ClusteringScene extends AbstractScene{
 							
 							
 							if (count < ideaSizeWithoutCategory()) {
-								ideas.get(count++).setVisible(true);
+								Idea i = ideas.get(count++);
+								i.setVisible(true);
+								i.tweenTranslate(tweenVector, 300, 0.3f, 0.7f);
 								rText.setText(ideaSizeWithoutCategory()-count + " Ideen uebrig");
 							}
 							

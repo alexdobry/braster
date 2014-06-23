@@ -17,6 +17,10 @@ public class StartBraster extends MTApplication {
 	public static LinkedList<PImage> helpCluster = new LinkedList<PImage>();
 	public static LinkedList<PImage> helpEVA = new LinkedList<PImage>();
 	public static LinkedList<PImage> helpTest = new LinkedList<PImage>();
+	public static PImage evalHighlightLeft;
+	public static PImage evalHighlightMiddle;
+	public static PImage evalHighlightRight;
+	
 	public static void main(String[] args) {
 		
 		
@@ -64,7 +68,10 @@ public class StartBraster extends MTApplication {
 		helpEVA.add(loadImage(path + "Evaluation_5.png"));
 		helpEVA.add(loadImage(path + "Evaluation_6.png"));	 
 		helpEVA.add(loadImage(path + "Evaluation_8.png"));
-		
+
+		evalHighlightLeft = loadImage(path +   "evalHighlightLeft.png");
+		evalHighlightMiddle = loadImage(path + "evalHighlightMiddle.png");
+		evalHighlightRight = loadImage(path +  "evalHighlightRight.png");
 		
 		//addScene(new WelcomeScene(this, "Hello World Scene"));
 		addScene(new SetupScene(this, "Hello World Scene"));
