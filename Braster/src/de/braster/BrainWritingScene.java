@@ -62,6 +62,10 @@ public class BrainWritingScene extends AbstractScene {
 		this.setClearColor(new MTColor(136, 171, 194, 255));
 		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		
+		//temporärer fix; beseitigt lag bei Eingabe der ersten Idee
+		Idea i = new Idea(mtApp, canv);
+		Idea.getAllIdeas().clear();
+		
 		MTTextArea problemTextArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		40, //fontzize 
@@ -71,31 +75,8 @@ public class BrainWritingScene extends AbstractScene {
 		problemTextArea.setNoStroke(true);
 		
 		problemTextArea.setText(problem);
-		problemTextArea.setGestureAllowance(DragProcessor.class, false);
-		problemTextArea.registerInputProcessor(new TapProcessor(mtApplication, 25, true, 350));
-		problemTextArea.addGestureListener(TapProcessor.class, new IGestureEventListener() {
-			public boolean processGestureEvent(MTGestureEvent ge) {
-				TapEvent te = (TapEvent)ge;
-				if (te.isDoubleTap()){
-					if (checkReady(players)) {
-						
-					
-						Iscene clusteringIscene = null;
-						mtApp.pushScene();
-						if (clusteringIscene == null){
-							clusteringIscene = new ClusteringScene(mtApp, "Clustering");
-							//Konstruktor erweitern um Anzahl Spieler, da genau soviele
-							//Tastaturen geladen werden
-						//Add the scene to the mt application
-						mtApp.addScene(clusteringIscene);
-						}
-						//Do the scene change
-						mtApp.changeScene(clusteringIscene);
-					}
-				}
-				return false;
-			}
-		});
+		problemTextArea.unregisterAllInputProcessors();
+		problemTextArea.removeAllGestureEventListeners();
 		canv.addChild(problemTextArea);
 		
 		problemTextArea.setPositionGlobal(new Vector3D(mtApplication.width/2f, 80));
@@ -254,7 +235,6 @@ public class BrainWritingScene extends AbstractScene {
 		for (MTEllipse ellipse : readyButtons) {
 			if (ellipse.getFillColor().equals(green1)) {
 				count++;
-				System.out.println(count);
 			}
 		}
 		
@@ -291,9 +271,7 @@ public class BrainWritingScene extends AbstractScene {
 			    		idea.setName(t.getText());
 			    		keyboard.resetSize(INPUT_SIZE);
 			    		animateInput(keyboard, t.getText());
-			    		t.clear();
-			    		System.out.print(idea.getChildCount());
-					
+			    		t.clear();				
 					}
 					return false;
 				}
