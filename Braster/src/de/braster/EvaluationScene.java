@@ -63,6 +63,7 @@ public class EvaluationScene extends AbstractScene{
 	public MTRectangle highlightLeft;
 	public MTRectangle highlightMiddle;
 	public MTRectangle highlightRight;
+	private MTRoundRectangle neueIter; 
 	
 	public EvaluationScene( MTApplication mtApplication, String name)
 	{		
@@ -305,8 +306,56 @@ public class EvaluationScene extends AbstractScene{
 		mtRoundRectangle.scale(1.2f, 1.2f, 1, mtRoundRectangle.getCenterPointRelativeToParent());
 		mtRoundRectangle.addChild(rText);
 		rText.setPositionRelativeToParent(mtRoundRectangle.getCenterPointLocal());
+		canv.addChild(mtRoundRectangle);
 		
-		this.canv.addChild(mtRoundRectangle);	
+		
+		//neue iteration
+		neueIter = new MTRoundRectangle(this.mtApp, this.mtApp.width-240, this.mtApp.height-280, 0, 200, 60, 12, 12);
+		neueIter.unregisterAllInputProcessors();
+		neueIter.setFillColor(MTColor.GREY);  	
+		neueIter.registerInputProcessor(new TapProcessor(this.mtApp));
+		neueIter.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent)ge;
+				
+				switch (te.getId()) {
+					case MTGestureEvent.GESTURE_STARTED:
+						neueIter.setFillColor(new MTColor(220,220,220,255));
+						break;
+					case MTGestureEvent.GESTURE_UPDATED:
+						break;
+					case MTGestureEvent.GESTURE_ENDED:
+						if (te.isTapped()){
+							mtApp.pushScene();
+							if (finalScene == null)
+							{				
+								//Im konstruktor mï¿½ssen die ideen als 2 listen ï¿½bergeben werden
+								finalScene = new EvaluationScene(mtApp, "Evaluation Again", clusterWeiter, clusterVerworfen);
+								mtApp.addScene(finalScene);
+							}
+							//Do the scene change
+							mtApp.changeScene(finalScene);
+						}						
+						neueIter.setFillColor(MTColor.GREY);  	
+						break;
+					}				
+				return false;
+			}
+		});
+		
+		MTTextArea iterText = new MTTextArea(this.mtApp, FontManager.getInstance().createFont(this.mtApp, "arial.ttf", 
+        		20, MTColor.WHITE));
+		iterText.unregisterAllInputProcessors();
+		iterText.setPickable(false);
+		iterText.setNoFill(true);
+		iterText.setNoStroke(true);
+		iterText.setText("Neue Iteration");
+		neueIter.setVisible(false);
+		neueIter.scale(1.2f, 1.2f, 1, neueIter.getCenterPointRelativeToParent());
+		neueIter.addChild(iterText);
+		iterText.setPositionRelativeToParent(neueIter.getCenterPointLocal());
+		
+		canv.addChild(neueIter);	
 	 }
 	
 	
@@ -604,29 +653,31 @@ public class EvaluationScene extends AbstractScene{
 					
 					if(clusterVerbleibend.size()==0 && clusterWeiter.size()==1 && showedCluster == null)
 					{						 
-						//FinalScene gehen
-						mtApp.pushScene();							
-						if (finalScene == null){
-							finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), clusterWeiter);
-							mtApp.addScene(finalScene);
-						}
-						//Do the scene change
-						mtApp.changeScene(finalScene);						
+//						//FinalScene gehen
+//						mtApp.pushScene();							
+//						if (finalScene == null){
+//							finalScene = new FinalScene(mtApp, "Final", SetupScene.getProblem(), clusterWeiter);
+//							mtApp.addScene(finalScene);
+//						}
+//						//Do the scene change
+//						mtApp.changeScene(finalScene);
+						neueIter.setVisible(true);						
 					}
 					if(clusterVerbleibend.size()==0 && clusterWeiter.size()>1 && showedCluster==null)
 					{
 						//rechten ideen in die mitte
 						//alle restlichen in papierkorb
 						//FinalScene gehen
-						mtApp.pushScene();
-						if (finalScene == null)
-						{				
-							//Im konstruktor mï¿½ssen die ideen als 2 listen ï¿½bergeben werden
-							finalScene = new EvaluationScene(mtApp, "Evaluation Again", clusterWeiter, clusterVerworfen);
-							mtApp.addScene(finalScene);
-						}
-						//Do the scene change
-						mtApp.changeScene(finalScene);						
+//						mtApp.pushScene();
+//						if (finalScene == null)
+//						{				
+//							//Im konstruktor mï¿½ssen die ideen als 2 listen ï¿½bergeben werden
+//							finalScene = new EvaluationScene(mtApp, "Evaluation Again", clusterWeiter, clusterVerworfen);
+//							mtApp.addScene(finalScene);
+//						}
+//						//Do the scene change
+//						mtApp.changeScene(finalScene);
+						neueIter.setVisible(true);
 					}				 
 				
 				return false;
@@ -837,7 +888,7 @@ public class EvaluationScene extends AbstractScene{
 	
 	
 	
-	//wenn neue idee hinzugefügt wird, muss die anzeige links aktualisiert werden
+	//wenn neue idee hinzugefügt wird, muss die anzeige rechts aktualisiert werden
 		public void updateRightSide()
 		{		
 			//Liste leeren		 
