@@ -24,6 +24,8 @@ import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.sceneManagement.AbstractScene;
@@ -67,10 +69,13 @@ public class EvaluationScene extends AbstractScene{
 		createStructureForIdeas(Idea.getAllParents());
 		 
 		//temporär
-		 
+		
+		
+		
+		/*
 	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
-	 	/*
+	 	 
 		ArrayList<Note> ideaTemp = new ArrayList<Note>();
 		ideaTemp.add(new Note("fussball", "sport" ));
 		Cluster cluster = new Cluster("sport",ideaTemp);
@@ -489,7 +494,9 @@ public class EvaluationScene extends AbstractScene{
 			
 			y+=50;  //abstand der elemente
 			 
-			rText.registerInputProcessor(new DragProcessor(getMTApplication()));
+			rText.registerInputProcessor(new DragProcessor(getMTApplication()));		 
+			rText.setGestureAllowance(ScaleProcessor.class, true);
+			rText.setGestureAllowance(RotateProcessor.class, true);
 			rText.addGestureListener(DragProcessor.class, new IGestureEventListener() {				
 				@Override
 				public boolean processGestureEvent(MTGestureEvent ge) {
