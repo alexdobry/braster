@@ -22,6 +22,7 @@ public class FinalScene extends AbstractScene{
 		super(mtApplication, name);
 		MTCanvas canvas = getCanvas();
 		
+		
 		MTTextArea textArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
@@ -38,7 +39,15 @@ public class FinalScene extends AbstractScene{
 		textArea.setNoStroke(true);
 		textArea.setHeightLocal(600);
 		textArea.setWidthLocal(600);
-		//textArea.setText("Für das Problem \n \n" + problem +"\n\nwurde folgende Lösung gefunden  \n \n" +result+".");		
+		String loesung ="";
+		for(Cluster cluster : result)
+		{
+			for(Note notes : cluster.getNotes())
+			{
+				loesung+= notes.getName()+"\n";
+			}
+		}
+		textArea.setText("Für das Problem \n \n" + problem +"\nwurde folgende Lösung gefunden  \n " +loesung+".");		
 		textArea.setPositionRelativeToParent(new Vector3D(mtApplication.width/2,mtApplication.height/2));
 		canvas.addChild(textArea);	
 	}

@@ -986,8 +986,8 @@ public class EvaluationScene extends AbstractScene{
 			if(idea.getChildren().length==0)
 			{
 				ArrayList<Note> ideasTemp = new ArrayList<Note>();
-				ideasTemp.add(new Note(idea.getText()));				
-				Cluster cluster = new Cluster("",ideasTemp);
+				ideasTemp.add(new Note(idea.getText(), idea.getText()));				
+				Cluster cluster = new Cluster(idea.getText(),ideasTemp);
 				clusterVerbleibend.add(cluster);
 			}
 			else
