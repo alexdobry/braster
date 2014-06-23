@@ -1,6 +1,7 @@
 package de.braster;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
@@ -25,6 +26,7 @@ import org.mt4j.util.animation.Animation;
 import org.mt4j.util.animation.AnimationEvent;
 import org.mt4j.util.animation.IAnimationListener;
 import org.mt4j.util.animation.MultiPurposeInterpolator;
+import org.mt4j.util.math.Matrix;
 import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
@@ -284,13 +286,6 @@ public class BrainWritingScene extends AbstractScene {
 				public boolean processGestureEvent(MTGestureEvent ge) {
 					TapEvent te = (TapEvent)ge;
 					if (te.isTapped() && t.getText().length() != 0){
-//						MTTextArea textArea = new MTTextArea(getMTApplication(),                                
-//			                    FontManager.getInstance().createFont(getMTApplication(), "arial.ttf", 
-//			                    		50, //fontzize 
-//			                    		new MTColor(255, 255, 255, 255))); //Font color
-//			    		
-//			    		textArea.setNoFill(true);
-//			    		textArea.setNoStroke(true);
 			    		Idea idea = new Idea(getMTApplication(), canv);
 			    		idea.setText(t.getText());
 			    		idea.setName(t.getText());
@@ -386,22 +381,45 @@ public class BrainWritingScene extends AbstractScene {
 	}
 	
 	private void animateInput(BWKeyboard kb, String ideaText) {
+		
+
+		Vector3D rot = new Vector3D();
+		Vector3D scale = new Vector3D();
+		Vector3D trans = new Vector3D();
+		
+		kb.getLocalMatrix().decompose(trans, rot, scale);
+		
+
+		
 		final MTTextArea textArea = new MTTextArea(mtApp);
 		textArea.setText(ideaText);
 		textArea.setPickable(false);
 		textArea.setFillColor(green1);
 		textArea.setStrokeColor(green2);
 		
+		Vector3D v = null;
+		float width = textArea.getWidthXY(TransformSpace.LOCAL);
+		if (rot.z > 0) {
+			textArea.rotateZ(textArea.getCenterPointRelativeToParent(), 90);
+			v = new Vector3D(-100, 0, 0);
+		}
+		
+		if (rot.z < 0) {
+			textArea.rotateZ(textArea.getCenterPointRelativeToParent(), 270);
+			v = new Vector3D(100, 0, 0);
+		}
+		
+		if (rot.z == 0) {
+			v = new Vector3D(0, 100, 0);
+		}
 		
 		Vector3D pos = new Vector3D(kb.getWidthXY(TransformSpace.LOCAL)/2, -50, 0);
 		textArea.setPositionRelativeToOther(kb, pos);
 		canv.addChild(textArea);
-		
-		Vector3D v = new Vector3D(0, -100, 0);
-		
+		kb.sendToFront();
 		textArea.tweenTranslate(v, 500, 0.3f, 0.7f);
 
-		MultiPurposeInterpolator scaleAnimation = new MultiPurposeInterpolator(textArea.getWidthXY(TransformSpace.LOCAL), 0, 500, 0.3f, 0.7f, 1);
+		MultiPurposeInterpolator scaleAnimation = new MultiPurposeInterpolator(width, 0, 500, 0.3f, 0.7f, 1);
 		
 		Animation animScale = new Animation("Idee verschwinden lassen", scaleAnimation, textArea);
 		animScale.addAnimationListener(new IAnimationListener() {
