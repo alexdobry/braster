@@ -685,6 +685,7 @@ public class EvaluationScene extends AbstractScene{
 							case MTGestureEvent.GESTURE_UPDATED:
 								if (de.getDragCursor().getCurrentEvtPosX() > trennlinieLinks.x && de.getDragCursor().getCurrentEvtPosX() < trennlinieRechts.x) {
 									highlightMiddle.setVisible(true);
+									highlightRight.setVisible(false);
 								} else if (de.getDragCursor().getCurrentEvtPosX() > trennlinieRechts.x) {
 									highlightRight.setVisible(true);
 									highlightMiddle.setVisible(false);
@@ -882,6 +883,7 @@ public class EvaluationScene extends AbstractScene{
 								case MTGestureEvent.GESTURE_UPDATED:
 									if (de.getDragCursor().getCurrentEvtPosX() > trennlinieLinks.x && de.getDragCursor().getCurrentEvtPosX() < trennlinieRechts.x) {
 										highlightMiddle.setVisible(true);
+										highlightLeft.setVisible(false);
 									} else if (de.getDragCursor().getCurrentEvtPosX() < trennlinieLinks.x) {
 										highlightMiddle.setVisible(false);
 										highlightLeft.setVisible(true);
