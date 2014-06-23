@@ -83,7 +83,7 @@ public class BWIdeaView extends MTRectangle{
 			});
 			this.addChild(keybCloseSvg);
 				
-			registerInputProcessor(new FlickProcessor());
+			registerInputProcessor(new FlickProcessor(300,2));
 			addGestureListener(FlickProcessor.class, new IGestureEventListener() {
 				
 				@Override

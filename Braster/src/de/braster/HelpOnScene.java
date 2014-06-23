@@ -44,7 +44,7 @@ public class HelpOnScene extends MTRectangle {
 		steps.setPositionRelativeToParent(new Vector3D(getWidthXYRelativeToParent()*0.5f, getHeightXYRelativeToParent()*heightFactor));
 		
 		addChild(steps);
-		registerInputProcessor(new FlickProcessor());
+		registerInputProcessor(new FlickProcessor(300,2));
 		addGestureListener(FlickProcessor.class, new IGestureEventListener() {
 			
 			@Override
