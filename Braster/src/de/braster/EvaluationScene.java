@@ -53,7 +53,7 @@ public class EvaluationScene extends AbstractScene{
 	public ArrayList<Cluster> clusterWeiter;
 	
 	private Cluster showedCluster;
-	private Cluster popupCluster;
+	public Cluster popupCluster;
 	
 	private ClusterPopup openClusterPopup; 
 	public MTList listMiddle;
@@ -76,7 +76,7 @@ public class EvaluationScene extends AbstractScene{
 		
 		
 		
-		/*
+		 
 	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
 	 	 
@@ -108,7 +108,7 @@ public class EvaluationScene extends AbstractScene{
 		ideaTemp4.add(new Note("julia ist eine sehr sehr gute freundin", "freundin"));
 		Cluster cluster4 = new Cluster("freundin",ideaTemp4);
 		clusterVerbleibend.add(cluster4);
-		 */	 
+		 
 			 
 		showedCluster = new Cluster();	
 		clusterVerworfen = new ArrayList<Cluster>();
@@ -709,11 +709,18 @@ public class EvaluationScene extends AbstractScene{
 					
 		float x = einheitX+75;
 		float y =  100;					
-		 						
+		 
+		
+		
 		//arraylist durchgehen
 		//für jede arraylist das erste element anzeigen als ein symbol
 		for(final Cluster cluster : clusterVerworfen)
 		{	 
+			if(cluster.getNotes().size()==0)
+			{
+				clusterVerworfen.remove(cluster);
+				continue;
+			}
 			final MTTextArea textAreaIdee = new MTTextArea(mtApp);
 			final MTTextArea ordner = new MTTextArea(mtApp);
 			//wenn im cluster nur eine idee ist, wird diese direkt angezeigt
@@ -830,16 +837,16 @@ public class EvaluationScene extends AbstractScene{
 						if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 						{		
 							//öffnet sich clusterpopup
-							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster,  tempScene,0 );
-							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
-							area.addChild(openClusterPopup);
 							popupCluster = cluster;
+							clusterVerworfen.remove(popupCluster);
+							openClusterPopup = new ClusterPopup(mtApp, 250, 100, popupCluster,  tempScene,0 );
+							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
+							area.addChild(openClusterPopup);	
 							 
 						}
-						else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet
-						{
-							//update machen, weil sich inhalt geändert haben kann	
-						
+						else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet -> dann schließe den
+						{			 
+							clusterVerworfen.add(popupCluster);
 							popupCluster=null;
 							openClusterPopup.destroy();	
 							updateleftSide();
@@ -847,15 +854,13 @@ public class EvaluationScene extends AbstractScene{
 							updateRightSide();
 						}
 						else if(te.isTapped())  //wenn neue cluster geöffnet wird
-						{						
-							updateleftSide();
-							updateMiddleList();
-							updateRightSide();
-							openClusterPopup.destroy();
-							openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster , tempScene,0 );
-							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
-							area.addChild(openClusterPopup);
+						{		
+							clusterVerworfen.add(popupCluster);							 
 							popupCluster = cluster;
+							openClusterPopup.destroy();
+							openClusterPopup = new ClusterPopup(mtApp, 250, 100, popupCluster , tempScene,0 );
+							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
+							area.addChild(openClusterPopup);						
 						}
 					
 						return false;
@@ -999,9 +1004,9 @@ public class EvaluationScene extends AbstractScene{
 										updateRightSide();
 									}
 									 
-									 highlightLeft.setVisible(false);
-										highlightMiddle.setVisible(false);
-										highlightRight.setVisible(false);
+									highlightLeft.setVisible(false);
+									highlightMiddle.setVisible(false);
+									highlightRight.setVisible(false);
 									 break;
 								} 
 							  
@@ -1028,25 +1033,30 @@ public class EvaluationScene extends AbstractScene{
 							if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 							{		
 								//öffnet sich clusterpopup
-								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster, tempScene,1 );
-								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
-								area.addChild(openClusterPopup);
 								popupCluster = cluster;
+								clusterWeiter.remove(popupCluster);
+								openClusterPopup = new ClusterPopup(mtApp, 250, 100, popupCluster,  tempScene,1 );
+								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
+								area.addChild(openClusterPopup);									 
 							}
-							else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet
-							{
+							else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet -> dann schließe den
+							{			 
+								clusterWeiter.add(popupCluster);
 								popupCluster=null;
-								openClusterPopup.destroy();								 
+								openClusterPopup.destroy();	
+								updateleftSide();
+								updateMiddleList();
+								updateRightSide();
 							}
 							else if(te.isTapped())  //wenn neue cluster geöffnet wird
-							{
+							{		
+								clusterWeiter.add(popupCluster);							 
+								popupCluster = cluster;
 								openClusterPopup.destroy();
-								openClusterPopup = new ClusterPopup(mtApp, 250, 100, cluster ,tempScene,1);
+								openClusterPopup = new ClusterPopup(mtApp, 250, 100, popupCluster , tempScene,1 );
 								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
-								area.addChild(openClusterPopup);
-								popupCluster = cluster;							
+								area.addChild(openClusterPopup);						
 							}
-						
 							return false;
 						}
 					});

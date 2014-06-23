@@ -23,12 +23,14 @@ public class ClusterPopup  extends MTRectangle{
 	private EvaluationScene caller;
 	private ClusterPopup popup;
 	private int side;
+	private ClusterPopup dieses;
 	
 	@SuppressWarnings("deprecation")
 	public ClusterPopup(MTApplication pApplet, float width, float height, final Cluster cluster, 
 			  EvaluationScene call, int seite) {
 		super(pApplet, width, height);
 		
+		 
 		side = seite;
 		caller =call;
 		popup = this;
@@ -60,7 +62,7 @@ public class ClusterPopup  extends MTRectangle{
 		this.addChild(line);
 		
 		y= 57;
-		for(Note actualNote : cluster.getNotes())
+		for(final Note actualNote : cluster.getNotes())
 		{
 			final MTTextArea textareaIdee = new MTTextArea(pApplet);
 			textareaIdee.setText(actualNote.getName());	
@@ -113,7 +115,7 @@ public class ClusterPopup  extends MTRectangle{
 							//von links nach rechts
 							if(side ==0  && centerPoint.x> EvaluationScene.trennlinieRechts.x)
 							{							 
-								boolean added = false;
+								 boolean added = false;
 								 //überprüfung ob der cluster bereits besteht
 								 for(Cluster rightCluster : caller.clusterWeiter)
 								 {
@@ -127,25 +129,32 @@ public class ClusterPopup  extends MTRectangle{
 								if(added==false)
 								{
 									ArrayList<Note> newNotes = new ArrayList<Note>();
-									newNotes.add(new Note(textareaIdee.getText(),cluster.getName()));
+									newNotes.add(new Note(textareaIdee.getText(), cluster.getName()));
 									Cluster newCluster = new Cluster(ideenText, newNotes);
 									caller.clusterWeiter.add(newCluster);
 								}
-								removeFromClusterList(textareaIdee,caller.clusterVerworfen);
-								textareaIdee.destroy();								 
-								caller.updateRightSide();
+								
+								cluster.getNotes().remove(actualNote);
+								textareaIdee.destroy();					
+								caller.updateRightSide();	
 								popup.sendToFront();
+								if(cluster.getNotes().size()==0)
+								{
+									popup.destroy();
+									caller.updateleftSide();
+									caller.popupCluster=null;
+								}	
 							}
 							//von rechts nach links
 							if(side ==1 && centerPoint.x < EvaluationScene.trennlinieLinks.x)
 							{							 
-								boolean added = false;
+								 boolean added = false;
 								 //überprüfung ob der cluster bereits besteht
-								 for(Cluster rightCluster : caller.clusterVerworfen)
+								 for(Cluster leftCluster : caller.clusterVerworfen)
 								 {
-									if(rightCluster.getName().equals(ideenText))
+									if(leftCluster.getName().equals(ideenText))
 									{
-										rightCluster.getNotes().add(new Note(textareaIdee.getText(),cluster.getName()));
+										leftCluster.getNotes().add(new Note(textareaIdee.getText(),cluster.getName()));
 										added=true;
 										break;
 									}	 										
@@ -153,14 +162,21 @@ public class ClusterPopup  extends MTRectangle{
 								if(added==false)
 								{
 									ArrayList<Note> newNotes = new ArrayList<Note>();
-									newNotes.add(new Note(textareaIdee.getText(),cluster.getName()));
+									newNotes.add(new Note(textareaIdee.getText(), cluster.getName()));
 									Cluster newCluster = new Cluster(ideenText, newNotes);
 									caller.clusterVerworfen.add(newCluster);
 								}
-								removeFromClusterList(textareaIdee,caller.clusterWeiter);
-								textareaIdee.destroy();								 
-								caller.updateleftSide();
+								
+								cluster.getNotes().remove(actualNote);
+								textareaIdee.destroy();					
+								caller.updateRightSide();	
 								popup.sendToFront();
+								if(cluster.getNotes().size()==0)
+								{
+									popup.destroy();
+									caller.updateRightSide();
+									caller.popupCluster=null;
+								}	
 							}
 							//von links in mitte
 							else if(side ==0  &&  centerPoint.x >  EvaluationScene.trennlinieLinks.x && centerPoint.x < EvaluationScene.trennlinieRechts.x)
@@ -184,10 +200,16 @@ public class ClusterPopup  extends MTRectangle{
 									caller.clusterVerbleibend.add(newCluster);
 								}
 								
-								removeFromClusterList(textareaIdee,caller.clusterVerworfen);
+								cluster.getNotes().remove(actualNote);
 								textareaIdee.destroy();					
-								caller.updateMiddleList();
+								caller.updateMiddleList();	
 								popup.sendToFront();
+								if(cluster.getNotes().size()==0)
+								{
+									popup.destroy();
+									caller.updateleftSide();
+									caller.popupCluster=null;
+								}															 
 							}
 							//von rechts in mitte
 							else if(side == 1 &&  centerPoint.x >  EvaluationScene.trennlinieLinks.x && centerPoint.x < EvaluationScene.trennlinieRechts.x)
@@ -210,10 +232,18 @@ public class ClusterPopup  extends MTRectangle{
 									Cluster newCluster = new Cluster(ideenText, newNotes);
 									caller.clusterVerbleibend.add(newCluster);
 								}
-								removeFromClusterList(textareaIdee,caller.clusterWeiter);
+								
+								cluster.getNotes().remove(actualNote);
 								textareaIdee.destroy();					
-								caller.updateMiddleList();
+								caller.updateMiddleList();	
 								popup.sendToFront();
+								if(cluster.getNotes().size()==0)
+								{
+									popup.destroy();
+									caller.updateRightSide();
+									caller.popupCluster=null;
+								}
+								
 							}
 							break;							 
 						} 
