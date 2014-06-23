@@ -60,9 +60,9 @@ public class EvaluationScene extends AbstractScene{
 	
 	private Iscene finalScene;
 	private EvaluationScene tempScene;	
-	private MTRectangle highlightLeft;
-	private MTRectangle highlightMiddle;
-	private MTRectangle highlightRight;
+	public MTRectangle highlightLeft;
+	public MTRectangle highlightMiddle;
+	public MTRectangle highlightRight;
 	
 	public EvaluationScene( MTApplication mtApplication, String name)
 	{		

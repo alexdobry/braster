@@ -84,9 +84,30 @@ public class ClusterPopup  extends MTRectangle{
 							
 							 break;		
 						case MTGestureEvent.GESTURE_UPDATED:
+							if (side == 1 && de.getDragCursor().getCurrentEvtPosX() > EvaluationScene.trennlinieLinks.x && de.getDragCursor().getCurrentEvtPosX() < EvaluationScene.trennlinieRechts.x) {
+								caller.highlightMiddle.setVisible(true);
+								caller.highlightLeft.setVisible(false);
+							} else if (side == 1 && de.getDragCursor().getCurrentEvtPosX() < EvaluationScene.trennlinieLinks.x) {
+								caller.highlightMiddle.setVisible(false);
+								caller.highlightLeft.setVisible(true);
+							} else if (side == 0 && de.getDragCursor().getCurrentEvtPosX() > EvaluationScene.trennlinieLinks.x && de.getDragCursor().getCurrentEvtPosX() < EvaluationScene.trennlinieRechts.x) {
+								caller.highlightMiddle.setVisible(true);
+								caller.highlightRight.setVisible(false);
+							} else if (side == 0 && de.getDragCursor().getCurrentEvtPosX() > EvaluationScene.trennlinieRechts.x) {
+								caller.highlightRight.setVisible(true);
+								caller.highlightMiddle.setVisible(false);
+							} else {
+								caller.highlightLeft.setVisible(false);
+								caller.highlightMiddle.setVisible(false);
+								caller.highlightRight.setVisible(false);
+							}
+							
 							break;
 						case MTGestureEvent.GESTURE_ENDED:									 								
-							
+							textareaIdee.setFillColor(MTColor.GREEN);
+							caller.highlightLeft.setVisible(false);
+							caller.highlightMiddle.setVisible(false);
+							caller.highlightRight.setVisible(false);
 							 Vector3D centerPoint = textareaIdee.getCenterPointGlobal();
 							 String ideenText = cluster.getName();
 							//von links nach rechts
