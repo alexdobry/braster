@@ -317,8 +317,8 @@ public class EvaluationScene extends AbstractScene{
 	{
 		//liste leeren und erstellen
 		listMiddle.removeAllListElements();
-		listMiddle.setFillColor(listColor);
-		listMiddle.setStrokeColor(listColor);
+		listMiddle.setNoFill(true);
+		listMiddle.setNoStroke(true);
 		area.addChild(listMiddle);
 				
 		int x = 5; 
@@ -390,8 +390,8 @@ public class EvaluationScene extends AbstractScene{
 	{
 		MTListCell cell = new MTListCell(this.mtApp,3*einheitX-20, 40);
 		cell.setPickable(true);
-		cell.setStrokeColor(listColor);
-		cell.setFillColor(listColor);
+		cell.setNoStroke(true);
+		cell.setNoFill(true);
 		cell.unregisterAllInputProcessors();
 		listMiddle.addChild(cell);		
 		cell.registerInputProcessor(new TapProcessor(mtApp));
