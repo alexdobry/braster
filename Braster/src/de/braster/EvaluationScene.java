@@ -542,7 +542,8 @@ public class EvaluationScene extends AbstractScene{
 						}
 						
 						break;
-					case DragEvent.GESTURE_ENDED:							 					
+					case DragEvent.GESTURE_ENDED:
+						rText.setFillColor(MTColor.GREEN);
 						Vector3D centerPoint = rText.getCenterPointRelativeToParent();						
 						if(centerPoint.x <  trennlinieLinks.x) //wird nach links verschoben
 						{			
@@ -682,8 +683,19 @@ public class EvaluationScene extends AbstractScene{
 								 textAreaIdee.setFillColor(new MTColor(220,220,220,255));
 								 break;		
 							case MTGestureEvent.GESTURE_UPDATED:
+								if (de.getDragCursor().getCurrentEvtPosX() > trennlinieLinks.x && de.getDragCursor().getCurrentEvtPosX() < trennlinieRechts.x) {
+									highlightMiddle.setVisible(true);
+								} else if (de.getDragCursor().getCurrentEvtPosX() > trennlinieRechts.x) {
+									highlightRight.setVisible(true);
+									highlightMiddle.setVisible(false);
+								} else {
+									highlightLeft.setVisible(false);
+									highlightMiddle.setVisible(false);
+									highlightRight.setVisible(false);
+								}
 								break;
-							case MTGestureEvent.GESTURE_ENDED:									 								
+							case MTGestureEvent.GESTURE_ENDED:	
+								 textAreaIdee.setFillColor(MTColor.GREEN);
 								 Vector3D centerPoint = textAreaIdee.getCenterPointRelativeToParent();
 								 String ideenText = cluster.getName();
 								 if(centerPoint.x >  trennlinieLinks.x && centerPoint.x < trennlinieRechts.x)
@@ -736,6 +748,9 @@ public class EvaluationScene extends AbstractScene{
 									updateRightSide();	
 									updateleftSide();
 								}
+								 highlightLeft.setVisible(false);
+									highlightMiddle.setVisible(false);
+									highlightRight.setVisible(false);
 								 break;
 							} 
 						  
@@ -865,8 +880,19 @@ public class EvaluationScene extends AbstractScene{
 									 textAreaIdee.setFillColor(new MTColor(220,220,220,255));
 									 break;		
 								case MTGestureEvent.GESTURE_UPDATED:
+									if (de.getDragCursor().getCurrentEvtPosX() > trennlinieLinks.x && de.getDragCursor().getCurrentEvtPosX() < trennlinieRechts.x) {
+										highlightMiddle.setVisible(true);
+									} else if (de.getDragCursor().getCurrentEvtPosX() < trennlinieLinks.x) {
+										highlightMiddle.setVisible(false);
+										highlightLeft.setVisible(true);
+									} else {
+										highlightLeft.setVisible(false);
+										highlightMiddle.setVisible(false);
+										highlightRight.setVisible(false);
+									}
 									break;
-								case MTGestureEvent.GESTURE_ENDED:									 								
+								case MTGestureEvent.GESTURE_ENDED:	
+									textAreaIdee.setFillColor(MTColor.GREEN);
 									 Vector3D centerPoint = textAreaIdee.getCenterPointRelativeToParent();
 									 String ideenText = cluster.getName();
 									 if(centerPoint.x >  trennlinieLinks.x && centerPoint.x < trennlinieRechts.x)
@@ -919,6 +945,10 @@ public class EvaluationScene extends AbstractScene{
 										updateleftSide();
 										updateRightSide();
 									}
+									 
+									 highlightLeft.setVisible(false);
+										highlightMiddle.setVisible(false);
+										highlightRight.setVisible(false);
 									 break;
 								} 
 							  
