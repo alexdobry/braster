@@ -76,7 +76,7 @@ public class EvaluationScene extends AbstractScene{
 		
 		
 		
-		 
+		 /*
 	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
 	 	 
@@ -108,7 +108,7 @@ public class EvaluationScene extends AbstractScene{
 		ideaTemp4.add(new Note("julia ist eine sehr sehr gute freundin", "freundin"));
 		Cluster cluster4 = new Cluster("freundin",ideaTemp4);
 		clusterVerbleibend.add(cluster4);
-		 
+		 */
 			 
 		showedCluster = new Cluster();	
 		clusterVerworfen = new ArrayList<Cluster>();
@@ -524,6 +524,8 @@ public class EvaluationScene extends AbstractScene{
 	//Löscht die aktuell angezeigten Ideen und schiebt sie in die Liste zurück
 	private void moveShowedClusterToList()
 	{
+		if(showedCluster !=null && showedCluster.getNotes().size() >0)
+		{
 		//showedCluster wieder nach oben schieben
 		clusterVerbleibend.add(showedCluster);		 
 		showedCluster = null;
@@ -543,6 +545,7 @@ public class EvaluationScene extends AbstractScene{
 			{
 				continue;
 			}
+		}
 		}
 	}
 	
@@ -739,6 +742,8 @@ public class EvaluationScene extends AbstractScene{
 						switch (de.getId()) {
 							case MTGestureEvent.GESTURE_STARTED:								 
 								 textAreaIdee.setFillColor(new MTColor(220,220,220,255));
+								 moveShowedClusterToList();
+								 updateMiddleList();
 								 break;		
 							case MTGestureEvent.GESTURE_UPDATED:
 								if (de.getDragCursor().getCurrentEvtPosX() > trennlinieLinks.x && de.getDragCursor().getCurrentEvtPosX() < trennlinieRechts.x) {
@@ -778,9 +783,9 @@ public class EvaluationScene extends AbstractScene{
 										clusterVerbleibend.add(newCluster);
 									}
 									removeFromClusterList(textAreaIdee,clusterVerworfen);
-									textAreaIdee.destroy();					
+									textAreaIdee.destroy();										
 									updateMiddleList();
-									updateleftSide();
+									updateleftSide();								
 								}
 								else if(centerPoint.x> trennlinieRechts.x)
 								{							 
@@ -803,9 +808,9 @@ public class EvaluationScene extends AbstractScene{
 										clusterWeiter.add(newCluster);
 									}
 									removeFromClusterList(textAreaIdee,clusterVerworfen);
-									textAreaIdee.destroy();					
+									textAreaIdee.destroy();									 
 									updateRightSide();	
-									updateleftSide();
+									updateleftSide();									
 								}
 								 highlightLeft.setVisible(false);
 									highlightMiddle.setVisible(false);
@@ -837,30 +842,33 @@ public class EvaluationScene extends AbstractScene{
 						if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 						{		
 							//öffnet sich clusterpopup
+							moveShowedClusterToList();
+							updateMiddleList();
 							popupCluster = cluster;
 							clusterVerworfen.remove(popupCluster);
 							openClusterPopup = new ClusterPopup(mtApp, 250, 100, popupCluster,  tempScene,0 );
 							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
-							area.addChild(openClusterPopup);	
+							area.addChild(openClusterPopup);							
 							 
 						}
 						else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet -> dann schließe den
 						{			 
+							moveShowedClusterToList();
+							updateMiddleList();
 							clusterVerworfen.add(popupCluster);
 							popupCluster=null;
-							openClusterPopup.destroy();	
-							updateleftSide();
-							updateMiddleList();
+							openClusterPopup.destroy();						
+							updateleftSide();							
 							updateRightSide();
 						}
 						else if(te.isTapped())  //wenn neue cluster geöffnet wird
-						{		
+						{							 
 							clusterVerworfen.add(popupCluster);							 
 							popupCluster = cluster;
 							openClusterPopup.destroy();
 							openClusterPopup = new ClusterPopup(mtApp, 250, 100, popupCluster , tempScene,0 );
 							openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
-							area.addChild(openClusterPopup);						
+							area.addChild(openClusterPopup);							
 						}
 					
 						return false;
@@ -935,6 +943,8 @@ public class EvaluationScene extends AbstractScene{
 							switch (de.getId()) {
 								case MTGestureEvent.GESTURE_STARTED:								 
 									 textAreaIdee.setFillColor(new MTColor(220,220,220,255));
+										moveShowedClusterToList();
+										updateMiddleList();
 									 break;		
 								case MTGestureEvent.GESTURE_UPDATED:
 									if (de.getDragCursor().getCurrentEvtPosX() > trennlinieLinks.x && de.getDragCursor().getCurrentEvtPosX() < trennlinieRechts.x) {
@@ -974,7 +984,7 @@ public class EvaluationScene extends AbstractScene{
 											clusterVerbleibend.add(newCluster);
 										}
 										removeFromClusterList(textAreaIdee,clusterWeiter);
-										textAreaIdee.destroy();					
+										textAreaIdee.destroy();										 
 										updateMiddleList();
 										updateRightSide();
 									}
@@ -999,7 +1009,7 @@ public class EvaluationScene extends AbstractScene{
 											clusterVerworfen.add(newCluster);
 										}
 										removeFromClusterList(textAreaIdee,clusterWeiter);
-										textAreaIdee.destroy();					
+										textAreaIdee.destroy();										
 										updateleftSide();
 										updateRightSide();
 									}
@@ -1033,19 +1043,22 @@ public class EvaluationScene extends AbstractScene{
 							if (te.isTapped() && popupCluster==null) //und wenn dieser nicht bereits geöffnet ist  
 							{		
 								//öffnet sich clusterpopup
+								moveShowedClusterToList();
+								updateMiddleList();
 								popupCluster = cluster;
 								clusterWeiter.remove(popupCluster);
 								openClusterPopup = new ClusterPopup(mtApp, 250, 100, popupCluster,  tempScene,1 );
 								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
-								area.addChild(openClusterPopup);									 
+								area.addChild(openClusterPopup);							 
 							}
 							else if(te.isTapped() && popupCluster.getName().equals(cluster.getName()))//und bereits geöffnet -> dann schließe den
-							{			 
+							{		
+								moveShowedClusterToList();
+								updateMiddleList();
 								clusterWeiter.add(popupCluster);
 								popupCluster=null;
-								openClusterPopup.destroy();	
-								updateleftSide();
-								updateMiddleList();
+								openClusterPopup.destroy();								 
+								updateleftSide();							 
 								updateRightSide();
 							}
 							else if(te.isTapped())  //wenn neue cluster geöffnet wird
@@ -1055,7 +1068,8 @@ public class EvaluationScene extends AbstractScene{
 								openClusterPopup.destroy();
 								openClusterPopup = new ClusterPopup(mtApp, 250, 100, popupCluster , tempScene,1 );
 								openClusterPopup.setPositionGlobal(new Vector3D(ordner.getCenterPointGlobal().x,ordner.getCenterPointGlobal().y+ openClusterPopup.getHeightXYVectLocal().length()/2+15));
-								area.addChild(openClusterPopup);						
+								area.addChild(openClusterPopup);
+								moveShowedClusterToList();
 							}
 							return false;
 						}
