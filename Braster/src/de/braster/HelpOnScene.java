@@ -78,8 +78,7 @@ public class HelpOnScene extends MTRectangle {
 		
 		
 		
-		weiter = new MTRoundRectangle(pApplet, pApplet.getWidth()/2, pApplet.getHeight()*0.8f, 0, 150, 40, 12, 12);
-		weiter.setPositionRelativeToOther(steps, new Vector3D(300, steps.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f, 0));
+		weiter = new MTRoundRectangle(pApplet, 896, pApplet.getHeight()*0.8f, 0, 100, 40, 12, 12);
 		weiter.unregisterAllInputProcessors();
 		weiter.setFillColor(MTColor.GRAY);
 		MTTextArea rText = new MTTextArea(pApplet, FontManager.getInstance().createFont(pApplet, "arial.ttf", 
@@ -92,21 +91,42 @@ public class HelpOnScene extends MTRectangle {
 		rText.setText("Weiter");
 		weiter.addChild(rText);
 		rText.setPositionRelativeToParent(weiter.getCenterPointLocal());
-		weiter.setNoStroke(true);
+//		weiter.setNoStroke(true);
 		weiter.registerInputProcessor(new TapProcessor(pApplet));
 		weiter.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(weiter));
 		weiter.setVisible(false);
 		addChild(weiter);
+//		weiter.setStrokeColor(MTColor.WHITE);
+		weiter.setPositionGlobal(new Vector3D(880-weiter.getWidthXY(TransformSpace.LOCAL)/2, steps.getCenterPointGlobal().y, 0));
+		
 		
 		weiter.addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			
 			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
-				if (te.isTapped()) {
-//					test.destroy();
-					destroy();
+				switch (te.getId()) {
+				case TapEvent.GESTURE_STARTED:
+					weiter.setFillColor(new MTColor(220,220,220,255));
+					break;
+				
+				case TapEvent.GESTURE_UPDATED:
+					
+					break;
+				
+				case TapEvent.GESTURE_ENDED:
+					if (te.isTapped()) {
+//						test.destroy();
+						destroy();
+					}	
+					
+					weiter.setFillColor(MTColor.GRAY);
+					break;
+
+				default:
+					break;
 				}
+				
 				return false;
 			}
 		});
