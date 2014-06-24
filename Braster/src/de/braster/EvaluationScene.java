@@ -72,7 +72,7 @@ public class EvaluationScene extends AbstractScene{
 		
 		
 		
-		 /*
+		/* 
 	 	clusterVerbleibend = new ArrayList<Cluster>();
 		 
 	 	 

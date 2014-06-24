@@ -168,7 +168,7 @@ public class ClusterPopup  extends MTRectangle{
 								
 								cluster.getNotes().remove(actualNote);
 								textareaIdee.destroy();					
-								caller.updateRightSide();	
+								caller.updateleftSide();	
 								popup.sendToFront();
 								if(cluster.getNotes().size()==0)
 								{
