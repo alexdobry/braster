@@ -35,6 +35,8 @@ public class EvaluationScene extends AbstractScene{
 	private MTCanvas canv;
 	private MTApplication mtApp;
 	private MTColor listColor;
+	private MTColor ideaFillColor = new MTColor(0, 100, 0, 255);
+	private MTColor ideaStrokeColor = new MTColor(34, 139, 34, 255);
  
 	private MTEllipse area;	 
 	private float einheitX;
@@ -384,8 +386,8 @@ public class EvaluationScene extends AbstractScene{
 			{
 				textAreaIdee = new MTTextArea(mtApp);
 				textAreaIdee.setText(cluster.getNotes().get(0).getName());	
-				textAreaIdee.setFillColor(MTColor.GREEN);
-				textAreaIdee.setStrokeColor(MTColor.LIME);
+				textAreaIdee.setFillColor(ideaFillColor);
+				textAreaIdee.setStrokeColor(ideaStrokeColor);
 				textAreaIdee.unregisterAllInputProcessors();
 				textAreaIdee.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
 				textAreaIdee.removeAllGestureEventListeners();
@@ -553,8 +555,8 @@ public class EvaluationScene extends AbstractScene{
 		for(Note note : selectedCluster.getNotes())
 		{			 
 			final MTTextArea rText = new MTTextArea(mtApp);
-			rText.setFillColor(MTColor.GREEN);
-			rText.setStrokeColor(MTColor.LIME);
+			rText.setFillColor(ideaFillColor);
+			rText.setStrokeColor(ideaStrokeColor);
 			rText.unregisterAllInputProcessors();
 			rText.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 25, MTColor.WHITE, true));		 
 			rText.setPickable(true);
@@ -589,7 +591,7 @@ public class EvaluationScene extends AbstractScene{
 						
 						break;
 					case DragEvent.GESTURE_ENDED:
-						rText.setFillColor(MTColor.GREEN);
+						rText.setFillColor(ideaFillColor);
 						Vector3D centerPoint = rText.getCenterPointRelativeToParent();						
 						if(centerPoint.x <  trennlinieLinks.x) //wird nach links verschoben
 						{			
@@ -724,8 +726,8 @@ public class EvaluationScene extends AbstractScene{
 			if(cluster.getNotes().size()==1)
 			{				
 				textAreaIdee.setText(cluster.getNotes().get(0).getName());	
-				textAreaIdee.setFillColor(MTColor.GREEN);
-				textAreaIdee.setStrokeColor(MTColor.LIME);				 
+				textAreaIdee.setFillColor(ideaFillColor);
+				textAreaIdee.setStrokeColor(ideaStrokeColor);				 
 				textAreaIdee.unregisterAllInputProcessors();
 				textAreaIdee.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
 				textAreaIdee.setPickable(true);				
@@ -753,7 +755,7 @@ public class EvaluationScene extends AbstractScene{
 								}
 								break;
 							case MTGestureEvent.GESTURE_ENDED:	
-								 textAreaIdee.setFillColor(MTColor.GREEN);
+								 textAreaIdee.setFillColor(ideaFillColor);
 								 Vector3D centerPoint = textAreaIdee.getCenterPointRelativeToParent();
 								 String ideenText = cluster.getName();
 								 if(centerPoint.x >  trennlinieLinks.x && centerPoint.x < trennlinieRechts.x)
@@ -925,8 +927,8 @@ public class EvaluationScene extends AbstractScene{
 				if(cluster.getNotes().size()==1)
 				{				
 					textAreaIdee.setText(cluster.getNotes().get(0).getName());	
-					textAreaIdee.setFillColor(MTColor.GREEN);
-					textAreaIdee.setStrokeColor(MTColor.LIME);
+					textAreaIdee.setFillColor(ideaFillColor);
+					textAreaIdee.setStrokeColor(ideaStrokeColor);
 					textAreaIdee.unregisterAllInputProcessors();
 					textAreaIdee.setFont(FontManager.getInstance().createFont(mtApp, "arial.ttf", 14, MTColor.WHITE, true));
 					textAreaIdee.setPickable(true);					 
@@ -954,7 +956,7 @@ public class EvaluationScene extends AbstractScene{
 									}
 									break;
 								case MTGestureEvent.GESTURE_ENDED:	
-									textAreaIdee.setFillColor(MTColor.GREEN);
+									textAreaIdee.setFillColor(ideaFillColor);
 									 Vector3D centerPoint = textAreaIdee.getCenterPointRelativeToParent();
 									 String ideenText = cluster.getName();
 									 if(centerPoint.x >  trennlinieLinks.x && centerPoint.x < trennlinieRechts.x)

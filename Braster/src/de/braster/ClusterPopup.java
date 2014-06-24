@@ -19,7 +19,10 @@ public class ClusterPopup  extends MTRectangle{
 	private MTApplication mtApp;
 	private EvaluationScene caller;
 	private ClusterPopup popup;
-	private int side;
+	private int side;	
+
+	private MTColor ideaFillColor = new MTColor(0, 100, 0, 255);
+	private MTColor ideaStrokeColor = new MTColor(34, 139, 34, 255);
 	
 	@SuppressWarnings("deprecation")
 	public ClusterPopup(MTApplication pApplet, float width, float height, final Cluster cluster, 
@@ -62,8 +65,8 @@ public class ClusterPopup  extends MTRectangle{
 		{
 			final MTTextArea textareaIdee = new MTTextArea(pApplet);
 			textareaIdee.setText(actualNote.getName());	
-			textareaIdee.setFillColor(MTColor.GREEN);
-			textareaIdee.setStrokeColor(MTColor.LIME);
+			textareaIdee.setFillColor(ideaFillColor);
+			textareaIdee.setStrokeColor(ideaStrokeColor);
 			width = textareaIdee.getWidthXYVectLocal().length();
 			textareaIdee.unregisterAllInputProcessors();
 			textareaIdee.setFont(FontManager.getInstance().createFont(pApplet, "arial.ttf", 14, MTColor.WHITE, true));
@@ -102,7 +105,7 @@ public class ClusterPopup  extends MTRectangle{
 							
 							break;
 						case MTGestureEvent.GESTURE_ENDED:									 								
-							textareaIdee.setFillColor(MTColor.GREEN);
+							textareaIdee.setFillColor(ideaFillColor);
 							caller.highlightLeft.setVisible(false);
 							caller.highlightMiddle.setVisible(false);
 							caller.highlightRight.setVisible(false);
