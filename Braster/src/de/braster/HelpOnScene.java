@@ -2,6 +2,7 @@ package de.braster;
 
 import java.util.LinkedList;
 
+import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
@@ -79,6 +80,7 @@ public class HelpOnScene extends MTRectangle {
 		
 		
 		weiter = new MTRoundRectangle(pApplet, pApplet.getWidth()/2, pApplet.getHeight()*0.8f, 0, 150, 40, 12, 12);
+		weiter.setPositionRelativeToOther(steps, new Vector3D(300, steps.getHeightXY(TransformSpace.RELATIVE_TO_PARENT)/2f, 0));
 		weiter.unregisterAllInputProcessors();
 		weiter.setFillColor(MTColor.GRAY);
 		MTTextArea rText = new MTTextArea(pApplet, FontManager.getInstance().createFont(pApplet, "arial.ttf", 
