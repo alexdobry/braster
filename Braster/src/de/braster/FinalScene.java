@@ -4,19 +4,15 @@ import java.util.ArrayList;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
-import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
-import org.mt4j.input.inputProcessors.IGestureEventListener;
-import org.mt4j.input.inputProcessors.MTGestureEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
 public class FinalScene extends AbstractScene{
 
+	@SuppressWarnings("deprecation")
 	public FinalScene( final MTApplication mtApplication, String name, String problem, ArrayList<Cluster> result)
 	{
 		super(mtApplication, name);
@@ -36,8 +32,6 @@ public class FinalScene extends AbstractScene{
 		textArea1.setPositionGlobal(new Vector3D(mtApplication.width/2,80));
 		canvas.addChild(textArea1);
 		
-		
-		problem = "mieses wetter";
 		MTTextArea textArea2 = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 
                 		50, //fontzize 
@@ -64,7 +58,7 @@ public class FinalScene extends AbstractScene{
 		
 		int x =mtApplication.width/(result.size()+1);
 		int y= mtApplication.height/5*2+100;
-		String loesung ="";
+
 		float laengstes =0; 
 		
 		for(Cluster cluster : result)
@@ -85,7 +79,7 @@ public class FinalScene extends AbstractScene{
 					laengstes = ordner.getWidthXYVectLocal().length();
 				}
 				canvas.addChild(ordner);
-				ordner.setPositionRelativeToParent(new Vector3D(x,y));
+				ordner.setPositionGlobal(new Vector3D(x,y));
 				
 				y+=30;
 				//brauen ordner dazu und grünen ideen daunter
@@ -99,7 +93,7 @@ public class FinalScene extends AbstractScene{
 					textAreaIdee.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 14, MTColor.WHITE, true));
 					textAreaIdee.removeAllGestureEventListeners();
 					textAreaIdee.setPickable(false);
-					textAreaIdee.setPositionRelativeToParent(new Vector3D(x,y));
+					textAreaIdee.setPositionGlobal(new Vector3D(x,y));
 					canvas.addChild(textAreaIdee);
 					if(textAreaIdee.getWidthXYVectLocal().length()>laengstes)
 					{
@@ -108,7 +102,7 @@ public class FinalScene extends AbstractScene{
 					y+=30;				
 				}
 				
-				x+=laengstes+20;
+				x+=laengstes+100;
 			}
 			else
 			{				
@@ -125,10 +119,10 @@ public class FinalScene extends AbstractScene{
 				{
 					laengstes = textAreaIdee.getWidthXYVectLocal().length();
 				}
-			
-				x+=laengstes+20;
-				textAreaIdee.setPositionRelativeToParent(new Vector3D(x,y));
-				canvas.addChild(textAreaIdee);				
+
+				textAreaIdee.setPositionGlobal(new Vector3D(x,y));
+				canvas.addChild(textAreaIdee);
+				x+=laengstes+100;				
 			}
 			laengstes=0;
 			
