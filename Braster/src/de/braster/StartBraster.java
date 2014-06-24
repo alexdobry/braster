@@ -61,20 +61,18 @@ public class StartBraster extends MTApplication {
 		helpTest.add(loadImage(path + "3.png"));
 		helpTest.add(loadImage(path + "4.png"));
 		
-		helpEVA.add(loadImage(path + "Evaluation_1.png"));
-		helpEVA.add(loadImage(path + "Evaluation_2.png"));
-		helpEVA.add(loadImage(path + "Evaluation_3.png"));
-		helpEVA.add(loadImage(path + "Evaluation_4.png"));
-		helpEVA.add(loadImage(path + "Evaluation_5.png"));
-		helpEVA.add(loadImage(path + "Evaluation_6.png"));	 
-		helpEVA.add(loadImage(path + "Evaluation_8.png"));
+		helpEVA.add(loadImage(path + "evaluation1.png"));
+		helpEVA.add(loadImage(path + "evaluation2.png"));
+		helpEVA.add(loadImage(path + "evaluation3.png"));
+		helpEVA.add(loadImage(path + "evaluation4.png"));
+		helpEVA.add(loadImage(path + "evaluation5.png"));
 
 		evalHighlightLeft = loadImage(path +   "evalHighlightLeft.png");
 		evalHighlightMiddle = loadImage(path + "evalHighlightMiddle.png");
 		evalHighlightRight = loadImage(path +  "evalHighlightRight.png");
 		
 		addScene(new WelcomeScene(this, "Hello World Scene"));
-//		addScene(new SetupScene(this, "Hello World Scene"));
+		//addScene(new SetupScene(this, "Hello World Scene"));
 		//addScene(new ClusteringScene(this, "Hello World Scene"));
 		//addScene(new EvaluationHelp(this, "Hello World Scene"));
 		//addScene(new EvaluationScene(this, "Hello World Scene"));
