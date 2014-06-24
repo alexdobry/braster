@@ -1,14 +1,12 @@
 package de.braster;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
-import org.mt4j.components.visibleComponents.shapes.MTRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
@@ -26,7 +24,6 @@ import org.mt4j.util.animation.Animation;
 import org.mt4j.util.animation.AnimationEvent;
 import org.mt4j.util.animation.IAnimationListener;
 import org.mt4j.util.animation.MultiPurposeInterpolator;
-import org.mt4j.util.math.Matrix;
 import org.mt4j.util.math.Vector3D;
 
 import processing.core.PImage;
@@ -62,9 +59,6 @@ public class BrainWritingScene extends AbstractScene {
 		this.setClearColor(new MTColor(136, 171, 194, 255));
 		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		
-		//temporärer fix; beseitigt lag bei Eingabe der ersten Idee
-		Idea i = new Idea(mtApp, canv);
-		Idea.getAllIdeas().clear();
 		
 		MTTextArea problemTextArea = new MTTextArea(mtApplication,                                
                 FontManager.getInstance().createFont(mtApplication, "arial.ttf", 

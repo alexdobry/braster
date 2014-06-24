@@ -14,16 +14,12 @@ import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProc
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
-import processing.core.PApplet;
-import processing.core.PImage;
-
 public class ClusterPopup  extends MTRectangle{
 	
 	private MTApplication mtApp;
 	private EvaluationScene caller;
 	private ClusterPopup popup;
 	private int side;
-	private ClusterPopup dieses;
 	
 	@SuppressWarnings("deprecation")
 	public ClusterPopup(MTApplication pApplet, float width, float height, final Cluster cluster, 

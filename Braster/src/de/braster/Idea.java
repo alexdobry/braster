@@ -1,6 +1,5 @@
 package de.braster;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,13 +11,9 @@ import org.mt4j.components.PickResult.PickEntry;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
-import org.mt4j.components.visibleComponents.widgets.MTTextArea.ExpandDirection;
-import org.mt4j.components.visibleComponents.widgets.keyboard.MTKeyboard;
-import org.mt4j.input.IMTInputEventListener;
 import org.mt4j.input.gestureAction.TapAndHoldVisualizer;
 import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.AbstractComponentProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
@@ -30,8 +25,6 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
-import de.braster.BWKeyboard.KeyInfo;
-
 
 public class Idea extends MTTextArea {
 	
@@ -39,7 +32,6 @@ public class Idea extends MTTextArea {
 	private MTCanvas canvas;
 	private Idea self = null;
 	private static final LinkedList<Idea> ideas = new LinkedList<Idea>();
-	private LinkedList<Idea> children = new LinkedList<Idea>();
 	private MTColor ideaFillColor = new MTColor(0, 100, 0, 255);;
 	private MTColor ideaStrokeColor = new MTColor(34, 139, 34, 255);;
 	private MTColor ideaTextColor = MTColor.WHITE;

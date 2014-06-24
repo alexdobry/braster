@@ -10,6 +10,10 @@ import processing.core.PImage;
 
 public class StartBraster extends MTApplication {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static LinkedList<PImage> K1helpBW = new LinkedList<PImage>();
 	public static LinkedList<PImage> K2helpBW = new LinkedList<PImage>();
 	public static LinkedList<PImage> K3helpBW = new LinkedList<PImage>();

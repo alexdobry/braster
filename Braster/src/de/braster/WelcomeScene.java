@@ -27,6 +27,12 @@ public class WelcomeScene extends AbstractScene {
 		mtApp = mtApplication;
 		canv = getCanvas();
 
+		
+		//temporärer fix; beseitigt lag bei Eingabe der ersten Idee
+		Idea i = new Idea(mtApp, canv);
+		Idea.getAllIdeas().clear();
+		
+		
 	    //Background
 	    MTRectangle background = new MTRectangle(mtApplication, mtApplication.width, mtApplication.height);
 	    background.setFillColor(new MTColor(255,255,255,255));

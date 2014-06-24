@@ -2,36 +2,15 @@ package de.braster;
 
 import java.util.ArrayList;
 
-import javax.swing.Timer;
 
 import org.mt4j.MTApplication;
 import org.mt4j.components.MTCanvas;
-import org.mt4j.components.MTComponent;
-import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.font.FontManager;
-import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTBackgroundImage;
-import org.mt4j.components.visibleComponents.widgets.MTListCell;
-import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.components.visibleComponents.widgets.MTTextField;
-import org.mt4j.input.inputProcessors.IGestureEventListener;
-import org.mt4j.input.inputProcessors.MTGestureEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.sceneManagement.AbstractScene;
-import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
-import org.mt4j.util.animation.Animation;
-import org.mt4j.util.animation.AnimationEvent;
-import org.mt4j.util.animation.IAnimationListener;
-import org.mt4j.util.animation.MultiPurposeInterpolator;
 import org.mt4j.util.math.Vector3D;
-
-
-
-
-
-
 
 
 
@@ -41,7 +20,6 @@ public class EvaluationHelp extends AbstractScene {
 
 	private MTCanvas canv;
 	private MTApplication mtApp;
-	private Iscene evaluationScene;
 	
 	public EvaluationHelp(MTApplication mtApplication, String name) {
 		super(mtApplication, name);

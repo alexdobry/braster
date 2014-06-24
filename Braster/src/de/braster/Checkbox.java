@@ -1,6 +1,5 @@
 package de.braster;
 
-import org.mt4j.components.MTCanvas;
 import org.mt4j.components.visibleComponents.font.FontManager;
 import org.mt4j.components.visibleComponents.shapes.MTRoundRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTTextField;
