@@ -40,7 +40,8 @@ public class SetupScene  extends AbstractScene{
 	private static String problemDefinition = "";
 	private boolean problemEdit = false;
 	public static boolean needHelp;
-		
+	private boolean keyboardOpen = false;	
+	
 	public SetupScene( final MTApplication mtApplication, String name)
 	{
 		super(mtApplication, name);
@@ -73,9 +74,12 @@ public class SetupScene  extends AbstractScene{
 						   textareaProblem.setText("");
 						   problemEdit = true;
 					   }
-					   Keyboard keyboard = makeKB(mtApplication, textareaProblem);
-					   keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f)));                    						   
-					   
+					   if(keyboardOpen ==false)
+					   {
+						   Keyboard keyboard = makeKB(mtApplication, textareaProblem);
+						   keyboard.setPositionGlobal(new Vector3D(mtApplication.width/2, mtApplication.height-(keyboard.getHeightXY(TransformSpace.LOCAL)/2f)));                    						   
+						   keyboardOpen=true;
+					   }
 				   }
 				   return false;
 			}
@@ -288,6 +292,7 @@ public Keyboard makeKB(final MTApplication mtApplication, final MTTextArea t) {
 				t.setText(textAreaOfKeyboard.getText());
 				//t.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 40));
 				t.setPositionGlobal(new Vector3D(mtApp.width/2, mtApp.height/4 - 20));
+				keyboardOpen = false;
 			}
 			return false;
 		}
