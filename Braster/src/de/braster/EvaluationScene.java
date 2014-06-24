@@ -131,7 +131,7 @@ public class EvaluationScene extends AbstractScene{
 	public EvaluationScene( MTApplication mtApplication, String name, ArrayList<Cluster> tideas, ArrayList<Cluster> trubbish)
 	{		
 		super(mtApplication, name);		
-			
+		tempScene = this;
 		clusterVerbleibend = tideas;
 		showedCluster = new Cluster();	
 		clusterVerworfen = trubbish;
