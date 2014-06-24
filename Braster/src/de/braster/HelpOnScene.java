@@ -84,7 +84,7 @@ public class HelpOnScene extends MTRectangle {
 		weiter.setFillColor(MTColor.GRAY);
 		MTTextArea rText = new MTTextArea(pApplet, FontManager.getInstance().createFont(pApplet, "arial.ttf", 
         		18, //fontzize 
-        		MTColor.BLACK));
+        		MTColor.WHITE));
 		rText.unregisterAllInputProcessors();
 		rText.setNoFill(true);
 		rText.setPickable(false);
