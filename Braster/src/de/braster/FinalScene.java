@@ -56,32 +56,32 @@ public class FinalScene extends AbstractScene{
 		textArea3.setPositionGlobal(new Vector3D(mtApplication.width/2,mtApplication.height/5*2));
 		canvas.addChild(textArea3);
 		
-		int x =mtApplication.width/(result.size()+1);
+		int x =mtApplication.width/(result.size()+5);
 		int y= mtApplication.height/5*2+100;
 
-		float laengstes =0; 
+		float laengstesDavor =0; 
 		
 		for(Cluster cluster : result)
 		{
+			float laengstes =0;
 			if(cluster.getNotes().size()>1)
 			{
+				ArrayList<MTTextArea> sammelList = new ArrayList<MTTextArea>();
 				y =mtApplication.height/5*2+100;
 				MTTextArea ordner = new MTTextArea(mtApplication);
 				ordner.setText(cluster.getName());	
 				ordner.setFillColor(new MTColor(139,69,0,255));
 				ordner.setStrokeColor(new MTColor(205,133,0,255));
 				ordner.unregisterAllInputProcessors();
-				ordner.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 14, MTColor.WHITE, true));
+				ordner.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 24, MTColor.WHITE, true));
 				ordner.removeAllGestureEventListeners();
 				ordner.setPickable(false);
 				if(ordner.getWidthXYVectLocal().length()>laengstes)
 				{
 					laengstes = ordner.getWidthXYVectLocal().length();
 				}
-				canvas.addChild(ordner);
-				ordner.setPositionGlobal(new Vector3D(x,y));
+				sammelList.add(ordner);
 				
-				y+=30;
 				//brauen ordner dazu und grünen ideen daunter
 				for(Note notes : cluster.getNotes())
 				{
@@ -90,41 +90,56 @@ public class FinalScene extends AbstractScene{
 					textAreaIdee.setFillColor(MTColor.GREEN);
 					textAreaIdee.setStrokeColor(MTColor.LIME);
 					textAreaIdee.unregisterAllInputProcessors();
-					textAreaIdee.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 14, MTColor.WHITE, true));
+					textAreaIdee.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 24, MTColor.WHITE, true));
 					textAreaIdee.removeAllGestureEventListeners();
 					textAreaIdee.setPickable(false);
-					textAreaIdee.setPositionGlobal(new Vector3D(x,y));
-					canvas.addChild(textAreaIdee);
 					if(textAreaIdee.getWidthXYVectLocal().length()>laengstes)
 					{
 						laengstes = textAreaIdee.getWidthXYVectLocal().length();
 					}
-					y+=30;				
+					sammelList.add(textAreaIdee);					
 				}
-				
-				x+=laengstes+100;
+							
+				x+=laengstes/2+ laengstesDavor/2+20;
+			
+				for(MTTextArea area : sammelList)
+				{
+					area.setPositionGlobal(new Vector3D(x,y));
+					canvas.addChild(area);
+					y+=40;
+				}				 
+				laengstesDavor=laengstes;
 			}
 			else
 			{				
+				ArrayList<MTTextArea> sammelList = new ArrayList<MTTextArea>();
 				y =mtApplication.height/5*2+100;//nur eine grüne idee
 				MTTextArea textAreaIdee = new MTTextArea(mtApplication);
 				textAreaIdee.setText(cluster.getNotes().get(0).getName());	
 				textAreaIdee.setFillColor(MTColor.GREEN);
 				textAreaIdee.setStrokeColor(MTColor.LIME);
 				textAreaIdee.unregisterAllInputProcessors();
-				textAreaIdee.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 14, MTColor.WHITE, true));
+				textAreaIdee.setFont(FontManager.getInstance().createFont(mtApplication, "arial.ttf", 24, MTColor.WHITE, true));
 				textAreaIdee.removeAllGestureEventListeners();
 				textAreaIdee.setPickable(false);
+				sammelList.add(textAreaIdee);
 				if(textAreaIdee.getWidthXYVectLocal().length()>laengstes)
 				{
 					laengstes = textAreaIdee.getWidthXYVectLocal().length();
 				}
 
-				textAreaIdee.setPositionGlobal(new Vector3D(x,y));
-				canvas.addChild(textAreaIdee);
-				x+=laengstes+100;				
+				x+=laengstes/2+ laengstesDavor/2+20;
+				
+				for(MTTextArea area : sammelList)
+				{
+					area.setPositionGlobal(new Vector3D(x,y));
+					canvas.addChild(area);
+					y+=40;
+				}				 
+				laengstesDavor=laengstes;
+
 			}
-			laengstes=0;
+			
 			
 			
 		}
