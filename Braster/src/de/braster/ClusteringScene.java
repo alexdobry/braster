@@ -19,6 +19,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
+import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
@@ -44,6 +45,7 @@ public class ClusteringScene extends AbstractScene{
 		this.canv = getCanvas();
 		//setzt Hintergrundfarbe
 		this.setClearColor(new MTColor(208, 224, 235, 255));
+		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		
 		mtRoundRectangle = new MTRoundRectangle(this.mtApp, 30, 60, 0, 200, 60, 12, 12);
 		

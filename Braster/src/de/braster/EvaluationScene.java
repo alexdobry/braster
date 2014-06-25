@@ -23,6 +23,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
+import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
@@ -64,7 +65,7 @@ public class EvaluationScene extends AbstractScene{
 	public EvaluationScene( MTApplication mtApplication, String name)
 	{		
 		super(mtApplication, name);		
-		
+		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		tempScene = this;
 		createStructureForIdeas(Idea.getAllParents());
 		 

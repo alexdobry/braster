@@ -24,6 +24,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.Rotate
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
+import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
@@ -49,7 +50,7 @@ public class SetupScene  extends AbstractScene{
 		this.mtApp = mtApplication;		
 		this.canv = getCanvas();
 		this.playerButtons = new ArrayList<Positioncomponent>();
-		
+		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		problemDefinition = "Problem eingeben...";
 		this.setClearColor(new MTColor(73, 112, 138, 255));
 		

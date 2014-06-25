@@ -10,6 +10,7 @@ import org.mt4j.input.inputProcessors.IGestureEventListener;
 import org.mt4j.input.inputProcessors.MTGestureEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
+import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.Iscene;
 import org.mt4j.util.MTColor;
@@ -26,7 +27,7 @@ public class WelcomeScene extends AbstractScene {
 		super(mtApplication, name);
 		mtApp = mtApplication;
 		canv = getCanvas();
-
+		this.registerGlobalInputProcessor(new CursorTracer(mtApplication, this));
 		
 		//temporärer fix; beseitigt lag bei Eingabe der ersten Idee
 		Idea i = new Idea(mtApp, canv);
